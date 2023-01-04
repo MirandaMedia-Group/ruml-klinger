@@ -1,6 +1,8 @@
 <template>
 	<section class="hero">
-		<NuxtPicture :src="backgroundImage.sourceUrl" />
+		<NuxtPicture
+			:src="backgroundImage.sourceUrl"
+			provider="ipx" />
 		<div class="container">
 			<div class="content">
 				<div class="subheading">{{ props.subheading }}</div>
