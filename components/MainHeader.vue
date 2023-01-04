@@ -3,9 +3,7 @@
 		<div class="container">
 			<div class="site-logo">
 				<nuxt-link to="/">
-					<NuxtImg
-						src="/site-logo.png"
-						provider="ipx" />
+					<NuxtImg src="/site-logo.png" />
 				</nuxt-link>
 			</div>
 
