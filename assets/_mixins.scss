@@ -1,0 +1,50 @@
+@mixin clearfix {
+	&:before,
+	&:after {
+		content: ' ';
+		display: table;
+	}
+	&:after {
+		clear: both;
+	}
+}
+
+@mixin container($value) {
+	max-width: calc($value + 4rem);
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 2rem;
+	padding-right: 2rem;
+	@media (max-width: 767px) {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}
+
+@mixin box-sizing($value) {
+	-webkit-box-sizing: $value;
+	-moz-box-sizing: $value;
+	box-sizing: $value;
+}
+
+@mixin visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	border: 0;
+	padding: 0;
+	white-space: nowrap;
+	-webkit-clip-path: inset(100%);
+	clip-path: inset(100%);
+	clip: rect(0 0 0 0);
+	overflow: hidden;
+}
+
+@function em($size, $context: 16) {
+	@return calc(($size / $context) * 1em);
+}
+@function rem($size, $context: 16) {
+	@return calc(($size / $context) * 1rem);
+}
