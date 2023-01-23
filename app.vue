@@ -12,6 +12,7 @@
 	body {
 		font-family: 'Montserrat', sans-serif;
 		font-size: clamp(14px, 1rem, 18px);
+		background-color: #f9f9f9;
 	}
 	p {
 		line-height: em(28);

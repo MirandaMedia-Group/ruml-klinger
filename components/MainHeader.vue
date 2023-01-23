@@ -71,7 +71,6 @@
 		}
 	`
 	const { data: categoryData } = useAsyncQuery({ query: categoryQuery })
-	console.log(categoryData)
 </script>
 <style lang="scss" scoped>
 	header {

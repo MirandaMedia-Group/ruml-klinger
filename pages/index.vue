@@ -43,6 +43,31 @@
 			</div>
 		</div>
 	</section>
+	<section class="services container">
+		<div class="narrow center">
+			<h2>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
+			<p>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
+		</div>
+		<div class="services-wrap">
+			<div
+				class="service"
+				v-for="(item, index) in servicesData.pages.nodes"
+				:key="index">
+				<div class="service__image">
+					<img :src="item.featuredImage?.node.sourceUrl" />
+				</div>
+				<div class="service__content">
+					<h3>{{ item.title }}</h3>
+					<p class="service__description">{{ item.rumlKlingerSluzby.shortDescription }}</p>
+					<NuxtLink
+						:to="`/sluzby/${item.slug}`"
+						class="btn btn-primary"
+						>Zobrazit službu</NuxtLink
+					>
+				</div>
+			</div>
+		</div>
+	</section>
 </template>
 <script setup>
 	const homepageQuery = gql`
@@ -104,11 +129,35 @@
 							sourceUrl
 						}
 					}
+					servicesBlock {
+						title
+						perex
+					}
 				}
 			}
 		}
 	`
 	const { data: homepageData, error: homepageError } = await useAsyncQuery(homepageQuery)
+
+	const servicesQuery = gql`
+		query {
+			pages(where: { parent: "cG9zdDo1OTg=" }) {
+				nodes {
+					title
+					slug
+					featuredImage {
+						node {
+							sourceUrl
+						}
+					}
+					rumlKlingerSluzby {
+						shortDescription
+					}
+				}
+			}
+		}
+	`
+	const { data: servicesData, error: servicesError } = await useAsyncQuery(servicesQuery)
 </script>
 <style lang="scss">
 	.categories__switcher {
@@ -194,5 +243,23 @@
 		.banner__content {
 			max-width: 736px;
 		}
+	}
+	.services-wrap {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(1px, 1fr));
+		gap: 30px;
+		margin-top: 30px;
+	}
+	.service__content {
+		background-color: $color-white;
+		padding: 30px;
+		h3 {
+			margin-top: 0;
+			margin-bottom: em(15, 28);
+			font-size: rem(28);
+		}
+	}
+	.service__description {
+		min-height: 84px;
 	}
 </style>
