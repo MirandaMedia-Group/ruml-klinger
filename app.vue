@@ -13,6 +13,24 @@
 		font-family: 'Montserrat', sans-serif;
 		font-size: clamp(14px, 1rem, 18px);
 	}
+	p {
+		line-height: em(28);
+		margin-top: 0;
+	}
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+	img {
+		width: 100%;
+		height: auto;
+	}
+	button {
+		background-color: transparent;
+		border: 0;
+		padding: 0;
+	}
 	h1,
 	h2,
 	h3,
@@ -21,11 +39,11 @@
 	h6 {
 		font-family: 'Gotham', sans-serif;
 		color: $color-primary;
-		margin: 0 0 em(30, 42);
-		line-height: em(60, 42);
 	}
 	h1 {
 		font-size: rem(42);
+		margin: 0 0 em(30, 42);
+		line-height: em(60, 42);
 		position: relative;
 		&::after {
 			content: '';
@@ -36,8 +54,42 @@
 			margin-top: em(30, 42);
 		}
 	}
+	h2 {
+		font-size: rem(36);
+		position: relative;
+		line-height: em(48, 36);
+		margin: 0 0 em(20, 36);
+		&::after {
+			content: '';
+			display: block;
+			height: 2px;
+			width: 60px;
+			margin-left: auto;
+			margin-right: auto;
+			background-color: $color-secondary;
+			margin-top: em(20, 36);
+		}
+	}
+	h3 {
+		font-size: rem(32);
+		line-height: em(42, 32);
+	}
+	section {
+		margin-bottom: 100px;
+	}
 	.container {
 		@include container(1440px);
+	}
+	.narrow {
+		max-width: 920px;
+		margin-left: auto;
+		margin-right: auto;
+		p {
+			font-size: rem(20);
+		}
+	}
+	.center {
+		text-align: center;
 	}
 	.btn {
 		display: inline-flex;
@@ -52,7 +104,7 @@
 			background-color: $color-secondary;
 			color: $color-white;
 			border: 1px solid $color-secondary;
-			padding-right: em(50);
+			padding-right: em(60);
 			&::before {
 				content: url(/icon/arrow-white.svg);
 				margin-right: em(13.5);
@@ -63,16 +115,11 @@
 			&:focus {
 				padding-left: em(30);
 				padding-right: em(30);
-				background-color: darken($color-secondary, 5%);
+				background-color: $color-secondary-hover;
 				&::before {
-					margin-right: em(23.5);
+					margin-right: em(33.5);
 				}
 			}
-		}
-		&.btn-secondary {
-			background-color: transparent;
-			color: $color-black;
-			border: 1px solid $color-secondary;
 		}
 	}
 	.buttons-vertical {

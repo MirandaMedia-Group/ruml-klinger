@@ -53,7 +53,26 @@
 		</div>
 	</header>
 </template>
-<script setup></script>
+<script setup>
+	const categoryQuery = gql`
+		{
+			kategorieProduktus(where: { parent: 0 }) {
+				nodes {
+					children {
+						nodes {
+							id
+							name
+						}
+					}
+					id
+					name
+				}
+			}
+		}
+	`
+	const { data: categoryData } = useAsyncQuery({ query: categoryQuery })
+	console.log(categoryData)
+</script>
 <style lang="scss" scoped>
 	header {
 		padding: 20px 0;

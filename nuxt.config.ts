@@ -22,7 +22,7 @@ export default defineNuxtConfig({
 	apollo: {
 		clients: {
 			default: {
-				httpEndpoint: 'https://wp-miranda-6.axfone.eu/graphql',
+				httpEndpoint: 'https://wp-miranda-1.axfone.eu/graphql',
 			},
 		},
 	},

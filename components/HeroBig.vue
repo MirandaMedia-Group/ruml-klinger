@@ -1,34 +1,40 @@
 <template>
 	<section class="hero">
 		<NuxtPicture
-			:src="backgroundImage.sourceUrl"
+			:src="image.sourceUrl"
 			provider="ipx" />
 		<div class="container">
 			<div class="content">
-				<div class="subheading">{{ props.subheading }}</div>
 				<h1>{{ props.title }}</h1>
-				<p class="excerpt">
-					{{ props.excerpt }}
-				</p>
+				<div
+					class="excerpt"
+					v-html="props.perex"></div>
 				<div class="buttons-vertical">
 					<NuxtLink
-						v-if="btnPrimary.btnType === 'internal'"
-						:to="btnPrimary.btnUrlInternal"
+						v-if="btnPrimary.type === 'internal'"
+						:to="btnPrimary.urlInternal"
 						class="btn btn-primary">
-						{{ btnPrimary.btnText }}
+						{{ btnPrimary.text }}
 					</NuxtLink>
 					<a
-						class="btn btn-secondary"
-						:href="btnSecondary.btnUrl">
-						{{ btnSecondary.btnText }}
+						v-else-if="btnPrimary.type === 'external'"
+						:href="btnPrimary.urlExternal"
+						class="btn btn-primary"
+						target="_blank">
+						{{ btnPrimary.text }}
 					</a>
+					<BtnSecondary
+						:type="btnSecondary.type"
+						:href="btnSecondary.type === 'internal' ? btnSecondary.urlInternal : btnSecondary.urlExternal">
+						{{ btnSecondary.text }}
+					</BtnSecondary>
 				</div>
 			</div>
 		</div>
 	</section>
 </template>
 <script setup>
-	const props = defineProps(['title', 'subheading', 'excerpt', 'btnPrimary', 'btnSecondary', 'backgroundImage'])
+	const props = defineProps(['title', 'perex', 'btnPrimary', 'btnSecondary', 'image'])
 </script>
 <style lang="scss" scoped>
 	.hero {
