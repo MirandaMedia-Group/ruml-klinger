@@ -26,6 +26,23 @@
 			</NuxtLink>
 		</div>
 	</section>
+	<section class="banner__top container">
+		<div
+			class="banner"
+			:style="`background-image: url(${homepageData.page.rumlKlingerHomepage.bannerTop.image.sourceUrl})`">
+			<div class="banner__content">
+				<h3>{{ homepageData.page.rumlKlingerHomepage.bannerTop.title }}</h3>
+				<p>{{ homepageData.page.rumlKlingerHomepage.bannerTop.perex }}</p>
+				<a
+					class="btn btn-primary"
+					:href="homepageData.page.rumlKlingerHomepage.bannerTop.btn.file.mediaItemUrl"
+					target="_blank">
+					{{ homepageData.page.rumlKlingerHomepage.bannerTop.btn.text }}
+					({{ (homepageData.page.rumlKlingerHomepage.bannerTop.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
+				</a>
+			</div>
+		</div>
+	</section>
 </template>
 <script setup>
 	const homepageQuery = gql`
@@ -71,6 +88,20 @@
 								sourceUrl
 								altText
 							}
+						}
+					}
+					bannerTop {
+						title
+						perex
+						btn {
+							text
+							file {
+								fileSize
+								mediaItemUrl
+							}
+						}
+						image {
+							sourceUrl
 						}
 					}
 				}
@@ -148,6 +179,20 @@
 					}
 				}
 			}
+		}
+	}
+	.banner {
+		padding: 60px;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		h3 {
+			font-size: rem(28);
+			margin-bottom: em(20, 28);
+			margin-top: 0;
+		}
+		.banner__content {
+			max-width: 736px;
 		}
 	}
 </style>
