@@ -154,6 +154,27 @@
 			<BtnSecondary href="/partneri"> Další partneři </BtnSecondary>
 		</div>
 	</section>
+	<section class="about-us">
+		<div class="container">
+			<div class="columns col-2 align-center">
+				<div class="column about-us__text">
+					<h2>{{ aboutUs.title }}</h2>
+					<div
+						class="about-us__perex"
+						v-html="aboutUs.perex"></div>
+					<div
+						class="about-us__description"
+						v-html="aboutUs.text"></div>
+					<BtnSecondary href="/o-nas">Více o společnosti</BtnSecondary>
+				</div>
+				<div class="column about-us__image">
+					<NuxtPicture
+						:src="aboutUs.image.sourceUrl"
+						provider="ipx" />
+				</div>
+			</div>
+		</div>
+	</section>
 </template>
 <script setup>
 	// GLOBAL DATA
@@ -167,6 +188,7 @@
 	const hpBannerTop = ref(null)
 	const hpVideos = ref(null)
 	const activeVideo = ref(0)
+	const aboutUs = ref(null)
 
 	// COMPUTED
 	const youtubeVideoUrl = (videoURL) => videoURL.replace('watch?v=', 'embed/')
@@ -248,6 +270,14 @@
 								}
 							}
 						}
+						aboutUs {
+							title
+							perex
+							text
+							image {
+								sourceUrl
+							}
+						}
 					}
 				}
 			}
@@ -258,6 +288,7 @@
 		hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
 		hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
 		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
+		aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
 	}
 	if (homepageData.value === null) {
 		console.log('nemam data')
@@ -267,6 +298,7 @@
 		hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
 		hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
 		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
+		aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
 	}
 
 	const getServicesData = async () => {
@@ -518,5 +550,21 @@
 			mix-blend-mode: luminosity;
 			opacity: 0.25;
 		}
+	}
+	.about-us {
+		.columns {
+			gap: 80px;
+		}
+		h2::after {
+			margin-left: 0;
+		}
+	}
+	.about-us__perex {
+		font-size: rem(20);
+		color: rgba($color-font, 0.9);
+	}
+	.about-us__description {
+		color: rgba($color-font, 0.9);
+		font-weight: 300;
 	}
 </style>

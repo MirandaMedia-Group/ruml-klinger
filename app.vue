@@ -130,4 +130,15 @@
 		align-items: flex-start;
 		margin-top: 30px;
 	}
+	.columns {
+		display: flex;
+		&.col-2 {
+			.column {
+				flex: 1 1 420px;
+			}
+		}
+		&.align-center {
+			align-items: center;
+		}
+	}
 </style>
