@@ -175,12 +175,54 @@
 			</div>
 		</div>
 	</section>
+	<section class="references container">
+		<div class="narrow center">
+			<h2>Reference</h2>
+		</div>
+		<div class="references__categories">
+			<nav>
+				<ul>
+					<li
+						class="references__category--item"
+						v-for="(item, index) in referenceCategories.referenceCategories.nodes"
+						:class="{ active: index === 0 }"
+						:key="index">
+						{{ item.name }}
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<div
+			v-for="item in referenceCategories.referenceCategories.nodes"
+			:key="item.id"
+			class="references__block">
+			<div class="references__list">
+				<div
+					class="reference"
+					v-for="reference in references.references.nodes.filter(
+						(reference) => reference.referenceCategories.nodes[0].id === item.id
+					)"
+					:key="index">
+					<div class="reference__image">
+						<NuxtPicture
+							:src="reference.featuredImage.node.sourceUrl"
+							provider="ipx" />
+					</div>
+					<div class="reference__title">
+						{{ reference.title }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 </template>
 <script setup>
 	// GLOBAL DATA
 	const homepageData = useState('homepageData', () => null)
 	const servicesData = useState('servicesData', () => null)
 	const partnersData = useState('partnersData', () => null)
+	const referenceCategories = useState('referenceCategories', () => null)
+	const references = useState('references', () => null)
 
 	// DATA SEGMENTATION
 	const hpHero = ref(null)
@@ -349,7 +391,55 @@
 	if (partnersData.value === null) {
 		getPartnersData()
 	}
-	console.log(partnersData.value)
+
+	const getReferenceCategories = async () => {
+		const referenceCategoriesQuery = gql`
+			{
+				referenceCategories {
+					nodes {
+						id
+						name
+						link
+						uri
+					}
+				}
+			}
+		`
+		const { data } = await useAsyncQuery(referenceCategoriesQuery)
+		referenceCategories.value = data
+	}
+	if (referenceCategories.value === null) {
+		getReferenceCategories()
+	}
+	const getReferences = async () => {
+		const referencesQuery = gql`
+			{
+				references {
+					nodes {
+						id
+						title
+						featuredImage {
+							node {
+								sourceUrl
+							}
+						}
+						referenceCategories {
+							nodes {
+								name
+								id
+							}
+						}
+					}
+				}
+			}
+		`
+		const { data } = await useAsyncQuery(referencesQuery)
+		references.value = data
+	}
+	if (references.value === null) {
+		getReferences()
+	}
+	console.log(references.value)
 </script>
 <style lang="scss">
 	.categories__switcher {
@@ -552,6 +642,9 @@
 		}
 	}
 	.about-us {
+		background: url(/ruml-big.svg) left center no-repeat;
+		margin: -100px 0 0;
+		padding: 100px 0;
 		.columns {
 			gap: 80px;
 		}
@@ -566,5 +659,51 @@
 	.about-us__description {
 		color: rgba($color-font, 0.9);
 		font-weight: 300;
+	}
+	.references__categories {
+		width: 100%;
+		background-color: $color-bg;
+		padding: 20px 20px 0;
+		ul {
+			list-style: none;
+			display: flex;
+			font-family: 'Gotham', sans-serif;
+			li {
+				flex: 1;
+				font-weight: 700;
+				text-align: center;
+				padding: em(10) em(70);
+				line-height: em(24);
+				transition: all 0.15s ease-in-out;
+				&.active,
+				&:hover,
+				&:focus {
+					color: $color-secondary;
+					background-color: $color-white;
+				}
+			}
+		}
+	}
+	.references__list {
+		display: flex;
+		gap: 20px;
+		.reference {
+			flex: 1;
+		}
+		.reference__image {
+			background-color: $color-white;
+			padding: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			aspect-ratio: 1;
+			filter: grayscale(1);
+			margin-bottom: 5px;
+		}
+		.reference__title {
+			font-weight: 700;
+			text-align: center;
+			line-height: em(28);
+		}
 	}
 </style>
