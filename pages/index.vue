@@ -16,7 +16,7 @@
 				:to="category.url"
 				class="category">
 				<div class="category__image">
-					<NuxtImg
+					<NuxtPicture
 						:src="category.image.sourceUrl"
 						:alt="category.image.altText"
 						provider="ipx" />
@@ -55,7 +55,7 @@
 				v-for="(item, index) in servicesData.pages.nodes"
 				:key="index">
 				<div class="service__image">
-					<NuxtImg
+					<NuxtPicture
 						:src="item.featuredImage?.node.sourceUrl"
 						provider="ipx" />
 				</div>
