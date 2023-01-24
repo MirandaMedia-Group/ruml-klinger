@@ -8,7 +8,7 @@
 				<h1>{{ props.title }}</h1>
 				<div
 					class="excerpt"
-					v-html="props.perex"></div>
+					v-html="props?.perex"></div>
 				<div class="buttons-vertical">
 					<NuxtLink
 						v-if="btnPrimary.type === 'internal'"

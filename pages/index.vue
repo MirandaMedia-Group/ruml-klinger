@@ -1,9 +1,9 @@
 <template>
-	<HeroBig v-bind="homepageData.page.rumlKlingerHomepage.hero" />
+	<HeroBig v-bind="hpHero" />
 	<section class="categories container">
 		<div class="narrow center">
-			<h2>{{ homepageData.page.rumlKlingerHomepage.categoriesBlock.title }}</h2>
-			<p>{{ homepageData.page.rumlKlingerHomepage.categoriesBlock.perex }}</p>
+			<h2>{{ hpCategories.title }}</h2>
+			<p>{{ hpCategories.perex }}</p>
 			<div class="categories__switcher">
 				<strong>Zobrazit kategorie podle:</strong>
 				<div class="switcher__control"><button class="active">Zboží</button>|<button>Výrobci</button></div>
@@ -11,7 +11,7 @@
 		</div>
 		<div class="categories-grid">
 			<NuxtLink
-				v-for="category in homepageData.page.rumlKlingerHomepage.categoriesBlock.categories"
+				v-for="category in hpCategories.categories"
 				:key="category.title"
 				:to="category.url"
 				class="category">
@@ -29,16 +29,16 @@
 	<section class="banner__top container">
 		<div
 			class="banner"
-			:style="`background-image: url(${homepageData.page.rumlKlingerHomepage.bannerTop.image.sourceUrl})`">
+			:style="`background-image: url(${hpBannerTop.image.sourceUrl})`">
 			<div class="banner__content">
-				<h3>{{ homepageData.page.rumlKlingerHomepage.bannerTop.title }}</h3>
-				<p>{{ homepageData.page.rumlKlingerHomepage.bannerTop.perex }}</p>
+				<h3>{{ hpBannerTop.title }}</h3>
+				<p>{{ hpBannerTop.perex }}</p>
 				<a
 					class="btn btn-primary"
-					:href="homepageData.page.rumlKlingerHomepage.bannerTop.btn.file.mediaItemUrl"
+					:href="hpBannerTop.btn.file.mediaItemUrl"
 					target="_blank">
-					{{ homepageData.page.rumlKlingerHomepage.bannerTop.btn.text }}
-					({{ (homepageData.page.rumlKlingerHomepage.bannerTop.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
+					{{ hpBannerTop.btn.text }}
+					({{ (hpBannerTop.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
 				</a>
 			</div>
 		</div>
@@ -61,103 +61,172 @@
 					<p class="service__description">{{ item.rumlKlingerSluzby.shortDescription }}</p>
 					<NuxtLink
 						:to="`/sluzby/${item.slug}`"
-						class="btn btn-primary"
-						>Zobrazit službu</NuxtLink
-					>
+						class="btn btn-primary">
+						Zobrazit službu
+					</NuxtLink>
 				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="container">
+		<div class="video__carousel">
+			<div class="video__description">
+				<h2>{{ hpVideos[activeVideo].title }}</h2>
+				<p>{{ hpVideos[activeVideo].description }}</p>
+			</div>
+			<div class="video__content">
+				<video
+					v-if="hpVideos[activeVideo].file"
+					:src="hpVideos[activeVideo].file"></video>
+				<iframe
+					v-else-if="hpVideos[activeVideo].video"
+					width="560"
+					height="315"
+					:src="hpVideos[0].video.replace('watch?v=', 'embed/')"
+					title="YouTube video player"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					allowfullscreen></iframe>
 			</div>
 		</div>
 	</section>
 </template>
 <script setup>
-	const homepageQuery = gql`
-		query {
-			page(id: "cG9zdDo1OTI=") {
-				title
-				slug
-				rumlKlingerHomepage {
-					hero {
-						btnPrimary {
-							text
-							type
-							urlExternal
-							urlInternal
-						}
-						btnSecondary {
-							text
-							type
-							urlExternal
-							urlInternal
-						}
-						image {
-							altText
-							link
-							mediaItemUrl
-							mediaType
-							sizes
-							sourceUrl
-							srcSet
-							title
-							uri
-						}
-						perex
-						title
-					}
-					categoriesBlock {
-						title
-						perex
-						categories {
-							url
-							title
-							image {
-								sourceUrl
-								altText
-							}
-						}
-					}
-					bannerTop {
-						title
-						perex
-						btn {
-							text
-							file {
-								fileSize
-								mediaItemUrl
-							}
-						}
-						image {
-							sourceUrl
-						}
-					}
-					servicesBlock {
-						title
-						perex
-					}
-				}
-			}
-		}
-	`
-	const { data: homepageData, error: homepageError } = await useAsyncQuery(homepageQuery)
+	// GLOBAL DATA
+	const homepageData = useState('homepageData', () => null)
+	const servicesData = useState('servicesData', () => null)
 
-	const servicesQuery = gql`
-		query {
-			pages(where: { parent: "cG9zdDo1OTg=" }) {
-				nodes {
+	// DATA SEGMENTATION
+	const hpHero = ref(null)
+	const hpCategories = ref(null)
+	const hpBannerTop = ref(null)
+	const hpVideos = ref(null)
+	const activeVideo = ref(0)
+
+	const getHomepageData = async () => {
+		const homepageQuery = gql`
+			query {
+				page(id: "cG9zdDo1OTI=") {
 					title
 					slug
-					featuredImage {
-						node {
-							sourceUrl
+					rumlKlingerHomepage {
+						hero {
+							btnPrimary {
+								text
+								type
+								urlExternal
+								urlInternal
+							}
+							btnSecondary {
+								text
+								type
+								urlExternal
+								urlInternal
+							}
+							image {
+								altText
+								link
+								mediaItemUrl
+								mediaType
+								sizes
+								sourceUrl
+								srcSet
+								title
+								uri
+							}
+							perex
+							title
 						}
-					}
-					rumlKlingerSluzby {
-						shortDescription
+						categoriesBlock {
+							title
+							perex
+							categories {
+								url
+								title
+								image {
+									sourceUrl
+									altText
+								}
+							}
+						}
+						bannerTop {
+							title
+							perex
+							btn {
+								text
+								file {
+									fileSize
+									mediaItemUrl
+								}
+							}
+							image {
+								sourceUrl
+							}
+						}
+						servicesBlock {
+							title
+							perex
+						}
+						videoCarousel {
+							video {
+								title
+								description
+								type
+								video
+								file {
+									mediaItemUrl
+									sourceUrl
+									title
+								}
+							}
+						}
 					}
 				}
 			}
-		}
-	`
-	const { data: servicesData, error: servicesError } = await useAsyncQuery(servicesQuery)
+		`
+		const { data } = await useAsyncQuery(homepageQuery)
+		homepageData.value = data
+		hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
+		hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
+		hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
+		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
+	}
+	if (homepageData.value === null) {
+		console.log('nemam data')
+		getHomepageData()
+	} else {
+		hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
+		hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
+		hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
+		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
+	}
+
+	const getServicesData = async () => {
+		const servicesQuery = gql`
+			query {
+				pages(where: { parent: "cG9zdDo1OTg=" }) {
+					nodes {
+						title
+						slug
+						featuredImage {
+							node {
+								sourceUrl
+							}
+						}
+						rumlKlingerSluzby {
+							shortDescription
+						}
+					}
+				}
+			}
+		`
+		const { data } = await useAsyncQuery(servicesQuery)
+		servicesData.value = data
+	}
+	if (servicesData.value === null) {
+		getServicesData()
+	}
 </script>
 <style lang="scss">
 	.categories__switcher {
