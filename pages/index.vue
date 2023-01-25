@@ -148,7 +148,9 @@
 					class="partner"
 					v-for="(item, index) in partnersData.partners.nodes"
 					:key="index">
-					<NuxtImg :src="item.featuredImage.node.sourceUrl" />
+					<NuxtPicture
+						:src="item.featuredImage.node.sourceUrl"
+						provider="ipx" />
 				</div>
 			</div>
 			<BtnSecondary href="/partneri"> Další partneři </BtnSecondary>
@@ -236,6 +238,7 @@
 	const youtubeVideoUrl = (videoURL) => videoURL.replace('watch?v=', 'embed/')
 
 	const getHomepageData = async () => {
+		console.log('fetch HP data')
 		const homepageQuery = gql`
 			query {
 				page(id: "cG9zdDo1OTI=") {
@@ -331,9 +334,9 @@
 		hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
 		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
 		aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
+		console.log('HP ready')
 	}
 	if (homepageData.value === null) {
-		console.log('nemam data')
 		getHomepageData()
 	} else {
 		hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
@@ -344,6 +347,7 @@
 	}
 
 	const getServicesData = async () => {
+		console.log('fetch services data')
 		const servicesQuery = gql`
 			query {
 				pages(where: { parent: "cG9zdDo1OTg=" }) {
@@ -367,9 +371,11 @@
 	}
 	if (servicesData.value === null) {
 		getServicesData()
+		console.log('services ready')
 	}
 
 	const getPartnersData = async () => {
+		console.log('fetch partners data')
 		const partnersQuery = gql`
 			query {
 				partners(first: 5) {
@@ -387,12 +393,14 @@
 		`
 		const { data } = await useAsyncQuery(partnersQuery)
 		partnersData.value = data
+		console.log('partners ready')
 	}
 	if (partnersData.value === null) {
 		getPartnersData()
 	}
 
 	const getReferenceCategories = async () => {
+		console.log('fetch reference categories')
 		const referenceCategoriesQuery = gql`
 			{
 				referenceCategories {
@@ -407,11 +415,13 @@
 		`
 		const { data } = await useAsyncQuery(referenceCategoriesQuery)
 		referenceCategories.value = data
+		console.log('reference categories ready')
 	}
 	if (referenceCategories.value === null) {
 		getReferenceCategories()
 	}
 	const getReferences = async () => {
+		console.log('fetch references')
 		const referencesQuery = gql`
 			{
 				references {
@@ -435,11 +445,11 @@
 		`
 		const { data } = await useAsyncQuery(referencesQuery)
 		references.value = data
+		console.log('references ready')
 	}
 	if (references.value === null) {
 		getReferences()
 	}
-	console.log(references.value)
 </script>
 <style lang="scss">
 	.categories__switcher {
@@ -664,8 +674,11 @@
 		width: 100%;
 		background-color: $color-bg;
 		padding: 20px 20px 0;
+		margin-bottom: 20px;
 		ul {
 			list-style: none;
+			padding: 0;
+			margin: 0;
 			display: flex;
 			font-family: 'Gotham', sans-serif;
 			li {
