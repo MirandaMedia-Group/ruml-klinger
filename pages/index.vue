@@ -19,6 +19,9 @@
 					<NuxtPicture
 						:src="category.image.sourceUrl"
 						:alt="category.image.altText"
+						:width="category.image.mediaDetails.width"
+						:height="category.image.mediaDetails.height"
+						loading="lazy"
 						provider="ipx" />
 				</div>
 				<div class="category__content">
@@ -57,6 +60,10 @@
 				<div class="service__image">
 					<NuxtPicture
 						:src="item.featuredImage?.node.sourceUrl"
+						:width="item.featuredImage?.node.mediaDetails.width"
+						:height="item.featuredImage?.node.mediaDetails.height"
+						:alt="item.featuredImage?.node.altText"
+						loading="lazy"
 						provider="ipx" />
 				</div>
 				<div class="service__content">
@@ -128,7 +135,7 @@
 				<video
 					v-if="hpVideos[activeVideo].file"
 					:src="hpVideos[activeVideo].file"></video>
-				<iframe
+				<!-- <iframe
 					v-else-if="hpVideos[activeVideo].video"
 					width="960"
 					height="550"
@@ -136,7 +143,7 @@
 					title="YouTube video player"
 					frameborder="0"
 					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-					allowfullscreen></iframe>
+					allowfullscreen></iframe> -->
 			</div>
 		</div>
 	</section>
@@ -150,6 +157,10 @@
 					:key="index">
 					<NuxtPicture
 						:src="item.featuredImage.node.sourceUrl"
+						:alt="item.featuredImage.node.altText"
+						:width="item.featuredImage.node.mediaDetails.width"
+						:height="item.featuredImage.node.mediaDetails.height"
+						loading="lazy"
 						provider="ipx" />
 				</div>
 			</div>
@@ -195,6 +206,10 @@
 					<div class="reference__image">
 						<NuxtPicture
 							:src="reference.featuredImage.node.sourceUrl"
+							:alt="reference.featuredImage.node.altText"
+							:width="reference.featuredImage.node.mediaDetails.width"
+							:height="reference.featuredImage.node.mediaDetails.height"
+							loading="lazy"
 							provider="ipx" />
 					</div>
 					<div class="reference__title">
@@ -256,14 +271,12 @@
 							}
 							image {
 								altText
-								link
-								mediaItemUrl
-								mediaType
-								sizes
 								sourceUrl
-								srcSet
 								title
-								uri
+								mediaDetails {
+									height
+									width
+								}
 							}
 							perex
 							title
@@ -277,6 +290,10 @@
 								image {
 									sourceUrl
 									altText
+									mediaDetails {
+										height
+										width
+									}
 								}
 							}
 						}
@@ -291,7 +308,12 @@
 								}
 							}
 							image {
+								altText
 								sourceUrl
+								mediaDetails {
+									height
+									width
+								}
 							}
 						}
 						servicesBlock {
@@ -316,7 +338,12 @@
 							perex
 							text
 							image {
+								altText
 								sourceUrl
+								mediaDetails {
+									height
+									width
+								}
 							}
 						}
 						career {
@@ -324,7 +351,12 @@
 							perex
 							text
 							image {
+								altText
 								sourceUrl
+								mediaDetails {
+									height
+									width
+								}
 							}
 						}
 					}
@@ -363,6 +395,11 @@
 						featuredImage {
 							node {
 								sourceUrl
+								altText
+								mediaDetails {
+									height
+									width
+								}
 							}
 						}
 						rumlKlingerSluzby {
@@ -391,6 +428,11 @@
 						featuredImage {
 							node {
 								sourceUrl
+								altText
+								mediaDetails {
+									height
+									width
+								}
 							}
 						}
 					}

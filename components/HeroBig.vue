@@ -2,6 +2,9 @@
 	<section class="hero">
 		<NuxtPicture
 			:src="image.sourceUrl"
+			:width="image.mediaDetails.width"
+			:height="image.mediaDetails.height"
+			:alt="image.altText"
 			provider="ipx" />
 		<div class="container">
 			<div class="content">

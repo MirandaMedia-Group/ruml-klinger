@@ -23,6 +23,10 @@
 				<div class="column about-us__image">
 					<NuxtPicture
 						:src="props.data.image.sourceUrl"
+						:width="props.data.image.mediaDetails.width"
+						:height="props.data.image.mediaDetails.height"
+						:alt="props.data.image.altText"
+						loading="lazy"
 						provider="ipx" />
 				</div>
 			</div>
