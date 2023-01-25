@@ -93,12 +93,14 @@
 							:key="index"
 							:class="{ active: index === activeVideo }"
 							class="carousel__dot"
-							@click="activeVideo = index"></button>
+							@click="activeVideo = index"
+							name="Slide"></button>
 					</div>
 					<div class="carousel__arrows">
 						<button
 							class="arrow arrow-left"
-							@click="activeVideo = activeVideo === 0 ? hpVideos.length - 1 : activeVideo - 1">
+							@click="activeVideo = activeVideo === 0 ? hpVideos.length - 1 : activeVideo - 1"
+							name="Předchozí">
 							<svg
 								width="19"
 								height="15"
@@ -114,7 +116,8 @@
 						</button>
 						<button
 							class="arrow arrow-right"
-							@click="activeVideo = activeVideo === hpVideos.length - 1 ? 0 : activeVideo + 1">
+							@click="activeVideo = activeVideo === hpVideos.length - 1 ? 0 : activeVideo + 1"
+							name="Další">
 							<svg
 								width="19"
 								height="15"
@@ -135,7 +138,7 @@
 				<video
 					v-if="hpVideos[activeVideo].file"
 					:src="hpVideos[activeVideo].file"></video>
-				<!-- <iframe
+				<iframe
 					v-else-if="hpVideos[activeVideo].video"
 					width="960"
 					height="550"
@@ -143,7 +146,7 @@
 					title="YouTube video player"
 					frameborder="0"
 					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-					allowfullscreen></iframe> -->
+					allowfullscreen></iframe>
 			</div>
 		</div>
 	</section>
@@ -228,6 +231,17 @@
 		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
 </template>
 <script setup>
+	useHead({
+		title: 'RUML Klinger - Domovská stránka',
+		meta: [
+			{
+				hid: 'description',
+				name: 'description',
+				content: 'Domovská stránka společnosti RUML Klinger',
+			},
+		],
+	})
+
 	// GLOBAL DATA
 	const homepageData = useState('homepageData', () => null)
 	const servicesData = useState('servicesData', () => null)

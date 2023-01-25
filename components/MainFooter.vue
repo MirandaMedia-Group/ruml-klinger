@@ -107,7 +107,10 @@
 				<div class="footer-block site-logo">
 					<NuxtPicture
 						class="logo"
-						src="/logo-white.png" />
+						src="/logo-white.png"
+						width="316"
+						height="94"
+						alt="RUML Klinger s.r.o." />
 					<a
 						href="https://www.linkedin.com/company/ruml-s-r-o/"
 						target="_blank"

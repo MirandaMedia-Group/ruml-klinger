@@ -5,6 +5,13 @@
 	</main>
 	<MainFooter />
 </template>
+<script setup>
+	useHead({
+		htmlAttrs: {
+			lang: 'cs',
+		},
+	})
+</script>
 <style lang="scss">
 	html {
 		font-size: 16px;

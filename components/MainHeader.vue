@@ -3,7 +3,11 @@
 		<div class="container">
 			<div class="site-logo">
 				<nuxt-link to="/">
-					<NuxtImg src="/site-logo.png" />
+					<NuxtImg
+						src="/site-logo.png"
+						width="184"
+						height="55"
+						alt="RUML Klinger s.r.o." />
 				</nuxt-link>
 			</div>
 
@@ -36,7 +40,9 @@
 					</ul>
 				</nav>
 				<span class="separator">|</span>
-				<button class="search">
+				<button
+					class="search"
+					name="Vyhledat">
 					<svg
 						width="24"
 						height="24"
