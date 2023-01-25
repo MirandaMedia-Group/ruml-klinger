@@ -483,6 +483,11 @@
 						featuredImage {
 							node {
 								sourceUrl
+								altText
+								mediaDetails {
+									height
+									width
+								}
 							}
 						}
 						referenceCategories {
