@@ -156,27 +156,10 @@
 			<BtnSecondary href="/partneri"> Další partneři </BtnSecondary>
 		</div>
 	</section>
-	<section class="about-us">
-		<div class="container">
-			<div class="columns col-2 align-center">
-				<div class="column about-us__text">
-					<h2>{{ aboutUs.title }}</h2>
-					<div
-						class="about-us__perex"
-						v-html="aboutUs.perex"></div>
-					<div
-						class="about-us__description"
-						v-html="aboutUs.text"></div>
-					<BtnSecondary href="/o-nas">Více o společnosti</BtnSecondary>
-				</div>
-				<div class="column about-us__image">
-					<NuxtPicture
-						:src="aboutUs.image.sourceUrl"
-						provider="ipx" />
-				</div>
-			</div>
-		</div>
-	</section>
+	<TextImageBlock
+		:data="aboutUs"
+		:hasBackground="true"
+		:btn="{ text: 'Více o společnosti', url: '/o-nas' }" />
 	<section class="references container">
 		<div class="narrow center">
 			<h2>Reference</h2>
@@ -187,9 +170,11 @@
 					<li
 						class="references__category--item"
 						v-for="(item, index) in referenceCategories.referenceCategories.nodes"
-						:class="{ active: index === 0 }"
+						:class="{ active: item.id === activeReferenceBlock }"
 						:key="index">
-						{{ item.name }}
+						<button @click.prevent="activeReferenceBlock = item.id">
+							{{ item.name }}
+						</button>
 					</li>
 				</ul>
 			</nav>
@@ -197,9 +182,11 @@
 		<div
 			v-for="item in referenceCategories.referenceCategories.nodes"
 			:key="item.id"
+			:class="{ active: item.id === activeReferenceBlock }"
 			class="references__block">
 			<div class="references__list">
-				<div
+				<NuxtLink
+					:to="`/reference/${reference.slug}`"
 					class="reference"
 					v-for="reference in references.references.nodes.filter(
 						(reference) => reference.referenceCategories.nodes[0].id === item.id
@@ -213,10 +200,17 @@
 					<div class="reference__title">
 						{{ reference.title }}
 					</div>
-				</div>
+				</NuxtLink>
 			</div>
 		</div>
+		<div class="buttons-wrapper buttons-center">
+			<BtnSecondary href="/reference">Všechny reference</BtnSecondary>
+		</div>
 	</section>
+	<TextImageBlock
+		:data="career"
+		:reverse="true"
+		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
 </template>
 <script setup>
 	// GLOBAL DATA
@@ -227,12 +221,14 @@
 	const references = useState('references', () => null)
 
 	// DATA SEGMENTATION
-	const hpHero = ref(null)
-	const hpCategories = ref(null)
-	const hpBannerTop = ref(null)
-	const hpVideos = ref(null)
-	const activeVideo = ref(0)
-	const aboutUs = ref(null)
+	const hpHero = useState('hpHero', () => null)
+	const hpCategories = useState('hpCategories', () => null)
+	const hpBannerTop = useState('hpBannerTop', () => null)
+	const hpVideos = useState('hpVideos', () => null)
+	const activeVideo = useState('activeVideo', () => 0)
+	const aboutUs = useState('aboutUs', () => null)
+	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
+	const career = useState('career', () => null)
 
 	// COMPUTED
 	const youtubeVideoUrl = (videoURL) => videoURL.replace('watch?v=', 'embed/')
@@ -323,6 +319,14 @@
 								sourceUrl
 							}
 						}
+						career {
+							title
+							perex
+							text
+							image {
+								sourceUrl
+							}
+						}
 					}
 				}
 			}
@@ -334,6 +338,7 @@
 		hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
 		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
 		aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
+		career.value = homepageData.value.page.rumlKlingerHomepage.career
 		console.log('HP ready')
 	}
 	if (homepageData.value === null) {
@@ -344,6 +349,7 @@
 		hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
 		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
 		aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
+		career.value = homepageData.value.page.rumlKlingerHomepage.career
 	}
 
 	const getServicesData = async () => {
@@ -415,10 +421,13 @@
 		`
 		const { data } = await useAsyncQuery(referenceCategoriesQuery)
 		referenceCategories.value = data
+		activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
 		console.log('reference categories ready')
 	}
 	if (referenceCategories.value === null) {
 		getReferenceCategories()
+	} else {
+		activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
 	}
 	const getReferences = async () => {
 		console.log('fetch references')
@@ -428,6 +437,7 @@
 					nodes {
 						id
 						title
+						slug
 						featuredImage {
 							node {
 								sourceUrl
@@ -651,25 +661,6 @@
 			opacity: 0.25;
 		}
 	}
-	.about-us {
-		background: url(/ruml-big.svg) left center no-repeat;
-		margin: -100px 0 0;
-		padding: 100px 0;
-		.columns {
-			gap: 80px;
-		}
-		h2::after {
-			margin-left: 0;
-		}
-	}
-	.about-us__perex {
-		font-size: rem(20);
-		color: rgba($color-font, 0.9);
-	}
-	.about-us__description {
-		color: rgba($color-font, 0.9);
-		font-weight: 300;
-	}
 	.references__categories {
 		width: 100%;
 		background-color: $color-bg;
@@ -683,25 +674,43 @@
 			font-family: 'Gotham', sans-serif;
 			li {
 				flex: 1;
-				font-weight: 700;
-				text-align: center;
-				padding: em(10) em(70);
-				line-height: em(24);
-				transition: all 0.15s ease-in-out;
-				&.active,
-				&:hover,
-				&:focus {
+				button {
+					height: 100%;
+					width: 100%;
+					font-weight: 700;
+					text-align: center;
+					padding: em(10) em(70);
+					line-height: em(24);
+					transition: all 0.15s ease-in-out;
+					cursor: pointer;
+				}
+				&.active button,
+				button:hover,
+				button:focus {
 					color: $color-secondary;
-					background-color: $color-white;
+					background-color: $color-bg-light;
 				}
 			}
 		}
 	}
+	.references__block {
+		&:not(.active) {
+			display: none;
+		}
+	}
 	.references__list {
-		display: flex;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 		gap: 20px;
 		.reference {
-			flex: 1;
+			text-decoration: none;
+			color: $color-font;
+			&:hover,
+			&:focus {
+				.reference__image img {
+					filter: grayscale(0);
+				}
+			}
 		}
 		.reference__image {
 			background-color: $color-white;
@@ -710,7 +719,10 @@
 			align-items: center;
 			justify-content: center;
 			aspect-ratio: 1;
-			filter: grayscale(1);
+			img {
+				filter: grayscale(1);
+				transition: all 0.15s ease-in-out;
+			}
 			margin-bottom: 5px;
 		}
 		.reference__title {

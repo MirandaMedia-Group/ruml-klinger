@@ -12,7 +12,7 @@
 	body {
 		font-family: 'Montserrat', sans-serif;
 		font-size: clamp(14px, 1rem, 18px);
-		background-color: #f9f9f9;
+		background-color: $color-bg-light;
 	}
 	p {
 		line-height: em(28);
@@ -123,6 +123,13 @@
 			}
 		}
 	}
+	.buttons-wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20px;
+		margin-top: 30px;
+		justify-content: center;
+	}
 	.buttons-vertical {
 		display: flex;
 		flex-direction: column;
@@ -139,6 +146,18 @@
 		}
 		&.align-center {
 			align-items: center;
+		}
+	}
+	.project-mail {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: rem(24);
+		&::before {
+			content: url(/icon/mail.svg);
+			line-height: 0;
 		}
 	}
 </style>
