@@ -1,8 +1,8 @@
 <template>
 	<MainHeader />
-	<main id="content">
+	<NuxtLayout>
 		<NuxtPage />
-	</main>
+	</NuxtLayout>
 	<MainFooter />
 </template>
 <script setup>
