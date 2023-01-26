@@ -13,11 +13,12 @@
 		display: flex;
 		align-items: flex-start;
 		gap: 30px;
+		margin-top: 50px;
 		#content {
 			flex: 1 1 640px;
 		}
 		#sidebar {
-			flex: 0 0 320px;
+			flex: 0 0 350px;
 		}
 	}
 </style>

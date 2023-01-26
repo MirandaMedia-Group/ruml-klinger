@@ -25,6 +25,9 @@
 		line-height: em(28);
 		margin-top: 0;
 	}
+	a {
+		transition: all 0.15s ease-in-out;
+	}
 	*,
 	*::before,
 	*::after {

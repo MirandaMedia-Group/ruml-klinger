@@ -5,7 +5,7 @@
 				<h1>Produkty</h1>
 			</template>
 			<template #sidebar>
-				<h2>sidebaaar</h2>
+				<CategorySidebar />
 			</template>
 		</NuxtLayout>
 	</div>
@@ -15,5 +15,7 @@
 	definePageMeta({
 		layout: 'false',
 	})
+
+	const activeCategory = useState('activeCategory', () => null)
 </script>
 <style lang="scss"></style>

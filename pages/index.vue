@@ -91,7 +91,9 @@
 						<h2>{{ hpVideos[activeVideo].title }}</h2>
 						<p>{{ hpVideos[activeVideo].description }}</p>
 					</div>
-					<div class="carousel__controls">
+					<div
+						v-if="hpVideos"
+						class="carousel__controls">
 						<div class="carousel__dots">
 							<button
 								v-for="(item, index) in hpVideos"
