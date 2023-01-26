@@ -138,15 +138,26 @@
 				<video
 					v-if="hpVideos[activeVideo].file"
 					:src="hpVideos[activeVideo].file"></video>
-				<iframe
-					v-else-if="hpVideos[activeVideo].video"
-					width="960"
-					height="550"
-					:src="youtubeVideoUrl(hpVideos[activeVideo].video)"
-					title="YouTube video player"
-					frameborder="0"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-					allowfullscreen></iframe>
+				<div v-else-if="hpVideos[activeVideo].video">
+					<a
+						v-if="hpVideos[activeVideo].video && !showVideo"
+						@click.prevent="showVideo = true"
+						:data-youtube="youtubeID(hpVideos[activeVideo].video)"
+						:href="hpVideos[activeVideo].video">
+						<img
+							alt=""
+							:src="`https://img.youtube.com/vi/${youtubeID(hpVideos[activeVideo].video)}/hqdefault.jpg`" />
+					</a>
+					<iframe
+						v-else
+						width="960"
+						height="550"
+						:src="`https://www.youtube-nocookie.com/embed/${youtubeID(hpVideos[activeVideo].video)}?autoplay=1`"
+						title="YouTube video player"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						allowfullscreen></iframe>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -230,6 +241,7 @@
 		:reverse="true"
 		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
 </template>
+
 <script setup>
 	useHead({
 		title: 'RUML Klinger - Domovská stránka',
@@ -255,12 +267,14 @@
 	const hpBannerTop = useState('hpBannerTop', () => null)
 	const hpVideos = useState('hpVideos', () => null)
 	const activeVideo = useState('activeVideo', () => 0)
+	const showVideo = useState('showVideo', () => false)
 	const aboutUs = useState('aboutUs', () => null)
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
 	const career = useState('career', () => null)
 
 	// COMPUTED
 	const youtubeVideoUrl = (videoURL) => videoURL.replace('watch?v=', 'embed/')
+	const youtubeID = (videoURL) => new URL(videoURL).searchParams.get('v')
 
 	const getHomepageData = async () => {
 		console.log('fetch HP data')
