@@ -1,10 +1,12 @@
 <template>
 	<NuxtLayout>
-		<HeroBig v-bind="hpHero" />
+		<HeroBig
+			v-if="hpHero"
+			v-bind="hpHero" />
 		<section class="categories container">
 			<div class="narrow center">
-				<h2>{{ hpCategories.title }}</h2>
-				<p>{{ hpCategories.perex }}</p>
+				<h2>{{ hpCategories?.title }}</h2>
+				<p>{{ hpCategories?.perex }}</p>
 				<div class="categories__switcher">
 					<strong>Zobrazit kategorie podle:</strong>
 					<div class="switcher__control"><button class="active">Zboží</button>|<button>Výrobci</button></div>
@@ -12,7 +14,7 @@
 			</div>
 			<div class="categories-grid">
 				<NuxtLink
-					v-for="category in hpCategories.categories"
+					v-for="category in hpCategories?.categories"
 					:key="category.title"
 					:to="category.url"
 					class="category">
@@ -34,29 +36,29 @@
 		<section class="banner__top container">
 			<div
 				class="banner"
-				:style="`background-image: url(${hpBannerTop.image.sourceUrl})`">
+				:style="`background-image: url(${hpBannerTop?.image.sourceUrl})`">
 				<div class="banner__content">
-					<h3>{{ hpBannerTop.title }}</h3>
-					<p>{{ hpBannerTop.perex }}</p>
+					<h3>{{ hpBannerTop?.title }}</h3>
+					<p>{{ hpBannerTop?.perex }}</p>
 					<a
 						class="btn btn-primary"
-						:href="hpBannerTop.btn.file.mediaItemUrl"
+						:href="hpBannerTop?.btn.file.mediaItemUrl"
 						target="_blank">
-						{{ hpBannerTop.btn.text }}
-						({{ (hpBannerTop.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
+						{{ hpBannerTop?.btn.text }}
+						({{ (hpBannerTop?.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
 					</a>
 				</div>
 			</div>
 		</section>
 		<section class="services container">
 			<div class="narrow center">
-				<h2>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
-				<p>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
+				<h2>{{ servicesData?.title }}</h2>
+				<p>{{ servicesData?.perex }}</p>
 			</div>
 			<div class="services-wrap">
 				<div
 					class="service"
-					v-for="(item, index) in servicesData.pages.nodes"
+					v-for="(item, index) in servicesData?.pages.nodes"
 					:key="index">
 					<div class="service__image">
 						<NuxtPicture
@@ -81,7 +83,9 @@
 		</section>
 
 		<section class="container">
-			<div class="video__carousel">
+			<div
+				v-if="hpVideos"
+				class="video__carousel">
 				<div class="video__info">
 					<div class="video__description">
 						<h2>{{ hpVideos[activeVideo].title }}</h2>
@@ -170,7 +174,7 @@
 				<div class="partners-list">
 					<div
 						class="partner"
-						v-for="(item, index) in partnersData.partners.nodes"
+						v-for="(item, index) in partnersData?.partners.nodes"
 						:key="index">
 						<NuxtPicture
 							:src="item.featuredImage.node.sourceUrl"
@@ -185,6 +189,7 @@
 			</div>
 		</section>
 		<TextImageBlock
+			v-if="aboutUs"
 			:data="aboutUs"
 			:hasBackground="true"
 			:btn="{ text: 'Více o společnosti', url: '/o-nas' }" />
@@ -197,7 +202,7 @@
 					<ul>
 						<li
 							class="references__category--item"
-							v-for="(item, index) in referenceCategories.referenceCategories.nodes"
+							v-for="(item, index) in referenceCategories?.referenceCategories.nodes"
 							:class="{ active: item.id === activeReferenceBlock }"
 							:key="index">
 							<button @click.prevent="activeReferenceBlock = item.id">
@@ -208,7 +213,7 @@
 				</nav>
 			</div>
 			<div
-				v-for="item in referenceCategories.referenceCategories.nodes"
+				v-for="item in referenceCategories?.referenceCategories.nodes"
 				:key="item.id"
 				:class="{ active: item.id === activeReferenceBlock }"
 				class="references__block">
@@ -216,7 +221,7 @@
 					<NuxtLink
 						:to="`/reference/${reference.slug}`"
 						class="reference"
-						v-for="reference in references.references.nodes.filter(
+						v-for="reference in references?.references.nodes.filter(
 							(reference) => reference.referenceCategories.nodes[0].id === item.id
 						)"
 						:key="index">
@@ -240,6 +245,7 @@
 			</div>
 		</section>
 		<TextImageBlock
+			v-if="career"
 			:data="career"
 			:reverse="true"
 			:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
@@ -279,45 +285,178 @@
 	// COMPUTED
 	const youtubeID = (videoURL) => new URL(videoURL).searchParams.get('v')
 
-	console.log('fetch HP data')
-	const homepageQuery = gql`
-		query {
-			page(id: "cG9zdDo1OTI=") {
-				title
-				slug
-				rumlKlingerHomepage {
-					hero {
-						btnPrimary {
-							text
-							type
-							urlExternal
-							urlInternal
-						}
-						btnSecondary {
-							text
-							type
-							urlExternal
-							urlInternal
-						}
-						image {
-							altText
-							sourceUrl
+	const getHomepageData = async () => {
+		console.log('fetch HP data')
+		const homepageQuery = gql`
+			query {
+				page(id: "cG9zdDo1OTI=") {
+					title
+					slug
+					rumlKlingerHomepage {
+						hero {
+							btnPrimary {
+								text
+								type
+								urlExternal
+								urlInternal
+							}
+							btnSecondary {
+								text
+								type
+								urlExternal
+								urlInternal
+							}
+							image {
+								altText
+								sourceUrl
+								title
+								mediaDetails {
+									height
+									width
+								}
+							}
+							perex
 							title
-							mediaDetails {
-								height
-								width
+						}
+						categoriesBlock {
+							title
+							perex
+							categories {
+								url
+								title
+								image {
+									sourceUrl
+									altText
+									mediaDetails {
+										height
+										width
+									}
+								}
 							}
 						}
-						perex
-						title
-					}
-					categoriesBlock {
-						title
-						perex
-						categories {
-							url
+						bannerTop {
 							title
+							perex
+							btn {
+								text
+								file {
+									fileSize
+									mediaItemUrl
+								}
+							}
 							image {
+								altText
+								sourceUrl
+								mediaDetails {
+									height
+									width
+								}
+							}
+						}
+						servicesBlock {
+							title
+							perex
+						}
+						videoCarousel {
+							video {
+								title
+								description
+								type
+								video
+								file {
+									mediaItemUrl
+									sourceUrl
+									title
+								}
+							}
+						}
+						aboutUs {
+							title
+							perex
+							text
+							image {
+								altText
+								sourceUrl
+								mediaDetails {
+									height
+									width
+								}
+							}
+						}
+						career {
+							title
+							perex
+							text
+							image {
+								altText
+								sourceUrl
+								mediaDetails {
+									height
+									width
+								}
+							}
+						}
+					}
+				}
+			}
+		`
+		const { data } = await useAsyncQuery(homepageQuery)
+		homepageData.value = data
+		hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
+		hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
+		hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
+		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
+		aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
+		career.value = homepageData.value.page.rumlKlingerHomepage.career
+		console.log('HP ready')
+	}
+	if (homepageData.value === null) {
+		getHomepageData()
+	}
+
+	const getServicesData = async () => {
+		console.log('fetch services data')
+		const servicesQuery = gql`
+			query {
+				pages(where: { parent: "cG9zdDo1OTg=" }) {
+					nodes {
+						title
+						slug
+						featuredImage {
+							node {
+								sourceUrl
+								altText
+								mediaDetails {
+									height
+									width
+								}
+							}
+						}
+						rumlKlingerSluzby {
+							shortDescription
+						}
+					}
+				}
+			}
+		`
+		const { data } = await useAsyncQuery(servicesQuery)
+		servicesData.value = data
+	}
+	if (servicesData.value === null) {
+		getServicesData()
+		console.log('services ready')
+	}
+
+	const getPartnersData = async () => {
+		console.log('fetch partners data')
+		const partnersQuery = gql`
+			query {
+				partners(first: 5) {
+					nodes {
+						id
+						title
+						featuredImage {
+							node {
 								sourceUrl
 								altText
 								mediaDetails {
@@ -327,214 +466,75 @@
 							}
 						}
 					}
-					bannerTop {
-						title
-						perex
-						btn {
-							text
-							file {
-								fileSize
-								mediaItemUrl
-							}
-						}
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
+				}
+			}
+		`
+		const { data } = await useAsyncQuery(partnersQuery)
+		partnersData.value = data
+		console.log('partners ready')
+	}
+	if (partnersData.value === null) {
+		getPartnersData()
+	}
+
+	const getReferenceCategories = async () => {
+		console.log('fetch reference categories')
+		const referenceCategoriesQuery = gql`
+			{
+				referenceCategories {
+					nodes {
+						id
+						name
+						link
+						uri
 					}
-					servicesBlock {
+				}
+			}
+		`
+		const { data } = await useAsyncQuery(referenceCategoriesQuery)
+		referenceCategories.value = data
+		activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
+		console.log('reference categories ready')
+	}
+	if (referenceCategories.value === null) {
+		getReferenceCategories()
+	}
+	const getReferences = async () => {
+		console.log('fetch references')
+		const referencesQuery = gql`
+			{
+				references {
+					nodes {
+						id
 						title
-						perex
-					}
-					videoCarousel {
-						video {
-							title
-							description
-							type
-							video
-							file {
-								mediaItemUrl
+						slug
+						featuredImage {
+							node {
 								sourceUrl
-								title
+								altText
+								mediaDetails {
+									height
+									width
+								}
 							}
 						}
-					}
-					aboutUs {
-						title
-						perex
-						text
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					career {
-						title
-						perex
-						text
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
+						referenceCategories {
+							nodes {
+								name
+								id
 							}
 						}
 					}
 				}
 			}
-		}
-	`
-	const { data: homepageResponse } = await useAsyncQuery(homepageQuery)
-	homepageData.value = homepageResponse
-	hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
-	hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
-	hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
-	hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
-	aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
-	career.value = homepageData.value.page.rumlKlingerHomepage.career
-	console.log('HP ready')
-	// const getHomepageData = async () => {
-	// }
-	// if (homepageData.value === null) {
-	// 	getHomepageData()
-	// } else {
-	// 	hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
-	// 	hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
-	// 	hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
-	// 	hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
-	// 	aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
-	// 	career.value = homepageData.value.page.rumlKlingerHomepage.career
-	// }
-
-	console.log('fetch services data')
-	const servicesQuery = gql`
-		query {
-			pages(where: { parent: "cG9zdDo1OTg=" }) {
-				nodes {
-					title
-					slug
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					rumlKlingerSluzby {
-						shortDescription
-					}
-				}
-			}
-		}
-	`
-	const { data: servicesResponse } = await useAsyncQuery(servicesQuery)
-	servicesData.value = servicesResponse
-	console.log('services ready')
-	// const getServicesData = async () => {
-	// }
-	// if (servicesData.value === null) {
-	// 	getServicesData()
-	// }
-
-	console.log('fetch partners data')
-	const partnersQuery = gql`
-		query {
-			partners(first: 5) {
-				nodes {
-					id
-					title
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: partnersResponse } = await useAsyncQuery(partnersQuery)
-	partnersData.value = partnersResponse
-	console.log('partners ready')
-	// const getPartnersData = async () => {}
-	// if (partnersData.value === null) {
-	// 	getPartnersData()
-	// }
-
-	console.log('fetch reference categories')
-	const referenceCategoriesQuery = gql`
-		{
-			referenceCategories {
-				nodes {
-					id
-					name
-					link
-					uri
-				}
-			}
-		}
-	`
-	const { data: referenceCategoriesResponse } = await useAsyncQuery(referenceCategoriesQuery)
-	referenceCategories.value = referenceCategoriesResponse
-	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
-	console.log('reference categories ready')
-	// const getReferenceCategories = async () => {}
-	// if (referenceCategories.value === null) {
-	// 	getReferenceCategories()
-	// } else {
-	// 	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
-	// }
-	console.log('fetch references')
-	const referencesQuery = gql`
-		{
-			references {
-				nodes {
-					id
-					title
-					slug
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					referenceCategories {
-						nodes {
-							name
-							id
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: referencesResponse } = await useAsyncQuery(referencesQuery)
-	references.value = referencesResponse
-	// console.log('references ready')
-	// const getReferences = async () => {}
-	// if (references.value === null) {
-	// 	getReferences()
-	// }
+		`
+		const { data } = await useAsyncQuery(referencesQuery)
+		references.value = data
+		console.log('references ready')
+	}
+	if (references.value === null) {
+		getReferences()
+	}
 </script>
 <style lang="scss">
 	.categories__switcher {
