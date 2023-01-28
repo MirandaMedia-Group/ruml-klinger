@@ -14,6 +14,7 @@
 		align-items: flex-start;
 		gap: 30px;
 		margin-top: 50px;
+		margin-bottom: 100px;
 		#content {
 			flex: 1 1 640px;
 		}

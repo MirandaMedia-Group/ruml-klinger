@@ -4,7 +4,8 @@
 			<div class="product__image">
 				<NuxtPicture
 					v-if="props.productAcf.gallery"
-					:src="props.productAcf.gallery?.[0].sourceUrl" />
+					:src="props.productAcf.gallery?.[0].sourceUrl"
+					provider="ipx" />
 			</div>
 			<div class="product__info">
 				<h2>{{ props.title }}</h2>

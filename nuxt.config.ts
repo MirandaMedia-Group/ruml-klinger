@@ -14,7 +14,7 @@ export default defineNuxtConfig({
 		},
 	},
 	css: ['@/assets/normalize.css', '@/assets/global.css'],
-	modules: ['@nuxt/image-edge', '@nuxtjs/apollo'],
+	modules: ['@nuxt/image-edge', '@nuxtjs/apollo', 'nuxt-swiper'],
 	image: {
 		provider: 'netlify',
 		domains: ['cdn.myshoptet.com', 'pet-center-stage.axfone.eu', 'pet-center-prod.axfone.eu'],
