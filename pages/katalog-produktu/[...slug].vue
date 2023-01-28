@@ -24,7 +24,7 @@
 
 	const categoryInfoQuery = gql`
 		query {
-			productCategories(where: { slug: "${router.currentRoute.value.params.slug[0]}" }) {
+			productCategories(where: { slug: "${router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]}" }) {
 				nodes {
 					name
 					slug
@@ -39,7 +39,7 @@
 
 	const categoryProductsQuery = gql`
 		query {
-			productCategories(where: { slug: "${router.currentRoute.value.params.slug[0]}" }) {
+			productCategories(where: { slug: "${router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]}" }) {
 				nodes {
 					contentNodes {
 						nodes {
