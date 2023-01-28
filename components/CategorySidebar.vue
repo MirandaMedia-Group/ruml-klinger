@@ -8,7 +8,7 @@
 					:class="{ 'has-children': level1?.children.nodes.length, expanded: $route.fullPath.indexOf(level1.slug) >= 0 }"
 					:key="index1">
 					<NuxtLink
-						:to="`/produkty/${level1.slug}`"
+						:to="`/katalog-produktu/${level1.slug}`"
 						:class="{ 'router-link-active': $route.fullPath.indexOf(level1.slug) >= 0 }">
 						{{ level1.name }}
 						<span
@@ -21,7 +21,7 @@
 						<li
 							v-for="(level2, index2) in level1?.children?.nodes"
 							:key="index2">
-							<NuxtLink :to="`/produkty/${level1.slug}/${level2.slug}`">{{ level2.name }}</NuxtLink>
+							<NuxtLink :to="`/katalog-produktu/${level1.slug}/${level2.slug}`">{{ level2.name }}</NuxtLink>
 						</li>
 					</ul>
 				</li>

@@ -20,7 +20,7 @@
 				<nav id="navigation">
 					<ul>
 						<li>
-							<nuxt-link to="/produkty">Produkty</nuxt-link>
+							<nuxt-link to="/katalog-produktu">Produkty</nuxt-link>
 						</li>
 						<li>
 							<nuxt-link to="/sluzby">Služby</nuxt-link>
