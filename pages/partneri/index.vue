@@ -1,11 +1,7 @@
 <template>
-	<section class="page-header">
-		<div class="container">
-			<div class="page-header__content">
-				<h1>Partneři</h1>
-			</div>
-		</div>
-	</section>
+	<PageHeader>
+		<h1>Partneři</h1>
+	</PageHeader>
 	<section class="container">
 		<div class="partners-grid">
 			<div
@@ -64,29 +60,6 @@
 	console.log(allPartners.value)
 </script>
 <style lang="scss">
-	.page-header {
-		background: url('/page-header-bg.jpg') no-repeat center;
-		background-size: cover;
-		margin-bottom: 120px;
-		&__content {
-			padding-top: 100px;
-			padding-bottom: 100px;
-			background-image: url('/page-header-logo.png');
-			background-repeat: no-repeat;
-			background-position: center bottom;
-			background-color: $color-white;
-			position: relative;
-			bottom: -80px;
-			text-align: center;
-			h1 {
-				margin-bottom: 0;
-				&::after {
-					margin-left: auto;
-					margin-right: auto;
-				}
-			}
-		}
-	}
 	.partners-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));

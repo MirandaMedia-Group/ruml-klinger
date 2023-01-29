@@ -45,7 +45,7 @@
 			</div>
 		</section>
 		<section>
-			<div class="anchors">
+			<AnchorsBlock>
 				<nav>
 					<ul>
 						<li v-if="singleProduct.products.nodes[0].content">
@@ -68,7 +68,7 @@
 						</li>
 					</ul>
 				</nav>
-			</div>
+			</AnchorsBlock>
 		</section>
 		<section
 			id="description"
@@ -340,36 +340,6 @@
 			}
 			&::after {
 				transform: translate(-50%, -50%);
-			}
-		}
-	}
-	.anchors {
-		border-bottom: 1px solid $color-inactive;
-		margin-bottom: 100px;
-		nav {
-			margin-bottom: -1px;
-			ul {
-				display: flex;
-				list-style: none;
-				margin: 0;
-				padding: 0;
-			}
-			a {
-				display: inline-block;
-				padding: em(10) em(20);
-				text-decoration: none;
-				color: $color-font;
-				border: 1px solid $color-inactive;
-				margin-right: -1px;
-				background-color: #f5f4f4;
-				&.active,
-				&:hover,
-				&:focus {
-					border-bottom: 1px solid $color-bg-light;
-					background-color: $color-bg-light;
-					color: $color-secondary;
-					font-weight: 700;
-				}
 			}
 		}
 	}

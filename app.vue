@@ -15,6 +15,7 @@
 <style lang="scss">
 	html {
 		font-size: 16px;
+		scroll-behavior: smooth;
 	}
 	body {
 		font-family: 'Montserrat', sans-serif;
