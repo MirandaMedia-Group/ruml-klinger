@@ -72,6 +72,7 @@
 		</section>
 		<section
 			id="description"
+			class="divider"
 			v-if="singleProduct.products.nodes[0].content">
 			<div
 				class="product__content"
@@ -84,6 +85,16 @@
 			<div
 				class="product__parameters"
 				v-html="singleProduct.products.nodes[0].productAcf.tabulkaParametru"></div>
+		</section>
+		<section
+			id="product-videos"
+			class="full-width"
+			v-if="singleProduct.products.nodes[0].productAcf.productVideos?.length">
+			<div class="container">
+				<VideoCarousel
+					:data="singleProduct.products.nodes[0].productAcf.productVideos"
+					:white="true" />
+			</div>
 		</section>
 		<section
 			id="product-files"
@@ -128,6 +139,17 @@
 				</div>
 			</div>
 		</section>
+		<section
+			id="additional-products"
+			class="divider top"
+			v-if="singleProduct.products.nodes[0].productAcf.additionalProducts?.length">
+			<div class="center">
+				<h2>Podobné produkty</h2>
+			</div>
+			<div class="products-grid">
+				<ProductsBlock :data="singleProduct.products.nodes[0].productAcf.additionalProducts" />
+			</div>
+		</section>
 	</div>
 </template>
 <script setup>
@@ -143,8 +165,10 @@
 					productAcf {
 						additionalProducts {
 							... on Product {
-								id
+								slug
+								title
 								productAcf {
+									shortDescription
 									gallery {
 										sourceUrl
 									}
@@ -179,7 +203,7 @@
 						}
 						productVideos {
 							description
-							heading
+							title
 							video
 						}
 						shortDescription
@@ -202,6 +226,12 @@
 	console.log(singleProduct.value.products.nodes[0].productAcf.productVideos)
 </script>
 <style lang="scss">
+	.full-width {
+		position: relative;
+		width: 100vw;
+		left: 50%;
+		transform: translateX(-50%);
+	}
 	.product-top {
 		display: flex;
 		align-items: flex-start;
@@ -276,6 +306,42 @@
 		}
 		.product__base-parameters-list-item-value {
 			flex: 4;
+		}
+	}
+	.divider {
+		position: relative;
+		padding-bottom: 50px;
+		&::before {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			display: block;
+			width: 100%;
+			height: 1px;
+			background-color: $color-inactive;
+		}
+		&::after {
+			padding: 8px;
+			background-color: $color-bg-light;
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translate(-50%, 50%);
+			content: url(/icon/ruml-logo-mini.svg);
+			display: block;
+			line-height: 0;
+		}
+		&.top {
+			padding-bottom: 0;
+			padding-top: 100px;
+			&::before,
+			&::after {
+				bottom: unset;
+				top: 0;
+			}
+			&::after {
+				transform: translate(-50%, -50%);
+			}
 		}
 	}
 	.anchors {
@@ -359,6 +425,10 @@
 				}
 			}
 		}
+	}
+	#product-videos {
+		background-color: $color-primary;
+		padding: 100px 0;
 	}
 	#product-files {
 		h2 {

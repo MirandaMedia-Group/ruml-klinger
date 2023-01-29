@@ -83,92 +83,9 @@
 		</section>
 
 		<section class="container">
-			<div
+			<VideoCarousel
 				v-if="hpVideos"
-				class="video__carousel">
-				<div class="video__info">
-					<div class="video__description">
-						<h2>{{ hpVideos[activeVideo].title }}</h2>
-						<p>{{ hpVideos[activeVideo].description }}</p>
-					</div>
-					<div
-						v-if="hpVideos"
-						class="carousel__controls">
-						<div class="carousel__dots">
-							<button
-								v-for="(item, index) in hpVideos"
-								:key="index"
-								:class="{ active: index === activeVideo }"
-								class="carousel__dot"
-								@click="activeVideo = index"
-								name="Slide"></button>
-						</div>
-						<div class="carousel__arrows">
-							<button
-								class="arrow arrow-left"
-								@click="activeVideo = activeVideo === 0 ? hpVideos.length - 1 : activeVideo - 1"
-								name="Předchozí">
-								<svg
-									width="19"
-									height="15"
-									viewBox="0 0 19 15"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg">
-									<path
-										d="M1.5 7.5L17.5 7.5M17.5 7.5L11 14M17.5 7.5L11 0.999999"
-										stroke-width="2"
-										stroke-linecap="round"
-										stroke-linejoin="round" />
-								</svg>
-							</button>
-							<button
-								class="arrow arrow-right"
-								@click="activeVideo = activeVideo === hpVideos.length - 1 ? 0 : activeVideo + 1"
-								name="Další">
-								<svg
-									width="19"
-									height="15"
-									viewBox="0 0 19 15"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg">
-									<path
-										d="M1.5 7.5L17.5 7.5M17.5 7.5L11 14M17.5 7.5L11 0.999999"
-										stroke-width="2"
-										stroke-linecap="round"
-										stroke-linejoin="round" />
-								</svg>
-							</button>
-						</div>
-					</div>
-				</div>
-				<div class="video__content">
-					<video
-						v-if="hpVideos[activeVideo].file"
-						:src="hpVideos[activeVideo].file"></video>
-					<div v-else-if="hpVideos[activeVideo].video">
-						<a
-							v-if="hpVideos[activeVideo].video && !showVideo"
-							@click.prevent="showVideo = true"
-							:data-youtube="youtubeID(hpVideos[activeVideo].video)"
-							:href="hpVideos[activeVideo].video">
-							<img
-								alt=""
-								width="950"
-								height="550"
-								:src="`https://img.youtube.com/vi/${youtubeID(hpVideos[activeVideo].video)}/hqdefault.jpg`" />
-						</a>
-						<iframe
-							v-else
-							width="960"
-							height="550"
-							:src="`https://www.youtube-nocookie.com/embed/${youtubeID(hpVideos[activeVideo].video)}?autoplay=1`"
-							title="YouTube video player"
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-							allowfullscreen></iframe>
-					</div>
-				</div>
-			</div>
+				:data="hpVideos" />
 		</section>
 		<section class="partners">
 			<div class="container center">
@@ -278,17 +195,11 @@
 	const hpCategories = useState('hpCategories', () => null)
 	const hpBannerTop = useState('hpBannerTop', () => null)
 	const hpVideos = useState('hpVideos', () => null)
-	const activeVideo = useState('activeVideo', () => 0)
-	const showVideo = useState('showVideo', () => false)
 	const aboutUs = useState('aboutUs', () => null)
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
 	const career = useState('career', () => null)
 
-	// COMPUTED
-	const youtubeID = (videoURL) => new URL(videoURL).searchParams.get('v')
-
 	const getHomepageData = async () => {
-		console.log('fetch HP data')
 		const homepageQuery = gql`
 			query {
 				page(id: "cG9zdDo1OTI=") {
@@ -410,14 +321,12 @@
 		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
 		aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
 		career.value = homepageData.value.page.rumlKlingerHomepage.career
-		console.log('HP ready')
 	}
 	if (homepageData.value === null) {
 		getHomepageData()
 	}
 
 	const getServicesData = async () => {
-		console.log('fetch services data')
 		const servicesQuery = gql`
 			query {
 				pages(where: { parent: "cG9zdDo1OTg=" }) {
@@ -446,11 +355,9 @@
 	}
 	if (servicesData.value === null) {
 		getServicesData()
-		console.log('services ready')
 	}
 
 	const getPartnersData = async () => {
-		console.log('fetch partners data')
 		const partnersQuery = gql`
 			query {
 				partners(first: 5) {
@@ -473,14 +380,12 @@
 		`
 		const { data } = await useAsyncQuery(partnersQuery)
 		partnersData.value = data
-		console.log('partners ready')
 	}
 	if (partnersData.value === null) {
 		getPartnersData()
 	}
 
 	const getReferenceCategories = async () => {
-		console.log('fetch reference categories')
 		const referenceCategoriesQuery = gql`
 			{
 				referenceCategories {
@@ -496,13 +401,11 @@
 		const { data } = await useAsyncQuery(referenceCategoriesQuery)
 		referenceCategories.value = data
 		activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
-		console.log('reference categories ready')
 	}
 	if (referenceCategories.value === null) {
 		getReferenceCategories()
 	}
 	const getReferences = async () => {
-		console.log('fetch references')
 		const referencesQuery = gql`
 			{
 				references {
@@ -532,7 +435,6 @@
 		`
 		const { data } = await useAsyncQuery(referencesQuery)
 		references.value = data
-		console.log('references ready')
 	}
 	if (references.value === null) {
 		getReferences()
@@ -640,87 +542,6 @@
 	}
 	.service__description {
 		min-height: 84px;
-	}
-
-	.video__carousel {
-		display: flex;
-		gap: 30px;
-		.video__info {
-			flex: 450;
-			display: flex;
-			flex-direction: column;
-			gap: 20px;
-		}
-		.video__content {
-			flex: 960;
-		}
-	}
-	.video__description {
-		margin-top: auto;
-		margin-bottom: auto;
-		h2 {
-			&::after {
-				margin-left: 0;
-			}
-		}
-		p {
-			font-size: rem(20);
-			color: rgba($color-font, 0.9);
-		}
-	}
-	.video__content {
-		iframe,
-		video {
-			display: block;
-		}
-	}
-	.carousel__controls {
-		display: flex;
-		align-items: center;
-		gap: 20px;
-		justify-content: space-between;
-	}
-	.carousel__dots {
-		display: flex;
-		gap: 20px;
-	}
-	.carousel__dot {
-		display: block;
-		width: 24px;
-		height: 24px;
-		border-radius: 50%;
-		background-color: $color-inactive;
-		&.active {
-			background-color: $color-secondary;
-		}
-	}
-	.carousel__arrows {
-		display: flex;
-		gap: 10px;
-		.arrow {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			width: 44px;
-			height: 44px;
-			border: 1px solid $color-font-light;
-			cursor: pointer;
-			svg {
-				stroke: $color-black;
-			}
-			&:hover,
-			&:focus {
-				border-color: $color-secondary;
-				svg {
-					stroke: $color-secondary;
-				}
-			}
-		}
-		.arrow-left {
-			svg {
-				transform: rotate(180deg);
-			}
-		}
 	}
 	.partners {
 		padding: 100px 0;
