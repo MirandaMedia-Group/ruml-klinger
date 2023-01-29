@@ -43,6 +43,7 @@
 <script setup>
 	const referenceCategories = useState('referenceCategories')
 	const references = useState('references')
+	const activeReferenceBlock = useState('activeReferenceBlock')
 
 	const getReferenceCategories = async () => {
 		const referenceCategoriesQuery = gql`
@@ -70,6 +71,7 @@
 		`
 		const { data } = await useAsyncQuery(referenceCategoriesQuery)
 		referenceCategories.value = data
+		activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
 	}
 	if (!referenceCategories.value) {
 		getReferenceCategories()
