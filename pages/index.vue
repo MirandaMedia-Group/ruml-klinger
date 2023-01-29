@@ -322,7 +322,7 @@
 		aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
 		career.value = homepageData.value.page.rumlKlingerHomepage.career
 	}
-	if (homepageData.value === null) {
+	if (!homepageData.value) {
 		getHomepageData()
 	}
 
@@ -353,7 +353,7 @@
 		const { data } = await useAsyncQuery(servicesQuery)
 		servicesData.value = data
 	}
-	if (servicesData.value === null) {
+	if (!servicesData.value) {
 		getServicesData()
 	}
 
@@ -381,7 +381,7 @@
 		const { data } = await useAsyncQuery(partnersQuery)
 		partnersData.value = data
 	}
-	if (partnersData.value === null) {
+	if (!partnersData.value) {
 		getPartnersData()
 	}
 
@@ -402,7 +402,7 @@
 		referenceCategories.value = data
 		activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
 	}
-	if (referenceCategories.value === null) {
+	if (!referenceCategories.value) {
 		getReferenceCategories()
 	}
 	const getReferences = async () => {
@@ -436,7 +436,7 @@
 		const { data } = await useAsyncQuery(referencesQuery)
 		references.value = data
 	}
-	if (references.value === null) {
+	if (!references.value) {
 		getReferences()
 	}
 </script>

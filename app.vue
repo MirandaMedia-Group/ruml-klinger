@@ -115,6 +115,12 @@
 	}
 	.center {
 		text-align: center;
+		h1 {
+			&::after {
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
 	}
 	.align-center {
 		align-items: center;
