@@ -99,8 +99,28 @@
 			font-size: rem(20);
 		}
 	}
+	.buttons-wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20px;
+		margin-top: 30px;
+		justify-content: center;
+	}
+	.buttons-vertical {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		align-items: flex-start;
+		margin-top: 30px;
+	}
 	.center {
 		text-align: center;
+	}
+	.align-center {
+		align-items: center;
+	}
+	.justify-start {
+		justify-content: flex-start;
 	}
 	.btn {
 		display: inline-flex;
@@ -132,20 +152,6 @@
 				}
 			}
 		}
-	}
-	.buttons-wrapper {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 20px;
-		margin-top: 30px;
-		justify-content: center;
-	}
-	.buttons-vertical {
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
-		align-items: flex-start;
-		margin-top: 30px;
 	}
 	.columns {
 		display: flex;

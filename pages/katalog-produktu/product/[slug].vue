@@ -154,7 +154,6 @@
 </template>
 <script setup>
 	const router = useRouter()
-	const swiperPagination = ref(null)
 	const singleProduct = useState('singleProduct', () => null)
 	const singleProductQuery = gql`
 		query {
