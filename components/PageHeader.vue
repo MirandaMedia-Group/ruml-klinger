@@ -32,6 +32,11 @@
 				color: rgba($color-black, 0.6);
 				margin-bottom: 0;
 			}
+			& > strong {
+				display: block;
+				color: $color-secondary;
+				margin-top: 20px;
+			}
 		}
 	}
 </style>

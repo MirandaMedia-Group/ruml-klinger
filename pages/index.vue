@@ -375,6 +375,7 @@
 						name
 						link
 						uri
+						slug
 						referenceCategoryAcf {
 							image {
 								sourceUrl

@@ -64,37 +64,37 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
 		gap: 40px;
-	}
-	.partner {
-		background-color: $color-white;
-		padding: 50px;
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
-		&__image {
-			img {
-				display: block;
-				max-height: 100px;
-				width: auto;
+		.partner {
+			background-color: $color-white;
+			padding: 50px;
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+			&__image {
+				img {
+					display: block;
+					max-height: 100px;
+					width: auto;
+				}
 			}
-		}
-		&__title {
-			margin: 0;
-			color: $color-black;
-			&::after {
-				display: none;
+			&__title {
+				margin: 0;
+				color: $color-black;
+				&::after {
+					display: none;
+				}
 			}
-		}
-		&__excerpt {
-			font-weight: 300;
-			p:last-child {
-				margin-bottom: 0;
+			&__excerpt {
+				font-weight: 300;
+				p:last-child {
+					margin-bottom: 0;
+				}
 			}
-		}
-		.buttons-wrapper {
-			margin-top: auto;
-			a:not(.btn) {
-				color: $color-primary-light;
+			.buttons-wrapper {
+				margin-top: auto;
+				a:not(.btn) {
+					color: $color-primary-light;
+				}
 			}
 		}
 	}
