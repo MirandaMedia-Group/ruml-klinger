@@ -83,6 +83,7 @@
 		}
 	}
 	h3 {
+		margin-top: 0;
 		font-size: rem(32);
 		line-height: em(42, 32);
 	}

@@ -33,7 +33,9 @@
 				</NuxtLink>
 			</div>
 		</section>
-		<section class="banner__top container">
+		<section
+			v-if="hpBannerTop"
+			class="banner__top container">
 			<div
 				class="banner"
 				:style="`background-image: url(${hpBannerTop?.image.sourceUrl})`">
@@ -111,7 +113,8 @@
 			v-if="aboutUs"
 			:data="aboutUs"
 			:hasBackground="true"
-			:btn="{ text: 'Více o společnosti', url: '/o-nas' }" />
+			:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
+			:alignCenter="true" />
 		<section class="references container">
 			<div class="narrow center">
 				<h2>Reference</h2>
@@ -148,7 +151,8 @@
 			v-if="career"
 			:data="career"
 			:reverse="true"
-			:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
+			:btn="{ text: 'Zobrazit pozice', url: '/kariera' }"
+			:alignCenter="true" />
 	</NuxtLayout>
 </template>
 
@@ -180,257 +184,257 @@
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
 	const career = useState('career', () => null)
 
-	const getHomepageData = async () => {
-		const homepageQuery = gql`
-			query {
-				page(id: "cG9zdDo1OTI=") {
+	// const getHomepageData = async () => {
+	const homepageQuery = gql`
+		query {
+			page(id: "cG9zdDo1OTI=") {
+				title
+				slug
+				rumlKlingerHomepage {
+					hero {
+						btnPrimary {
+							text
+							type
+							urlExternal
+							urlInternal
+						}
+						btnSecondary {
+							text
+							type
+							urlExternal
+							urlInternal
+						}
+						image {
+							altText
+							sourceUrl
+							title
+							mediaDetails {
+								height
+								width
+							}
+						}
+						perex
+						title
+					}
+					categoriesBlock {
+						title
+						perex
+						categories {
+							url
+							title
+							image {
+								sourceUrl
+								altText
+								mediaDetails {
+									height
+									width
+								}
+							}
+						}
+					}
+					bannerTop {
+						title
+						perex
+						btn {
+							text
+							file {
+								fileSize
+								mediaItemUrl
+							}
+						}
+						image {
+							altText
+							sourceUrl
+							mediaDetails {
+								height
+								width
+							}
+						}
+					}
+					servicesBlock {
+						title
+						perex
+					}
+					videoCarousel {
+						video {
+							title
+							description
+							type
+							video
+							file {
+								mediaItemUrl
+								sourceUrl
+								title
+							}
+						}
+					}
+					aboutUs {
+						title
+						perex
+						text
+						image {
+							altText
+							sourceUrl
+							mediaDetails {
+								height
+								width
+							}
+						}
+					}
+					career {
+						title
+						perex
+						text
+						image {
+							altText
+							sourceUrl
+							mediaDetails {
+								height
+								width
+							}
+						}
+					}
+				}
+			}
+		}
+	`
+	const { data: homepageResponse } = await useAsyncQuery(homepageQuery)
+	homepageData.value = homepageResponse
+	hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
+	hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
+	hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
+	hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
+	aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
+	career.value = homepageData.value.page.rumlKlingerHomepage.career
+	// }
+	// if (!homepageData.value) {
+	// 	getHomepageData()
+	// }
+
+	// const getServicesData = async () => {
+	const servicesQuery = gql`
+		query {
+			pages(where: { parent: "cG9zdDo1OTg=" }) {
+				nodes {
 					title
 					slug
-					rumlKlingerHomepage {
-						hero {
-							btnPrimary {
-								text
-								type
-								urlExternal
-								urlInternal
-							}
-							btnSecondary {
-								text
-								type
-								urlExternal
-								urlInternal
-							}
-							image {
-								altText
-								sourceUrl
-								title
-								mediaDetails {
-									height
-									width
-								}
-							}
-							perex
-							title
-						}
-						categoriesBlock {
-							title
-							perex
-							categories {
-								url
-								title
-								image {
-									sourceUrl
-									altText
-									mediaDetails {
-										height
-										width
-									}
-								}
-							}
-						}
-						bannerTop {
-							title
-							perex
-							btn {
-								text
-								file {
-									fileSize
-									mediaItemUrl
-								}
-							}
-							image {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
-							}
-						}
-						servicesBlock {
-							title
-							perex
-						}
-						videoCarousel {
-							video {
-								title
-								description
-								type
-								video
-								file {
-									mediaItemUrl
-									sourceUrl
-									title
-								}
-							}
-						}
-						aboutUs {
-							title
-							perex
-							text
-							image {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
-							}
-						}
-						career {
-							title
-							perex
-							text
-							image {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
+					featuredImage {
+						node {
+							sourceUrl
+							altText
+							mediaDetails {
+								height
+								width
 							}
 						}
 					}
+					rumlKlingerSluzby {
+						shortDescription
+					}
 				}
 			}
-		`
-		const { data } = await useAsyncQuery(homepageQuery)
-		homepageData.value = data
-		hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
-		hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
-		hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
-		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
-		aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
-		career.value = homepageData.value.page.rumlKlingerHomepage.career
-	}
-	if (!homepageData.value) {
-		getHomepageData()
-	}
+		}
+	`
+	const { data: servicesResponse } = await useAsyncQuery(servicesQuery)
+	servicesData.value = servicesResponse
+	// }
+	// if (!servicesData.value) {
+	// 	getServicesData()
+	// }
 
-	const getServicesData = async () => {
-		const servicesQuery = gql`
-			query {
-				pages(where: { parent: "cG9zdDo1OTg=" }) {
-					nodes {
-						title
-						slug
-						featuredImage {
-							node {
-								sourceUrl
-								altText
-								mediaDetails {
-									height
-									width
-								}
+	// const getPartnersData = async () => {
+	const partnersQuery = gql`
+		query {
+			partners(first: 5) {
+				nodes {
+					id
+					title
+					featuredImage {
+						node {
+							sourceUrl
+							altText
+							mediaDetails {
+								height
+								width
 							}
-						}
-						rumlKlingerSluzby {
-							shortDescription
 						}
 					}
 				}
 			}
-		`
-		const { data } = await useAsyncQuery(servicesQuery)
-		servicesData.value = data
-	}
-	if (!servicesData.value) {
-		getServicesData()
-	}
+		}
+	`
+	const { data: partnersResponse } = await useAsyncQuery(partnersQuery)
+	partnersData.value = partnersResponse
+	// }
+	// if (!partnersData.value) {
+	// 	getPartnersData()
+	// }
 
-	const getPartnersData = async () => {
-		const partnersQuery = gql`
-			query {
-				partners(first: 5) {
-					nodes {
-						id
-						title
-						featuredImage {
-							node {
-								sourceUrl
-								altText
-								mediaDetails {
-									height
-									width
-								}
+	// const getReferenceCategories = async () => {
+	const referenceCategoriesQuery = gql`
+		{
+			referenceCategories {
+				nodes {
+					id
+					name
+					link
+					uri
+					slug
+					referenceCategoryAcf {
+						image {
+							sourceUrl
+							altText
+							mediaDetails {
+								height
+								width
 							}
 						}
 					}
 				}
 			}
-		`
-		const { data } = await useAsyncQuery(partnersQuery)
-		partnersData.value = data
-	}
-	if (!partnersData.value) {
-		getPartnersData()
-	}
-
-	const getReferenceCategories = async () => {
-		const referenceCategoriesQuery = gql`
-			{
-				referenceCategories {
-					nodes {
-						id
-						name
-						link
-						uri
-						slug
-						referenceCategoryAcf {
-							image {
-								sourceUrl
-								altText
-								mediaDetails {
-									height
-									width
-								}
+		}
+	`
+	const { data: referenceCategoriesResponse } = await useAsyncQuery(referenceCategoriesQuery)
+	referenceCategories.value = referenceCategoriesResponse
+	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
+	// }
+	// if (!referenceCategories.value) {
+	// 	getReferenceCategories()
+	// }
+	// const getReferences = async () => {
+	const referencesQuery = gql`
+		{
+			references {
+				nodes {
+					id
+					title
+					slug
+					featuredImage {
+						node {
+							sourceUrl
+							altText
+							mediaDetails {
+								height
+								width
 							}
+						}
+					}
+					referenceCategories {
+						nodes {
+							name
+							id
 						}
 					}
 				}
 			}
-		`
-		const { data } = await useAsyncQuery(referenceCategoriesQuery)
-		referenceCategories.value = data
-		activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
-	}
-	if (!referenceCategories.value) {
-		getReferenceCategories()
-	}
-	const getReferences = async () => {
-		const referencesQuery = gql`
-			{
-				references {
-					nodes {
-						id
-						title
-						slug
-						featuredImage {
-							node {
-								sourceUrl
-								altText
-								mediaDetails {
-									height
-									width
-								}
-							}
-						}
-						referenceCategories {
-							nodes {
-								name
-								id
-							}
-						}
-					}
-				}
-			}
-		`
-		const { data } = await useAsyncQuery(referencesQuery)
-		references.value = data
-	}
-	if (!references.value) {
-		getReferences()
-	}
+		}
+	`
+	const { data: referencesResponse } = await useAsyncQuery(referencesQuery)
+	references.value = referencesResponse
+	// }
+	// if (!references.value) {
+	// 	getReferences()
+	// }
 </script>
 <style lang="scss">
 	.categories__switcher {

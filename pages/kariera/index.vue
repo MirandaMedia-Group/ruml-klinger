@@ -2,7 +2,24 @@
 	<PageHeader>
 		<h1>Staňte se jedním z nás</h1>
 		<p>Ve firmách RUML Group poskytujeme našim zaměstněncům/kolegům prostor pro jejich maximální uplatnění a rozvoj.</p>
-		<strong>Právě máme volných {{ careerList?.careers.nodes.length }} pozic</strong>
+		<strong>
+			Právě máme
+			{{
+				careerList?.careers.nodes.length === 1
+					? 'volnou'
+					: careerList?.careers.nodes.length >= 2 || careerList?.careers.nodes.length <= 4
+					? 'volné'
+					: 'volných'
+			}}
+			{{ careerList?.careers.nodes.length }}
+			{{
+				careerList?.careers.nodes.length === 1
+					? 'pozici'
+					: careerList?.careers.nodes.length >= 2 || careerList?.careers.nodes.length <= 4
+					? 'pozice'
+					: 'pozic'
+			}}
+		</strong>
 	</PageHeader>
 	<section class="container">
 		<div class="career-list">
@@ -19,7 +36,15 @@
 						provider="ipx" />
 				</div>
 				<div class="career__content">
+					<div class="career__company">
+						<NuxtPicture
+							:src="companyLogos[post.careerAcf.company]"
+							:alt="post.careerAcf.company" />
+					</div>
 					<h2 class="career__title">{{ post.title }}</h2>
+					<div class="career__website">
+						{{ companyURLs[post.careerAcf.company] }}
+					</div>
 					<div
 						class="career__excerpt"
 						v-html="post.excerpt"></div>
@@ -37,6 +62,22 @@
 
 <script setup>
 	const careerList = useState('careerList', () => null)
+	const companyLogos = ref({
+		klinger: '/loga/ruml-klinger.png',
+		service: '/loga/ruml-service.png',
+		emes: '/loga/ruml-emes.png',
+		industry: '/loga/ruml-industry.png',
+		tesneni: '/loga/ruml-tesneni.png',
+		group: '/loga/ruml-group.png',
+	})
+	const companyURLs = ref({
+		klinger: 'www.ruml-klinger.cz',
+		service: 'www.ruml-service.cz',
+		emes: 'www.ruml-emes.cz',
+		industry: 'www.ruml-industry.cz',
+		tesneni: 'www.ruml-tesneni.cz',
+		group: 'www.ruml-group.cz',
+	})
 
 	const careerListQuery = gql`
 		query {
@@ -55,6 +96,9 @@
 					}
 					slug
 					title
+					careerAcf {
+						company
+					}
 				}
 			}
 		}
@@ -76,6 +120,9 @@
 				display: block;
 			}
 		}
+		&__company {
+			margin-bottom: 20px;
+		}
 		&__content {
 			flex: 1 1 600px;
 			padding: 50px;
@@ -85,10 +132,15 @@
 			align-items: flex-start;
 			h2 {
 				font-size: rem(32);
+				margin-bottom: 0;
 				&::after {
 					display: none;
 				}
 			}
+		}
+		&__website {
+			color: $color-font-light;
+			margin-bottom: 20px;
 		}
 	}
 </style>

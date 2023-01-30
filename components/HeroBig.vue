@@ -1,5 +1,7 @@
 <template>
-	<section class="hero">
+	<section
+		class="hero"
+		:class="{ white: props.white }">
 		<NuxtPicture
 			:src="image.sourceUrl"
 			:width="image.mediaDetails.width"
@@ -12,7 +14,9 @@
 				<div
 					class="excerpt"
 					v-html="props?.perex"></div>
-				<div class="buttons-vertical">
+				<div
+					v-if="btnPrimary && btnSecondary"
+					class="buttons-vertical">
 					<NuxtLink
 						v-if="btnPrimary.type === 'internal'"
 						:to="btnPrimary.urlInternal"
@@ -37,11 +41,17 @@
 	</section>
 </template>
 <script setup>
-	const props = defineProps(['title', 'perex', 'btnPrimary', 'btnSecondary', 'image'])
+	const props = defineProps(['title', 'perex', 'btnPrimary', 'btnSecondary', 'image', 'white'])
 </script>
 <style lang="scss" scoped>
 	.hero {
 		position: relative;
+		&.white {
+			h1,
+			.excerpt {
+				color: $color-white;
+			}
+		}
 	}
 	.container {
 		position: absolute;
