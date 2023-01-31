@@ -1,7 +1,9 @@
 <template>
 	<HeroBig
 		v-bind="kontakty.page.rumlKlingerKontakty.hero"
-		:white="true" />
+		:white="true"
+		:center="true"
+		:contactBox="true" />
 	<section class="container">
 		<div class="billing-info">
 			<div class="column">
@@ -143,7 +145,8 @@
 							:src="person.image.sourceUrl"
 							:alt="person.image.altText"
 							:width="person.image.mediaDetails.width"
-							:height="person.image.mediaDetails.height" />
+							:height="person.image.mediaDetails.height"
+							provider="ipx" />
 						<NuxtPicture
 							v-else
 							src="/kontaktni_osoby/placeholder.jpg"
@@ -168,6 +171,7 @@
 			.replace(/[^\w\s-]/g, '')
 			.replace(/[\s_-]+/g, '-')
 			.replace(/^-+|-+$/g, '')
+
 	const kontakty = useState('kontakty', () => null)
 	const kontaktyQuery = gql`
 		query {
