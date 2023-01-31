@@ -1,7 +1,7 @@
 <template>
 	<section
 		class="page-image-header"
-		:style="`background-image: url('/page-header-bg.jpg')`">
+		:style="`background-image: url('/sluzby-bg.jpg')`">
 		<div class="container page-image-header__content center">
 			<h1>Služby</h1>
 			<p>
@@ -76,6 +76,13 @@
 <style lang="scss" scoped>
 	.page-image-header {
 		padding: 160px 0;
+		color: $color-white;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: center;
+		h1 {
+			color: inherit;
+		}
 		.container {
 			max-width: 760px;
 		}

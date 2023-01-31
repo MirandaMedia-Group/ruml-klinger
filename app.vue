@@ -184,4 +184,40 @@
 			line-height: 0;
 		}
 	}
+	.divider {
+		position: relative;
+		padding-bottom: 50px;
+		&::before {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			display: block;
+			width: 100%;
+			height: 1px;
+			background-color: $color-inactive;
+		}
+		&::after {
+			padding: 8px;
+			background-color: $color-bg-light;
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translate(-50%, 50%);
+			content: url(/icon/ruml-logo-mini.svg);
+			display: block;
+			line-height: 0;
+		}
+		&.top {
+			padding-bottom: 0;
+			padding-top: 100px;
+			&::before,
+			&::after {
+				bottom: unset;
+				top: 0;
+			}
+			&::after {
+				transform: translate(-50%, -50%);
+			}
+		}
+	}
 </style>

@@ -33,7 +33,8 @@
 						:alt="post.featuredImage.node.altText"
 						:width="post.featuredImage.node.mediaDetails.width"
 						:height="post.featuredImage.node.mediaDetails.height"
-						provider="ipx" />
+						provider="ipx"
+						:img-attrs="{ style: 'display:block;' }" />
 				</div>
 				<div class="career__content">
 					<div class="career__company">

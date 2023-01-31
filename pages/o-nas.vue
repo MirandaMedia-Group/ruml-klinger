@@ -24,7 +24,7 @@
 		</div>
 	</section>
 	<section
-		id="timeline"
+		id="historie"
 		v-if="onas.page.rumlKlingerOnas.timeline">
 		<div class="container">
 			<div class="timeline__columns">
@@ -89,6 +89,7 @@
 	</section>
 	<section
 		class="container"
+		id="nase-spolocnosti"
 		v-if="onas.page.rumlKlingerOnas.ourCompanies">
 		<div class="narrow center">
 			<h2>Naše společnosti</h2>
@@ -308,7 +309,7 @@
 			font-size: rem(24);
 		}
 	}
-	#timeline {
+	#historie {
 		background: url(/timeline-bg.jpg) repeat-y center center;
 		padding: 170px 0;
 		h2,

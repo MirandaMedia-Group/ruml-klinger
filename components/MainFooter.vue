@@ -22,7 +22,7 @@
 					<nav>
 						<ul>
 							<li>
-								<nuxt-link to="/nase-spolecnosti">Naše společnosti</nuxt-link>
+								<nuxt-link to="/o-nas#nase-spolecnosti">Naše společnosti</nuxt-link>
 							</li>
 							<li>
 								<nuxt-link to="/o-nas">O nás</nuxt-link>
@@ -31,7 +31,7 @@
 								<nuxt-link to="/financni-vysledky">Finanční výsledky</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link to="/historie">Historie</nuxt-link>
+								<nuxt-link to="/o-nas#historie">Historie</nuxt-link>
 							</li>
 							<li>
 								<nuxt-link to="/kontakty">Kontakty</nuxt-link>
