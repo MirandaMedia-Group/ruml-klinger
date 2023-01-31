@@ -63,7 +63,7 @@
 <script setup>
 	const careerList = useState('careerList', () => null)
 	const companyLogos = ref({
-		klinger: '/loga/ruml-klinger.png',
+		klinger: '/loga/ruml-group.png',
 		service: '/loga/ruml-service.png',
 		emes: '/loga/ruml-emes.png',
 		industry: '/loga/ruml-industry.png',
