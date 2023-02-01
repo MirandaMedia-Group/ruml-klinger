@@ -62,6 +62,14 @@
 					</div>
 				</div>
 			</div>
+			<div class="column">
+				<div
+					v-if="certificates.page.rumlKlingerOnas.firstBlock.certificates"
+					class="certificates">
+					<h2>Certifikáty</h2>
+					<FilesTable :data="certificates.page.rumlKlingerOnas.firstBlock.certificates" />
+				</div>
+			</div>
 		</div>
 	</section>
 	<section class="container">
@@ -162,6 +170,7 @@
 			</div>
 		</div>
 	</section>
+	<ContactForm />
 </template>
 <script setup>
 	const slugify = (str) =>
@@ -173,6 +182,7 @@
 			.replace(/^-+|-+$/g, '')
 
 	const kontakty = useState('kontakty', () => null)
+	const certificates = useState('certificates', () => null)
 	const kontaktyQuery = gql`
 		query {
 			page(id: "cG9zdDo2MDQ=") {
@@ -236,7 +246,30 @@
 	`
 	const { data: kontaktyResponse } = await useAsyncQuery(kontaktyQuery)
 	kontakty.value = kontaktyResponse.value
-	console.log(kontakty.value)
+
+	const certificatesQuery = gql`
+		query {
+			page(id: "cG9zdDo2MDI=") {
+				rumlKlingerOnas {
+					firstBlock {
+						certificates {
+							name
+							file {
+								fileSize
+								mediaItemUrl
+								slug
+								title
+								mimeType
+							}
+						}
+					}
+				}
+			}
+		}
+	`
+	const { data: certificatesResponse } = await useAsyncQuery(certificatesQuery)
+	certificates.value = certificatesResponse.value
+	console.log(certificates.value)
 </script>
 <style lang="scss">
 	.billing-info {

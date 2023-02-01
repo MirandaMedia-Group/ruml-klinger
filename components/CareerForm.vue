@@ -76,7 +76,11 @@
 					rows="5"
 					placeholder="Sem napište doplňující informace"></textarea>
 			</div>
-			<button type="submit">Odeslat</button>
+			<button
+				class="btn btn-tertiary"
+				type="submit">
+				Odeslat
+			</button>
 		</form>
 	</div>
 </template>
@@ -130,6 +134,9 @@
 		padding: 60px 30px 30px;
 		border-top: 4px solid $color-secondary;
 		border-radius: 6px;
+		background-image: url(/career-form-bg.svg);
+		background-repeat: no-repeat;
+		background-position: top right;
 		h2,
 		h3 {
 			color: $color-black;
@@ -177,16 +184,9 @@
 				color: $color-font-light;
 			}
 		}
-		button {
-			background-color: $color-secondary;
-			display: block;
-			width: 100%;
-			padding: em(15) em(30);
-			border-radius: 4px;
-			color: $color-white;
-			text-transform: uppercase;
-			font-weight: 700;
-			cursor: pointer;
-		}
+	}
+	button {
+		justify-content: center;
+		width: 100%;
 	}
 </style>

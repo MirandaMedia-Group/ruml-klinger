@@ -1,7 +1,6 @@
 <template>
 	<div class="references__list">
-		<NuxtLink
-			:to="`/reference/${reference.slug}`"
+		<div
 			class="reference"
 			v-for="reference in props.references.filter((reference) => reference.referenceCategories.nodes[0].id === props.category.id)"
 			:key="reference.slug">
@@ -17,7 +16,7 @@
 			<div class="reference__title">
 				{{ reference.title }}
 			</div>
-		</NuxtLink>
+		</div>
 	</div>
 </template>
 <script setup>
@@ -34,7 +33,7 @@
 			color: $color-font;
 			&:hover,
 			&:focus {
-				.reference__image img {
+				.reference__image {
 					filter: grayscale(0);
 				}
 			}
@@ -46,10 +45,8 @@
 			align-items: center;
 			justify-content: center;
 			aspect-ratio: 1;
-			img {
-				filter: grayscale(1);
-				transition: all 0.15s ease-in-out;
-			}
+			filter: grayscale(1);
+			transition: all 0.15s ease-in-out;
 			margin-bottom: 5px;
 		}
 		.reference__title {

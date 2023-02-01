@@ -42,6 +42,7 @@
 		background-color: transparent;
 		border: 0;
 		padding: 0;
+		cursor: pointer;
 	}
 	h1,
 	h2,
@@ -158,6 +159,14 @@
 				&::before {
 					margin-right: em(33.5);
 				}
+			}
+		}
+		&.btn-tertiary {
+			background-color: $color-secondary;
+			color: $color-white;
+			&:hover,
+			&:focus {
+				background-color: $color-secondary-hover;
 			}
 		}
 	}
@@ -290,11 +299,18 @@
 			}
 		}
 	}
+	.form-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
 	.form-group {
+		flex: 1 1 240px;
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
 		margin-bottom: 20px;
+		text-align: left;
 		label {
 			font-weight: 700;
 		}
@@ -311,6 +327,14 @@
 		background-color: #f5f4f4;
 		&:focus {
 			border-color: $color-secondary;
+		}
+	}
+	.white {
+		input[type='text'],
+		input[type='email'],
+		input[type='tel'],
+		textarea {
+			background-color: $color-white;
 		}
 	}
 </style>

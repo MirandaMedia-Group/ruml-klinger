@@ -33,10 +33,22 @@
 					provider="ipx" />
 				<h2>{{ category.name }}</h2>
 			</div>
-
 			<ReferencesList
 				:references="references?.references.nodes"
 				:category="category" />
+			<div
+				v-if="category.referenceCategoryAcf.technologies"
+				class="technologies center">
+				<h3>Použité technologie</h3>
+				<div v-html="category.referenceCategoryAcf.technologies"></div>
+				<div class="buttons-wrapper">
+					<NuxtLink
+						:to="`/kontakty#formular`"
+						class="btn btn-tertiary">
+						Chci poptat vaše služby
+					</NuxtLink>
+				</div>
+			</div>
 		</div>
 	</section>
 </template>
@@ -64,6 +76,7 @@
 									width
 								}
 							}
+							technologies
 						}
 					}
 				}
@@ -126,6 +139,42 @@
 				background-color: $color-bg-light;
 				&::after {
 					display: none;
+				}
+			}
+		}
+	}
+	.technologies {
+		background-color: rgba(214, 217, 227, 0.5);
+		padding: 50px;
+		text-align: left;
+		margin-bottom: 80px;
+		h3 {
+			text-align: center;
+			font-size: rem(16);
+			margin-bottom: em(25, 16);
+		}
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+			column-gap: 20px;
+			li {
+				font-size: rem(12);
+				line-height: em(18, 12);
+				position: relative;
+				padding: em(5, 12) em(10, 12);
+				padding-left: 18px;
+				&::before {
+					content: '';
+					display: block;
+					width: 9px;
+					height: 9px;
+					background-color: $color-secondary;
+					position: absolute;
+					left: 0;
+					top: 0.7em;
 				}
 			}
 		}
