@@ -57,7 +57,6 @@
 	`
 	const { data: allPartnersData } = await useAsyncQuery(allPartnersQuery)
 	allPartners.value = allPartnersData.value
-	console.log(allPartners.value)
 </script>
 <style lang="scss">
 	.partners-grid {

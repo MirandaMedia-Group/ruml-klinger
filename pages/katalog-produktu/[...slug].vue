@@ -22,8 +22,8 @@
 		layout: false,
 	})
 	const router = useRouter()
-	const categoryInfo = useState('categoryInfo', () => null)
-	const categoryProducts = useState('categoryProducts', () => null)
+	const categoryInfo = ref(null)
+	const categoryProducts = ref(null)
 
 	const categoryInfoQuery = gql`
 		query {
@@ -66,7 +66,6 @@
 	`
 	const { data: categoryProductsData } = await useAsyncQuery(categoryProductsQuery)
 	categoryProducts.value = categoryProductsData
-	console.log(categoryProducts.value)
 </script>
 <style lang="scss">
 	.category__header {

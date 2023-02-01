@@ -1,30 +1,10 @@
 <template>
 	<div>
-		<section class="detail-header">
-			<div class="container">
-				<div class="detail-header__columns">
-					<div class="column detail-header__image">
-						<NuxtPicture
-							:src="careerDetail.careers.nodes[0].featuredImage.node.sourceUrl"
-							:alt="careerDetail.careers.nodes[0].featuredImage.node.altText"
-							:width="careerDetail.careers.nodes[0].featuredImage.node.mediaDetails.width"
-							:height="careerDetail.careers.nodes[0].featuredImage.node.mediaDetails.height"
-							provider="ipx" />
-					</div>
-					<div class="column detail-header__info">
-						<div class="detail-header__company">
-							<NuxtPicture
-								:src="companyLogos[careerDetail.careers.nodes[0].careerAcf.company]"
-								:alt="careerDetail.careers.nodes[0].careerAcf.company" />
-						</div>
-						<h1>{{ careerDetail.careers.nodes[0].title }}</h1>
-						<div
-							class="detail-header__excerpt"
-							v-html="careerDetail.careers.nodes[0].excerpt"></div>
-					</div>
-				</div>
-			</div>
-		</section>
+		<PostHeader
+			:image="careerDetail.careers.nodes[0].featuredImage.node"
+			:logo="careerDetail.careers.nodes[0].careerAcf.company"
+			:title="careerDetail.careers.nodes[0].title"
+			:excerpt="careerDetail.careers.nodes[0].excerpt" />
 		<NuxtLayout name="with-sidebar-detail">
 			<template #main>
 				<div v-html="careerDetail.careers.nodes[0].content"></div>
@@ -45,7 +25,7 @@
 		layout: false,
 	})
 
-	const careerDetail = useState('careerDetail', () => null)
+	const careerDetail = ref(null)
 	const router = useRouter()
 
 	const companyLogos = ref({
@@ -93,39 +73,3 @@
 	const { data: careerDetailResponse } = await useAsyncQuery(careerDetailQuery)
 	careerDetail.value = careerDetailResponse.value
 </script>
-
-<style lang="scss">
-	.detail-header {
-		background: url(/page-header-bg.jpg) top center no-repeat;
-		margin-bottom: 160px;
-		&__columns {
-			position: relative;
-			bottom: -80px;
-			display: flex;
-			flex-wrap: wrap;
-			align-items: center;
-			background-color: $color-white;
-		}
-		&__image,
-		&__info {
-			flex: 1 1 420px;
-		}
-		&__image {
-			img {
-				display: block;
-			}
-		}
-		&__info {
-			padding: 50px;
-		}
-		&__company {
-			img {
-				width: auto;
-			}
-		}
-		&__excerpt {
-			font-size: rem(20);
-			color: rgba($color-font, 0.6);
-		}
-	}
-</style>

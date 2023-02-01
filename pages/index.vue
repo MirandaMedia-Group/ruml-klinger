@@ -33,29 +33,13 @@
 				</NuxtLink>
 			</div>
 		</section>
-		<section
-			v-if="hpBannerTop"
-			class="banner__top container">
-			<div
-				class="banner"
-				:style="`background-image: url(${hpBannerTop?.image.sourceUrl})`">
-				<div class="banner__content">
-					<h3>{{ hpBannerTop?.title }}</h3>
-					<p>{{ hpBannerTop?.perex }}</p>
-					<a
-						class="btn btn-primary"
-						:href="hpBannerTop?.btn.file.mediaItemUrl"
-						target="_blank">
-						{{ hpBannerTop?.btn.text }}
-						({{ (hpBannerTop?.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
-					</a>
-				</div>
-			</div>
+		<section>
+			<BannerTop />
 		</section>
 		<section class="services container">
 			<div class="narrow center">
-				<h2>{{ servicesData?.title }}</h2>
-				<p>{{ servicesData?.perex }}</p>
+				<h2>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
+				<p>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
 			</div>
 			<div class="services-wrap">
 				<div
@@ -178,7 +162,6 @@
 	// DATA SEGMENTATION
 	const hpHero = useState('hpHero', () => null)
 	const hpCategories = useState('hpCategories', () => null)
-	const hpBannerTop = useState('hpBannerTop', () => null)
 	const hpVideos = useState('hpVideos', () => null)
 	const aboutUs = useState('aboutUs', () => null)
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
@@ -299,10 +282,9 @@
 		}
 	`
 	const { data: homepageResponse } = await useAsyncQuery(homepageQuery)
-	homepageData.value = homepageResponse
+	homepageData.value = homepageResponse.value
 	hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
 	hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
-	hpBannerTop.value = homepageData.value.page.rumlKlingerHomepage.bannerTop
 	hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
 	aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
 	career.value = homepageData.value.page.rumlKlingerHomepage.career
@@ -310,6 +292,7 @@
 	// if (!homepageData.value) {
 	// 	getHomepageData()
 	// }
+	console.log(homepageData.value)
 
 	// const getServicesData = async () => {
 	const servicesQuery = gql`
@@ -336,7 +319,7 @@
 		}
 	`
 	const { data: servicesResponse } = await useAsyncQuery(servicesQuery)
-	servicesData.value = servicesResponse
+	servicesData.value = servicesResponse.value
 	// }
 	// if (!servicesData.value) {
 	// 	getServicesData()
@@ -364,7 +347,7 @@
 		}
 	`
 	const { data: partnersResponse } = await useAsyncQuery(partnersQuery)
-	partnersData.value = partnersResponse
+	partnersData.value = partnersResponse.value
 	// }
 	// if (!partnersData.value) {
 	// 	getPartnersData()
@@ -395,7 +378,7 @@
 		}
 	`
 	const { data: referenceCategoriesResponse } = await useAsyncQuery(referenceCategoriesQuery)
-	referenceCategories.value = referenceCategoriesResponse
+	referenceCategories.value = referenceCategoriesResponse.value
 	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
 	// }
 	// if (!referenceCategories.value) {
@@ -430,7 +413,7 @@
 		}
 	`
 	const { data: referencesResponse } = await useAsyncQuery(referencesQuery)
-	references.value = referencesResponse
+	references.value = referencesResponse.value
 	// }
 	// if (!references.value) {
 	// 	getReferences()

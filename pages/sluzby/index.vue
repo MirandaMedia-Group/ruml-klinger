@@ -33,11 +33,14 @@
 							href="mailto:ruml@ruml-group.cz">
 							ruml@ruml-group.cz
 						</a>
-						<BtnSecondary href="/sluzby/{{ service.slug }}">Detail služby</BtnSecondary>
+						<BtnSecondary :href="`/sluzby/${service.slug}`">Detail služby</BtnSecondary>
 					</div>
 				</div>
 			</div>
 		</div>
+	</section>
+	<section>
+		<BannerTop />
 	</section>
 </template>
 <script setup>
@@ -67,7 +70,7 @@
 			}
 		`
 		const { data } = await useAsyncQuery(servicesQuery)
-		servicesData.value = data
+		servicesData.value = data.value
 	}
 	if (!servicesData.value) {
 		getServicesData()

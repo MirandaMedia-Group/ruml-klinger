@@ -118,7 +118,7 @@
 </template>
 <script setup>
 	const router = useRouter()
-	const singleProduct = useState('singleProduct', () => null)
+	const singleProduct = ref(null)
 	const singleProductQuery = gql`
 		query {
 			products(where: { name: "${router.currentRoute.value.params.slug}" }) {
@@ -186,7 +186,6 @@
 	`
 	const { data: singleProductData } = await useAsyncQuery(singleProductQuery)
 	singleProduct.value = singleProductData
-	console.log(singleProduct.value.products.nodes[0].productAcf.productVideos)
 </script>
 <style lang="scss">
 	.full-width {
