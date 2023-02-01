@@ -220,4 +220,97 @@
 			}
 		}
 	}
+	.wp-content #content {
+		color: $color-font;
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			color: $color-black;
+			margin: em(40, 32) 0;
+			&::after {
+				display: none;
+			}
+		}
+		h2 {
+			font-size: rem(32);
+		}
+		h3 {
+			font-size: rem(26);
+		}
+		h4 {
+			font-size: rem(20);
+		}
+		ul {
+			list-style: none;
+			padding: 0;
+			margin: em(20) 0;
+			li {
+				position: relative;
+				padding-left: 34px;
+				line-height: em(28);
+				&::before {
+					content: '';
+					position: absolute;
+					left: 0;
+					display: block;
+					line-height: 0;
+					top: 0.1em;
+				}
+				&:not(:last-child) {
+					margin-bottom: em(15);
+				}
+			}
+		}
+		ul.check {
+			li {
+				&::before {
+					content: url(/icon/li-check.svg);
+				}
+			}
+		}
+		ul.dot {
+			li {
+				&::before {
+					content: '';
+					width: 10px;
+					height: 10px;
+					margin: 7px;
+					border-radius: 50%;
+					background-color: $color-black;
+				}
+			}
+		}
+		ul.plus {
+			li {
+				&::before {
+					content: url(/icon/li-plus.svg);
+				}
+			}
+		}
+	}
+	.form-group {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		margin-bottom: 20px;
+		label {
+			font-weight: 700;
+		}
+	}
+	input[type='text'],
+	input[type='email'],
+	input[type='tel'],
+	textarea {
+		border: 1px solid $color-inactive;
+		border-radius: 4px;
+		padding: em(10) em(20);
+		font-size: 1rem;
+		color: rgba($color-black, 0.6);
+		background-color: #f5f4f4;
+		&:focus {
+			border-color: $color-secondary;
+		}
+	}
 </style>

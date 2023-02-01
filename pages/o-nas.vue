@@ -9,19 +9,7 @@
 	<section
 		id="usp"
 		class="container">
-		<div class="narrow center">
-			<h2>{{ onas.page.rumlKlingerOnas.secondBlock.title }}</h2>
-			<div v-html="onas.page.rumlKlingerOnas.secondBlock.perex"></div>
-		</div>
-		<div class="usp-wrapper">
-			<div
-				v-for="(usp, index) in onas.page.rumlKlingerOnas.secondBlock.usp"
-				:key="index"
-				class="usp">
-				<strong>{{ usp.value }}</strong>
-				<span>{{ usp.text }}</span>
-			</div>
-		</div>
+		<USPBlock />
 	</section>
 	<section
 		id="historie"
@@ -176,14 +164,6 @@
 								title
 								mimeType
 							}
-						}
-					}
-					secondBlock {
-						title
-						perex
-						usp {
-							text
-							value
 						}
 					}
 					timeline {

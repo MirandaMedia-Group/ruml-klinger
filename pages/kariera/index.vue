@@ -25,7 +25,7 @@
 		<div class="career-list">
 			<div
 				class="career"
-				v-for="(post, index) in careerList?.careers.nodes"
+				v-for="(post, index) in careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger')"
 				:key="index">
 				<div class="career__image">
 					<NuxtPicture
@@ -59,10 +59,20 @@
 			</div>
 		</div>
 	</section>
+	<TextImageBlock
+		v-if="aboutUsBanner"
+		:data="aboutUsBanner.page.rumlKlingerHomepage.aboutUs"
+		:hasBackground="true"
+		:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
+		:alignCenter="true" />
+	<section class="container">
+		<USPBlock />
+	</section>
 </template>
 
 <script setup>
 	const careerList = useState('careerList', () => null)
+	const aboutUsBanner = useState('aboutUsBanner', () => null)
 	const companyLogos = ref({
 		klinger: '/loga/ruml-group.png',
 		service: '/loga/ruml-service.png',
@@ -106,7 +116,32 @@
 	`
 	const { data: careerListData } = await useAsyncQuery(careerListQuery)
 	careerList.value = careerListData.value
-	console.log(careerList.value)
+
+	const homepageQuery = gql`
+		query {
+			page(id: "cG9zdDo1OTI=") {
+				title
+				slug
+				rumlKlingerHomepage {
+					aboutUs {
+						title
+						perex
+						text
+						image {
+							altText
+							sourceUrl
+							mediaDetails {
+								height
+								width
+							}
+						}
+					}
+				}
+			}
+		}
+	`
+	const { data: homepageResponse } = await useAsyncQuery(homepageQuery)
+	aboutUsBanner.value = homepageResponse.value
 </script>
 
 <style lang="scss" scoped>

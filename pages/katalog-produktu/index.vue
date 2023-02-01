@@ -18,6 +18,9 @@
 </template>
 
 <script setup>
+	definePageMeta({
+		layout: false,
+	})
 	const allProducts = useState('allProducts', () => null)
 	const allProductsQuery = gql`
 		query {

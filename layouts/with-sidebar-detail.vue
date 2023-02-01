@@ -13,14 +13,14 @@
 	.content-wrapper {
 		display: flex;
 		align-items: flex-start;
-		gap: 30px;
+		gap: 60px;
 		margin-top: 50px;
 		margin-bottom: 100px;
 		#content {
 			flex: 1 1 640px;
 		}
 		#sidebar {
-			flex: 0 0 350px;
+			flex: 0 0 480px;
 		}
 	}
 </style>

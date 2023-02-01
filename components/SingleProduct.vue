@@ -9,6 +9,7 @@
 			</div>
 			<div class="product__info">
 				<h2>{{ props.title }}</h2>
+				<div v-html="props.excerpt"></div>
 				<svg
 					width="19"
 					height="15"
@@ -27,7 +28,7 @@
 	</div>
 </template>
 <script setup>
-	const props = defineProps(['slug', 'title', 'productAcf'])
+	const props = defineProps(['slug', 'title', 'excerpt', 'productAcf'])
 	console.log(props.slug)
 </script>
 <style lang="scss" scoped>

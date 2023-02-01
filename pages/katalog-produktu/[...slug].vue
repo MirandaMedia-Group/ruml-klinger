@@ -18,6 +18,9 @@
 	</div>
 </template>
 <script setup>
+	definePageMeta({
+		layout: false,
+	})
 	const router = useRouter()
 	const categoryInfo = useState('categoryInfo', () => null)
 	const categoryProducts = useState('categoryProducts', () => null)
@@ -41,7 +44,7 @@
 		query {
 			productCategories(where: { slug: "${router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]}" }) {
 				nodes {
-					contentNodes {
+					contentNodes(first: 30) {
 						nodes {
 							... on Product {
 								id
