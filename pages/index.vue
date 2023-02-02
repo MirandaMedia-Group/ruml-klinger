@@ -7,10 +7,10 @@
 			<div class="narrow center">
 				<h2>{{ hpCategories?.title }}</h2>
 				<p>{{ hpCategories?.perex }}</p>
-				<div class="categories__switcher">
+				<!-- <div class="categories__switcher">
 					<strong>Zobrazit kategorie podle:</strong>
 					<div class="switcher__control"><button class="active">Zboží</button>|<button>Výrobci</button></div>
-				</div>
+				</div> -->
 			</div>
 			<div class="categories-grid">
 				<NuxtLink

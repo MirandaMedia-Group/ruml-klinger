@@ -26,6 +26,11 @@ export default defineNuxtConfig({
 			},
 		},
 	},
+	nitro: {
+		prerender: {
+			routes: ['/', '/o-nas', '/kontakty', '/sluzby', '/reference', '/partneri', '/kariera'],
+		},
+	},
 	routeRules: {
 		'/': { static: true },
 		'/o-nas': { static: true },
@@ -35,7 +40,6 @@ export default defineNuxtConfig({
 		'/partneri': { static: true },
 		'/kariera': { static: true },
 		'/kariera/**': { swr: true },
-		'/katalog-produktu': { swr: true },
 		'/katalog-produktu/**': { swr: true },
 	},
 })

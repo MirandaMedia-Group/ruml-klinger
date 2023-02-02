@@ -29,7 +29,6 @@
 </template>
 <script setup>
 	const props = defineProps(['slug', 'title', 'excerpt', 'productAcf'])
-	console.log(props.slug)
 </script>
 <style lang="scss" scoped>
 	.product {
