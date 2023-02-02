@@ -185,7 +185,7 @@
 		}
 	`
 	const { data: singleProductData } = await useAsyncQuery(singleProductQuery)
-	singleProduct.value = singleProductData
+	singleProduct.value = singleProductData.value
 </script>
 <style lang="scss">
 	.full-width {

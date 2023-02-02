@@ -38,7 +38,7 @@
 		}
 	`
 	const { data: categoryInfoData } = await useAsyncQuery(categoryInfoQuery)
-	categoryInfo.value = categoryInfoData
+	categoryInfo.value = categoryInfoData.value
 
 	const categoryProductsQuery = gql`
 		query {
@@ -65,7 +65,7 @@
 		}
 	`
 	const { data: categoryProductsData } = await useAsyncQuery(categoryProductsQuery)
-	categoryProducts.value = categoryProductsData
+	categoryProducts.value = categoryProductsData.value
 </script>
 <style lang="scss">
 	.category__header {

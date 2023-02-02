@@ -292,7 +292,6 @@
 	// if (!homepageData.value) {
 	// 	getHomepageData()
 	// }
-	console.log(homepageData.value)
 
 	// const getServicesData = async () => {
 	const servicesQuery = gql`

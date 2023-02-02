@@ -33,6 +33,5 @@
 	`
 	const { data: serviceResponse } = await useAsyncQuery(serviceQuery)
 	service.value = serviceResponse.value
-	console.log(service.value)
 </script>
 <style lang="scss"></style>

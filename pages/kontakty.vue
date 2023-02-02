@@ -269,7 +269,6 @@
 	`
 	const { data: certificatesResponse } = await useAsyncQuery(certificatesQuery)
 	certificates.value = certificatesResponse.value
-	console.log(certificates.value)
 </script>
 <style lang="scss">
 	.billing-info {
