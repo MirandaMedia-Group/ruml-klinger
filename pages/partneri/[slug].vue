@@ -4,13 +4,15 @@
 			:src="singlePartner.partners.nodes[0].partnerAcf.hero.sourceUrl"
 			:alt="singlePartner.partners.nodes[0].partnerAcf.hero.altText"
 			:width="singlePartner.partners.nodes[0].partnerAcf.hero.mediaDetails.width"
-			:height="singlePartner.partners.nodes[0].partnerAcf.hero.mediaDetails.height" />
+			:height="singlePartner.partners.nodes[0].partnerAcf.hero.mediaDetails.height"
+			provider="ipx" />
 		<div class="container partner-header__content center">
 			<NuxtPicture
 				:src="singlePartner.partners.nodes[0].featuredImage.node.sourceUrl"
 				:alt="singlePartner.partners.nodes[0].featuredImage.node.altText"
 				:width="singlePartner.partners.nodes[0].featuredImage.node.mediaDetails.width"
-				:height="singlePartner.partners.nodes[0].featuredImage.node.mediaDetails.height" />
+				:height="singlePartner.partners.nodes[0].featuredImage.node.mediaDetails.height"
+				provider="ipx" />
 		</div>
 	</section>
 	<section class="container">
