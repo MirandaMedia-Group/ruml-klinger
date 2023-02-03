@@ -55,4 +55,14 @@
 			line-height: em(28);
 		}
 	}
+	@media (max-width: 900px) {
+		.references__list {
+			margin-bottom: 20px;
+		}
+	}
+	@media (max-width: 540px) {
+		.references__list {
+			grid-template-columns: repeat(2, minmax(1px, 1fr));
+		}
+	}
 </style>

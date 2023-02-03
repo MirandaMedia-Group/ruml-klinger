@@ -75,4 +75,24 @@
 	.certificates {
 		margin-top: 20px;
 	}
+	@media (max-width: 991px) {
+		.columns {
+			flex-direction: column;
+			gap: 30px;
+			&.col-2 .column {
+				flex-basis: unset;
+			}
+			&.reverse {
+				flex-direction: column;
+			}
+		}
+	}
+	@media (max-width: 767px) {
+		.has-background {
+			background: none;
+		}
+		.about-us__perex {
+			font-size: rem(18);
+		}
+	}
 </style>

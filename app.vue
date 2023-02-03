@@ -11,6 +11,13 @@
 			lang: 'cs',
 		},
 	})
+	const screenWidth = useState('screenWidth', () => null)
+	onMounted(() => {
+		screenWidth.value = window.innerWidth
+		window.addEventListener('resize', () => {
+			screenWidth.value = window.innerWidth
+		})
+	})
 </script>
 <style lang="scss">
 	html {
@@ -335,6 +342,23 @@
 		input[type='tel'],
 		textarea {
 			background-color: $color-white;
+		}
+	}
+
+	@media (max-width: 767px) {
+		section {
+			margin-bottom: 50px;
+		}
+		h1 {
+			font-size: rem(30);
+		}
+		h2 {
+			font-size: rem(26);
+		}
+		.narrow {
+			p {
+				font-size: rem(16);
+			}
 		}
 	}
 </style>

@@ -18,7 +18,7 @@
 		<div class="footer-middle">
 			<div class="container">
 				<div class="footer-block">
-					<h3>Menu</h3>
+					<h3 @click.prevent="toggleMenu">Menu<span class="trigger"></span></h3>
 					<nav>
 						<ul>
 							<li>
@@ -43,7 +43,7 @@
 					</nav>
 				</div>
 				<div class="footer-block">
-					<h3>Společnosti</h3>
+					<h3 @click.prevent="toggleMenu">Společnosti<span class="trigger"></span></h3>
 					<nav>
 						<ul>
 							<li>
@@ -85,24 +85,26 @@
 					</nav>
 				</div>
 				<div class="footer-block">
-					<h3>Kontakty</h3>
-					<p>
-						Nad Doly 1625/3 <br />
-						Praha 4 - Modřany <br />
-						PSČ 143 00 <br />
-						Česká republika
-					</p>
-					<p>
-						<a
-							href="https://goo.gl/maps/FiEKdmbvxHKZXB7k9"
-							target="_blank">
-							Zobrazit na mapě
-						</a>
-					</p>
-					<p>
-						<b>IČ:</b> 480 286 14 <br />
-						<b>DIČ:</b> CZ480 286 14
-					</p>
+					<h3 @click.prevent="toggleMenu">Kontakty<span class="trigger"></span></h3>
+					<div>
+						<p>
+							Nad Doly 1625/3 <br />
+							Praha 4 - Modřany <br />
+							PSČ 143 00 <br />
+							Česká republika
+						</p>
+						<p>
+							<a
+								href="https://goo.gl/maps/FiEKdmbvxHKZXB7k9"
+								target="_blank">
+								Zobrazit na mapě
+							</a>
+						</p>
+						<p>
+							<b>IČ:</b> 480 286 14 <br />
+							<b>DIČ:</b> CZ480 286 14
+						</p>
+					</div>
 				</div>
 				<div class="footer-block site-logo">
 					<NuxtPicture
@@ -168,6 +170,9 @@
 </template>
 <script setup>
 	const actualYear = computed(() => new Date().getFullYear())
+	const toggleMenu = (e) => {
+		e.target.classList.toggle('active')
+	}
 </script>
 <style lang="scss" scoped>
 	footer {
@@ -185,6 +190,8 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
+			flex-wrap: wrap;
+			gap: 40px;
 		}
 		h2 {
 			margin: 0;
@@ -200,8 +207,15 @@
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: space-between;
+			gap: 40px;
+		}
+		.footer-block {
+			flex-grow: 1;
 		}
 		h3 {
+			.trigger {
+				display: none;
+			}
 			font-size: rem(16);
 			margin-top: 0;
 			margin-bottom: em(10);
@@ -253,6 +267,8 @@
 				max-width: 315px;
 				display: block;
 				margin-bottom: 50px;
+				margin-left: auto;
+				margin-right: auto;
 			}
 		}
 		.social-link {
@@ -275,6 +291,7 @@
 			gap: 20px;
 			align-items: center;
 			justify-content: space-between;
+			flex-wrap: wrap;
 		}
 		.copyright {
 			a {
@@ -288,6 +305,58 @@
 			gap: 10px;
 			a {
 				text-decoration: none;
+			}
+		}
+	}
+	@media (max-width: 1130px) {
+		.footer-top .container {
+			justify-content: center;
+		}
+	}
+	@media (max-width: 540px) {
+		.footer-middle {
+			padding: 70px 0;
+			.container {
+				flex-direction: column;
+				gap: 20px;
+			}
+			h3 {
+				position: relative;
+				cursor: pointer;
+				.trigger {
+					content: '';
+					display: block;
+					width: 8px;
+					height: 8px;
+					border: 2px solid $color-secondary;
+					border-style: none solid solid none;
+					transform: rotate(45deg);
+					position: absolute;
+					top: 0.1em;
+					right: 0;
+					transition: all 0.15s ease-in-out;
+				}
+				&.active {
+					.trigger {
+						transform: rotate(-135deg);
+					}
+				}
+				&:not(.active) {
+					& + nav,
+					& + div {
+						display: none;
+					}
+				}
+			}
+			.site-logo .logo {
+				max-width: 157px;
+				margin-bottom: 20px;
+			}
+		}
+		.footer-bottom {
+			.container {
+				text-align: center;
+				justify-content: center;
 			}
 		}
 	}

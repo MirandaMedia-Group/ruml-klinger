@@ -187,4 +187,16 @@
 			}
 		}
 	}
+	@media (max-width: 900px) {
+		.video__carousel {
+			flex-direction: column-reverse;
+		}
+	}
+	@media (max-width: 767px) {
+		.video__description {
+			p {
+				font-size: 1rem;
+			}
+		}
+	}
 </style>

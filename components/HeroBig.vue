@@ -108,6 +108,9 @@
 				justify-content: center;
 			}
 		}
+		h1 {
+			font-size: clamp(rem(30), 3vw, rem(42));
+		}
 	}
 	.container {
 		position: absolute;
@@ -159,6 +162,21 @@
 					font-weight: 700;
 				}
 			}
+		}
+	}
+	@media (max-width: 991px) {
+		.container {
+			position: initial;
+			transform: none;
+		}
+		.content {
+			max-width: unset;
+			padding: 40px 0;
+		}
+	}
+	@media (max-width: 767px) {
+		.excerpt {
+			font-size: 1rem;
 		}
 	}
 </style>

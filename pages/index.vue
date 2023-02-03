@@ -103,29 +103,47 @@
 			<div class="narrow center">
 				<h2>Reference</h2>
 			</div>
-			<div class="references__categories">
-				<nav>
-					<ul>
-						<li
-							class="references__category--item"
-							v-for="(item, index) in referenceCategories?.referenceCategories.nodes"
-							:class="{ active: item.id === activeReferenceBlock }"
-							:key="index">
-							<button @click.prevent="activeReferenceBlock = item.id">
-								{{ item.name }}
-							</button>
-						</li>
-					</ul>
-				</nav>
+			<div v-if="screenWidth > 900">
+				<div class="references__categories">
+					<nav>
+						<ul>
+							<li
+								class="references__category--item"
+								v-for="(item, index) in referenceCategories?.referenceCategories.nodes"
+								:class="{ active: item.id === activeReferenceBlock }"
+								:key="index">
+								<button @click.prevent="activeReferenceBlock = item.id">
+									{{ item.name }}
+								</button>
+							</li>
+						</ul>
+					</nav>
+				</div>
+				<div
+					v-for="item in referenceCategories?.referenceCategories.nodes"
+					:key="item.id"
+					:class="{ active: item.id === activeReferenceBlock }"
+					class="references__block">
+					<ReferencesList
+						:references="references?.references.nodes"
+						:category="item" />
+				</div>
 			</div>
-			<div
-				v-for="item in referenceCategories?.referenceCategories.nodes"
-				:key="item.id"
-				:class="{ active: item.id === activeReferenceBlock }"
-				class="references__block">
-				<ReferencesList
-					:references="references?.references.nodes"
-					:category="item" />
+			<div v-else>
+				<div
+					class="mobile-references__wrapper"
+					v-for="(item, index) in referenceCategories?.referenceCategories.nodes"
+					:class="{ active: item.id === activeReferenceBlock }"
+					:key="index">
+					<button @click.prevent="activeReferenceBlock = item.id">
+						{{ item.name }}
+					</button>
+					<div class="mobile-references__block">
+						<ReferencesList
+							:references="references?.references.nodes"
+							:category="item" />
+					</div>
+				</div>
 			</div>
 			<div class="buttons-wrapper buttons-center">
 				<BtnSecondary href="/reference">Všechny reference</BtnSecondary>
@@ -151,6 +169,7 @@
 			},
 		],
 	})
+	const screenWidth = useState('screenWidth')
 
 	// GLOBAL DATA
 	const homepageData = useState('homepageData', () => null)
@@ -167,44 +186,202 @@
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
 	const career = useState('career', () => null)
 
-	// const getHomepageData = async () => {
-	const homepageQuery = gql`
-		query {
-			page(id: "cG9zdDo1OTI=") {
-				title
-				slug
-				rumlKlingerHomepage {
-					hero {
-						btnPrimary {
-							text
-							type
-							urlExternal
-							urlInternal
-						}
-						btnSecondary {
-							text
-							type
-							urlExternal
-							urlInternal
-						}
-						image {
-							altText
-							sourceUrl
+	const getHomepageData = async () => {
+		const homepageQuery = gql`
+			query {
+				page(id: "cG9zdDo1OTI=") {
+					title
+					slug
+					rumlKlingerHomepage {
+						hero {
+							btnPrimary {
+								text
+								type
+								urlExternal
+								urlInternal
+							}
+							btnSecondary {
+								text
+								type
+								urlExternal
+								urlInternal
+							}
+							image {
+								altText
+								sourceUrl
+								title
+								mediaDetails {
+									height
+									width
+								}
+							}
+							perex
 							title
-							mediaDetails {
-								height
-								width
+						}
+						categoriesBlock {
+							title
+							perex
+							categories {
+								url
+								title
+								image {
+									sourceUrl
+									altText
+									mediaDetails {
+										height
+										width
+									}
+								}
 							}
 						}
-						perex
-						title
-					}
-					categoriesBlock {
-						title
-						perex
-						categories {
-							url
+						bannerTop {
 							title
+							perex
+							btn {
+								text
+								file {
+									fileSize
+									mediaItemUrl
+								}
+							}
+							image {
+								altText
+								sourceUrl
+								mediaDetails {
+									height
+									width
+								}
+							}
+						}
+						servicesBlock {
+							title
+							perex
+						}
+						videoCarousel {
+							video {
+								title
+								description
+								type
+								video
+								file {
+									mediaItemUrl
+									sourceUrl
+									title
+								}
+							}
+						}
+						aboutUs {
+							title
+							perex
+							text
+							image {
+								altText
+								sourceUrl
+								mediaDetails {
+									height
+									width
+								}
+							}
+						}
+						career {
+							title
+							perex
+							text
+							image {
+								altText
+								sourceUrl
+								mediaDetails {
+									height
+									width
+								}
+							}
+						}
+					}
+				}
+			}
+		`
+		const { data: homepageResponse } = await useAsyncQuery(homepageQuery)
+		homepageData.value = homepageResponse.value
+		hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
+		hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
+		hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
+		aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
+		career.value = homepageData.value.page.rumlKlingerHomepage.career
+	}
+	if (!homepageData.value) {
+		getHomepageData()
+	}
+
+	const getServicesData = async () => {
+		const servicesQuery = gql`
+			query {
+				pages(where: { parent: "cG9zdDo1OTg=" }) {
+					nodes {
+						title
+						slug
+						featuredImage {
+							node {
+								sourceUrl
+								altText
+								mediaDetails {
+									height
+									width
+								}
+							}
+						}
+						rumlKlingerSluzby {
+							shortDescription
+						}
+					}
+				}
+			}
+		`
+		const { data: servicesResponse } = await useAsyncQuery(servicesQuery)
+		servicesData.value = servicesResponse.value
+	}
+	if (!servicesData.value) {
+		getServicesData()
+	}
+
+	const getPartnersData = async () => {
+		const partnersQuery = gql`
+			query {
+				partners(first: 5) {
+					nodes {
+						id
+						title
+						featuredImage {
+							node {
+								sourceUrl
+								altText
+								mediaDetails {
+									height
+									width
+								}
+							}
+						}
+					}
+				}
+			}
+		`
+		const { data: partnersResponse } = await useAsyncQuery(partnersQuery)
+		partnersData.value = partnersResponse.value
+	}
+	if (!partnersData.value) {
+		getPartnersData()
+	}
+
+	const getReferenceCategories = async () => {
+		const referenceCategoriesQuery = gql`
+			{
+				referenceCategories {
+					nodes {
+						id
+						name
+						link
+						uri
+						slug
+						referenceCategoryAcf {
 							image {
 								sourceUrl
 								altText
@@ -215,208 +392,51 @@
 							}
 						}
 					}
-					bannerTop {
+				}
+			}
+		`
+		const { data: referenceCategoriesResponse } = await useAsyncQuery(referenceCategoriesQuery)
+		referenceCategories.value = referenceCategoriesResponse.value
+		activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
+	}
+	if (!referenceCategories.value) {
+		getReferenceCategories()
+	}
+	const getReferences = async () => {
+		const referencesQuery = gql`
+			{
+				references {
+					nodes {
+						id
 						title
-						perex
-						btn {
-							text
-							file {
-								fileSize
-								mediaItemUrl
-							}
-						}
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					servicesBlock {
-						title
-						perex
-					}
-					videoCarousel {
-						video {
-							title
-							description
-							type
-							video
-							file {
-								mediaItemUrl
+						slug
+						featuredImage {
+							node {
 								sourceUrl
-								title
+								altText
+								mediaDetails {
+									height
+									width
+								}
 							}
 						}
-					}
-					aboutUs {
-						title
-						perex
-						text
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					career {
-						title
-						perex
-						text
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
+						referenceCategories {
+							nodes {
+								name
+								id
 							}
 						}
 					}
 				}
 			}
-		}
-	`
-	const { data: homepageResponse } = await useAsyncQuery(homepageQuery)
-	homepageData.value = homepageResponse.value
-	hpHero.value = homepageData.value.page.rumlKlingerHomepage.hero
-	hpCategories.value = homepageData.value.page.rumlKlingerHomepage.categoriesBlock
-	hpVideos.value = homepageData.value.page.rumlKlingerHomepage.videoCarousel.video
-	aboutUs.value = homepageData.value.page.rumlKlingerHomepage.aboutUs
-	career.value = homepageData.value.page.rumlKlingerHomepage.career
-	// }
-	// if (!homepageData.value) {
-	// 	getHomepageData()
-	// }
+		`
+		const { data: referencesResponse } = await useAsyncQuery(referencesQuery)
 
-	// const getServicesData = async () => {
-	const servicesQuery = gql`
-		query {
-			pages(where: { parent: "cG9zdDo1OTg=" }) {
-				nodes {
-					title
-					slug
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					rumlKlingerSluzby {
-						shortDescription
-					}
-				}
-			}
-		}
-	`
-	const { data: servicesResponse } = await useAsyncQuery(servicesQuery)
-	servicesData.value = servicesResponse.value
-	// }
-	// if (!servicesData.value) {
-	// 	getServicesData()
-	// }
-
-	// const getPartnersData = async () => {
-	const partnersQuery = gql`
-		query {
-			partners(first: 5) {
-				nodes {
-					id
-					title
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: partnersResponse } = await useAsyncQuery(partnersQuery)
-	partnersData.value = partnersResponse.value
-	// }
-	// if (!partnersData.value) {
-	// 	getPartnersData()
-	// }
-
-	// const getReferenceCategories = async () => {
-	const referenceCategoriesQuery = gql`
-		{
-			referenceCategories {
-				nodes {
-					id
-					name
-					link
-					uri
-					slug
-					referenceCategoryAcf {
-						image {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: referenceCategoriesResponse } = await useAsyncQuery(referenceCategoriesQuery)
-	referenceCategories.value = referenceCategoriesResponse.value
-	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
-	// }
-	// if (!referenceCategories.value) {
-	// 	getReferenceCategories()
-	// }
-	// const getReferences = async () => {
-	const referencesQuery = gql`
-		{
-			references {
-				nodes {
-					id
-					title
-					slug
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					referenceCategories {
-						nodes {
-							name
-							id
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: referencesResponse } = await useAsyncQuery(referencesQuery)
-	references.value = referencesResponse.value
-	// }
-	// if (!references.value) {
-	// 	getReferences()
-	// }
+		references.value = referencesResponse.value
+	}
+	if (!references.value) {
+		getReferences()
+	}
 </script>
 <style lang="scss">
 	.categories__switcher {
@@ -451,6 +471,19 @@
 		display: block;
 		position: relative;
 		margin-bottom: 15px;
+		text-decoration: none;
+		.category__image {
+			position: relative;
+			&::after {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				content: '';
+				background: linear-gradient(360deg, rgba(0, 0, 0, 0.6) 11.28%, rgba(0, 0, 0, 0) 50%);
+			}
+		}
 		.category__content {
 			position: absolute;
 			width: 100%;
@@ -489,20 +522,7 @@
 			}
 		}
 	}
-	.banner {
-		padding: 60px;
-		background-size: cover;
-		background-position: center;
-		background-repeat: no-repeat;
-		h3 {
-			font-size: rem(28);
-			margin-bottom: em(20, 28);
-			margin-top: 0;
-		}
-		.banner__content {
-			max-width: 736px;
-		}
-	}
+
 	.services-wrap {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(1px, 1fr));
@@ -529,8 +549,10 @@
 	}
 	.partners-list {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-evenly;
+		gap: 20px;
 		margin-bottom: 50px;
 		img {
 			mix-blend-mode: luminosity;
@@ -555,7 +577,7 @@
 					width: 100%;
 					font-weight: 700;
 					text-align: center;
-					padding: em(10) em(70);
+					padding: em(10) clamp(10px, 3vw, 70px);
 					line-height: em(24);
 					transition: all 0.15s ease-in-out;
 					cursor: pointer;
@@ -572,6 +594,91 @@
 	.references__block {
 		&:not(.active) {
 			display: none;
+		}
+	}
+	.mobile-references {
+		&__wrapper {
+			button {
+				width: 100%;
+				border: 1px solid $color-bg;
+				padding: em(10) em(20);
+				text-align: left;
+				font-weight: 700;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 10px;
+				margin-bottom: 20px;
+				&::after {
+					content: '';
+					display: block;
+					width: 8px;
+					height: 8px;
+					border: 2px solid $color-black;
+					border-style: none solid solid none;
+					transform: rotate(45deg);
+					transition: all 0.15s ease-in-out;
+				}
+			}
+			&:not(.active) {
+				.mobile-references__block {
+					display: none;
+				}
+			}
+			&.active {
+				button {
+					color: $color-secondary;
+					&::after {
+						transform: rotate(-135deg);
+					}
+				}
+			}
+		}
+	}
+	@media (max-width: 1150px) {
+		.categories-grid {
+			columns: 2;
+		}
+	}
+	@media (max-width: 991px) {
+		.categories-grid h3 {
+			font-size: rem(22);
+		}
+	}
+	@media (max-width: 820px) {
+		.services-wrap {
+			grid-template-columns: minmax(1px, 1fr);
+		}
+	}
+	@media (max-width: 767px) {
+		.service__content {
+			padding: 30px 20px;
+			h3 {
+				font-size: rem(22);
+			}
+		}
+	}
+	@media (max-width: 650px) {
+		.categories-grid {
+			columns: unset;
+		}
+		.category {
+			.category__image {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+				&::after {
+					background: rgba(0, 0, 0, 0.6);
+				}
+			}
+			.category__content {
+				position: initial;
+			}
 		}
 	}
 </style>

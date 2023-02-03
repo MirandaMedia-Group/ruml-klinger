@@ -17,7 +17,16 @@
 				ruml@ruml-group.cz
 			</a>
 			<div class="navigation-wrapper">
-				<nav id="navigation">
+				<div
+					class="hamburger"
+					@click.prevent="navigationVisible = !navigationVisible">
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+				<nav
+					id="navigation"
+					:class="{ visible: navigationVisible }">
 					<ul>
 						<li>
 							<nuxt-link to="/katalog-produktu">Produkty</nuxt-link>
@@ -59,7 +68,9 @@
 		</div>
 	</header>
 </template>
-<script setup></script>
+<script setup>
+	const navigationVisible = useState('navigationVisible', () => false)
+</script>
 <style lang="scss" scoped>
 	header {
 		padding: 20px 0;
@@ -130,5 +141,74 @@
 		padding: em(10, 14) em(20, 14);
 		font-weight: 700;
 		color: $color-primary;
+	}
+	.hamburger {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid $color-inactive;
+		border-radius: 50%;
+		gap: 4px;
+		width: 44px;
+		height: 44px;
+		span {
+			width: 16px;
+			height: 2px;
+			display: block;
+			background-color: $color-black;
+		}
+	}
+	@media (min-width: 1150px) {
+		.hamburger {
+			display: none;
+		}
+	}
+	@media (max-width: 1350px) {
+		.contact-mail {
+			display: none;
+		}
+	}
+	@media (max-width: 1149px) {
+		header {
+			position: relative;
+		}
+		#navigation {
+			position: absolute;
+			top: 100%;
+			right: 0;
+			z-index: 2;
+			width: 100%;
+			max-width: 0;
+			background-color: $color-white;
+			padding: 20px 0;
+			box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+			transition: all 0.15s ease-in-out;
+			ul {
+				flex-direction: column;
+			}
+			&.visible {
+				max-width: 480px;
+			}
+		}
+	}
+	@media (max-width: 540px) {
+		.site-logo {
+			max-width: 121px;
+		}
+		.language {
+			order: 1;
+			padding: 0.625rem;
+		}
+		.search {
+			order: 2;
+		}
+		.hamburger {
+			order: 3;
+			margin-left: 0.625rem;
+		}
+		.separator {
+			display: none;
+		}
 	}
 </style>
