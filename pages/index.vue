@@ -657,6 +657,9 @@
 				font-size: rem(22);
 			}
 		}
+		.partners {
+			padding: 50px 0;
+		}
 	}
 	@media (max-width: 650px) {
 		.categories-grid {

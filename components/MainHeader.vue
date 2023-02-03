@@ -184,11 +184,15 @@
 			padding: 20px 0;
 			box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
 			transition: all 0.15s ease-in-out;
+			overflow: hidden;
 			ul {
 				flex-direction: column;
 			}
 			&.visible {
 				max-width: 480px;
+			}
+			a {
+				width: 100%;
 			}
 		}
 	}

@@ -18,6 +18,12 @@
 			screenWidth.value = window.innerWidth
 		})
 	})
+	const navigationVisible = useState('navigationVisible')
+	const router = useRouter()
+	router.beforeEach((to, from, next) => {
+		navigationVisible.value = false
+		next()
+	})
 </script>
 <style lang="scss">
 	html {
@@ -49,6 +55,7 @@
 		background-color: transparent;
 		border: 0;
 		padding: 0;
+		color: inherit;
 		cursor: pointer;
 	}
 	h1,
