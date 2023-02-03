@@ -8,7 +8,8 @@
 						<h1>Produkty</h1>
 					</div>
 				</div>
-				<ProductsBlock :data="allProducts?.products.nodes" />
+				<div v-if="screenWidth <= 900"></div>
+				<ProductsBlock :data="allProductsData?.products.nodes" />
 			</template>
 			<template #sidebar>
 				<CategorySidebar />
@@ -21,7 +22,7 @@
 	definePageMeta({
 		layout: false,
 	})
-	const allProducts = useState('allProducts', () => null)
+	const screenWidth = useState('screenWidth')
 	const allProductsQuery = gql`
 		query {
 			products(first: 30) {
@@ -38,7 +39,5 @@
 			}
 		}
 	`
-	const { data: allProductsData } = await useAsyncQuery(allProductsQuery)
-	allProducts.value = allProductsData
+	const { data: allProductsData } = useAsyncQuery(allProductsQuery)
 </script>
-<style lang="scss"></style>

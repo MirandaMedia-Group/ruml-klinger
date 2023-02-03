@@ -3,12 +3,16 @@
 		<main id="content">
 			<slot name="main"></slot>
 		</main>
-		<aside id="sidebar">
+		<aside
+			v-if="screenWidth > 900"
+			id="sidebar">
 			<slot name="sidebar"></slot>
 		</aside>
 	</div>
 </template>
-<script setup></script>
+<script setup>
+	const screenWidth = useState('screenWidth')
+</script>
 <style lang="scss">
 	.content-wrapper {
 		display: flex;

@@ -11,13 +11,21 @@
 			lang: 'cs',
 		},
 	})
-	const screenWidth = useState('screenWidth', () => null)
+	const screenWidth = useState('screenWidth', () => {
+		return 1024
+	})
 	onMounted(() => {
 		screenWidth.value = window.innerWidth
 		window.addEventListener('resize', () => {
 			screenWidth.value = window.innerWidth
 		})
 	})
+	onBeforeUnmount(() => {
+		window.removeEventListener('resize', () => {
+			screenWidth.value = window.innerWidth
+		})
+	})
+
 	const navigationVisible = useState('navigationVisible')
 	const router = useRouter()
 	router.beforeEach((to, from, next) => {
