@@ -1,5 +1,5 @@
 <template>
-	<nav>
+	<nav v-if="screenWidth > 900">
 		<ul class="menu__level-1">
 			<li
 				v-for="(level1, index1) in categoriesData?.productCategories.nodes"
@@ -25,9 +25,32 @@
 			</li>
 		</ul>
 	</nav>
+	<nav
+		v-else
+		class="mobile-categories">
+		<button @click.prevent="toggleCategories">Kategorie</button>
+		<ul v-if="router.currentRoute.value.params?.slug">
+			<li
+				v-for="(item, index) in categoriesData?.productCategories.nodes.filter(
+					(node) => node.slug === router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
+				)[0]?.children.nodes"
+				:key="index">
+				<nuxt-link :to="`${router.currentRoute.value.fullPath}/${item.slug}`">{{ item.name }}</nuxt-link>
+			</li>
+		</ul>
+		<ul v-else>
+			<li
+				v-for="(item, index) in categoriesData?.productCategories.nodes"
+				:key="index">
+				<nuxt-link :to="`/katalog-produktu/${item.slug}`">{{ item.name }}</nuxt-link>
+			</li>
+		</ul>
+	</nav>
 </template>
 
 <script setup>
+	const screenWidth = useState('screenWidth')
+	const router = useRouter()
 	const productCategoriesQuery = gql`
 		query {
 			productCategories(where: { parent: 0 }) {
@@ -50,8 +73,9 @@
 			}
 		}
 	`
-	const { data: categoriesData } = useAsyncQuery(productCategoriesQuery)
+	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery)
 	const toggleExpanded = (e) => e.target.closest('.has-children').classList.toggle('expanded')
+	const toggleCategories = (e) => e.target.parentElement.classList.toggle('expanded')
 </script>
 <style lang="scss" scoped>
 	ul {
@@ -138,6 +162,51 @@
 					&::before {
 						background-color: $color-secondary;
 					}
+				}
+			}
+		}
+	}
+	.mobile-categories {
+		border: 1px solid $color-bg;
+		margin-bottom: 20px;
+		button,
+		a {
+			display: block;
+			width: 100%;
+			padding: em(10) em(20);
+		}
+		button {
+			font-weight: 700;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+			&::after {
+				content: '';
+				display: block;
+				width: 8px;
+				height: 8px;
+				border: 2px solid $color-black;
+				border-style: none solid solid none;
+				transform: rotate(45deg);
+				transition: all 0.15s ease-in-out;
+			}
+		}
+		a {
+			color: $color-font;
+		}
+		ul {
+			max-height: 0;
+			overflow: hidden;
+			transition: all 0.15s ease-in-out;
+		}
+		&.expanded {
+			ul {
+				max-height: 1000px;
+			}
+			button {
+				&::after {
+					transform: rotate(-135deg);
 				}
 			}
 		}

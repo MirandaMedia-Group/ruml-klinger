@@ -8,8 +8,10 @@
 						<h1>Produkty</h1>
 					</div>
 				</div>
-				<div v-if="screenWidth <= 900"></div>
-				<ProductsBlock :data="allProductsData?.products.nodes" />
+				<div v-if="screenWidth <= 900">
+					<CategoriesBox />
+				</div>
+				<ProductsBlock :data="allProductsData.products.nodes" />
 			</template>
 			<template #sidebar>
 				<CategorySidebar />
@@ -39,5 +41,5 @@
 			}
 		}
 	`
-	const { data: allProductsData } = useAsyncQuery(allProductsQuery)
+	const { data: allProductsData } = await useAsyncQuery(allProductsQuery)
 </script>

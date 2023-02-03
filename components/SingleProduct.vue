@@ -34,6 +34,7 @@
 	.product {
 		a {
 			text-decoration: none;
+			color: rgba($color-black, 0.6);
 			&:hover,
 			&:focus {
 				.product__image {
@@ -70,6 +71,14 @@
 			}
 			svg {
 				transition: all 0.15s ease-in-out;
+			}
+		}
+	}
+	@media (max-width: 767px) {
+		.product .product__info {
+			font-size: rem(12);
+			h2 {
+				font-size: rem(22);
 			}
 		}
 	}

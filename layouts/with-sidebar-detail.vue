@@ -23,4 +23,9 @@
 			flex: 0 0 480px;
 		}
 	}
+	@media (max-width: 767px) {
+		.content-wrapper {
+			margin-bottom: 50px;
+		}
+	}
 </style>

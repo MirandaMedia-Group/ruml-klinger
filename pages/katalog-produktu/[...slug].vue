@@ -5,11 +5,14 @@
 				<div class="category__header">
 					<div class="category__image"></div>
 					<div class="category__info">
-						<h1>{{ categoryInfo.productCategories.nodes[0].name }}</h1>
-						<p>{{ categoryInfo.productCategories.nodes[0].description }}</p>
+						<h1>{{ categoryInfoData.productCategories.nodes[0].name }}</h1>
+						<p>{{ categoryInfoData.productCategories.nodes[0].description }}</p>
 					</div>
 				</div>
-				<ProductsBlock :data="categoryProducts.productCategories.nodes[0].contentNodes.nodes" />
+				<div v-if="screenWidth <= 900">
+					<CategoriesBox />
+				</div>
+				<ProductsBlock :data="categoryProductsData.productCategories.nodes[0].contentNodes.nodes" />
 			</template>
 			<template #sidebar>
 				<CategorySidebar />
@@ -21,10 +24,8 @@
 	definePageMeta({
 		layout: false,
 	})
+	const screenWidth = useState('screenWidth')
 	const router = useRouter()
-	const categoryInfo = ref(null)
-	const categoryProducts = ref(null)
-
 	const categoryInfoQuery = gql`
 		query {
 			productCategories(where: { slug: "${router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]}" }) {
@@ -38,7 +39,6 @@
 		}
 	`
 	const { data: categoryInfoData } = await useAsyncQuery(categoryInfoQuery)
-	categoryInfo.value = categoryInfoData.value
 
 	const categoryProductsQuery = gql`
 		query {
@@ -65,7 +65,6 @@
 		}
 	`
 	const { data: categoryProductsData } = await useAsyncQuery(categoryProductsQuery)
-	categoryProducts.value = categoryProductsData.value
 </script>
 <style lang="scss">
 	.category__header {
@@ -76,6 +75,14 @@
 		padding: 50px;
 		p:last-child {
 			margin-bottom: 0;
+		}
+	}
+	@media (max-width: 767px) {
+		.category__header {
+			margin-bottom: 20px;
+		}
+		.category__info {
+			padding: 20px;
 		}
 	}
 </style>

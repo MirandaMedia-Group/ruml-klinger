@@ -27,4 +27,9 @@
 			flex: 0 0 350px;
 		}
 	}
+	@media (max-width: 767px) {
+		.content-wrapper {
+			margin-bottom: 50px;
+		}
+	}
 </style>
