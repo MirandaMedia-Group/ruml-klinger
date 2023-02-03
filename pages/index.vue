@@ -1,12 +1,10 @@
 <template>
 	<NuxtLayout>
-		<HeroBig
-			v-if="hpHero"
-			v-bind="hpHero" />
+		<HeroBig v-bind="homepageData.page.rumlKlingerHomepage.hero" />
 		<section class="categories container">
 			<div class="narrow center">
-				<h2>{{ hpCategories?.title }}</h2>
-				<p>{{ hpCategories?.perex }}</p>
+				<h2>{{ homepageData.page.rumlKlingerHomepage.categoriesBlock.title }}</h2>
+				<p>{{ homepageData.page.rumlKlingerHomepage.categoriesBlock.perex }}</p>
 				<!-- <div class="categories__switcher">
 					<strong>Zobrazit kategorie podle:</strong>
 					<div class="switcher__control"><button class="active">Zboží</button>|<button>Výrobci</button></div>
@@ -14,7 +12,7 @@
 			</div>
 			<div class="categories-grid">
 				<NuxtLink
-					v-for="category in hpCategories?.categories"
+					v-for="category in homepageData.page.rumlKlingerHomepage.categoriesBlock.categories"
 					:key="category.title"
 					:to="category.url"
 					class="category">
@@ -69,9 +67,7 @@
 		</section>
 
 		<section class="container">
-			<VideoCarousel
-				v-if="hpVideos"
-				:data="hpVideos" />
+			<VideoCarousel :data="homepageData.page.rumlKlingerHomepage.videoCarousel.video" />
 		</section>
 		<section class="partners">
 			<div class="container center">
@@ -94,8 +90,7 @@
 			</div>
 		</section>
 		<TextImageBlock
-			v-if="aboutUs"
-			:data="aboutUs"
+			:data="homepageData.page.rumlKlingerHomepage.aboutUs"
 			:hasBackground="true"
 			:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
 			:alignCenter="true" />
@@ -150,8 +145,7 @@
 			</div>
 		</section>
 		<TextImageBlock
-			v-if="career"
-			:data="career"
+			:data="homepageData.page.rumlKlingerHomepage.career"
 			:reverse="true"
 			:btn="{ text: 'Zobrazit pozice', url: '/kariera' }"
 			:alignCenter="true" />
@@ -171,13 +165,8 @@
 	})
 	const screenWidth = useState('screenWidth')
 
-	// DATA SEGMENTATION
-	const hpHero = useState('hpHero', () => null)
-	const hpCategories = useState('hpCategories', () => null)
-	const hpVideos = useState('hpVideos', () => null)
-	const aboutUs = useState('aboutUs', () => null)
+	// STATES
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
-	const career = useState('career', () => null)
 
 	const homepageQuery = gql`
 		query {
@@ -292,21 +281,8 @@
 			}
 		}
 	`
-	const { data: homepageData, pending: homepagePending } = useAsyncQuery(homepageQuery)
-	hpHero.value = homepageData.value?.page.rumlKlingerHomepage.hero
-	hpCategories.value = homepageData.value?.page.rumlKlingerHomepage.categoriesBlock
-	hpVideos.value = homepageData.value?.page.rumlKlingerHomepage.videoCarousel.video
-	aboutUs.value = homepageData.value?.page.rumlKlingerHomepage.aboutUs
-	career.value = homepageData.value?.page.rumlKlingerHomepage.career
-	watch(homepagePending, (val) => {
-		if (!val) {
-			hpHero.value = homepageData.value?.page.rumlKlingerHomepage.hero
-			hpCategories.value = homepageData.value?.page.rumlKlingerHomepage.categoriesBlock
-			hpVideos.value = homepageData.value?.page.rumlKlingerHomepage.videoCarousel.video
-			aboutUs.value = homepageData.value?.page.rumlKlingerHomepage.aboutUs
-			career.value = homepageData.value?.page.rumlKlingerHomepage.career
-		}
-	})
+
+	const { data: homepageData, pending: homepagePending } = await useAsyncQuery(homepageQuery)
 
 	// SLUZBY
 	const servicesQuery = gql`
@@ -332,7 +308,7 @@
 			}
 		}
 	`
-	const { data: servicesData } = useAsyncQuery(servicesQuery)
+	const { data: servicesData } = await useAsyncQuery(servicesQuery)
 
 	// PARTNERI
 	const partnersQuery = gql`
@@ -355,7 +331,7 @@
 			}
 		}
 	`
-	const { data: partnersData } = useAsyncQuery(partnersQuery)
+	const { data: partnersData } = await useAsyncQuery(partnersQuery)
 
 	// KATEGORIE REFERENCI
 	const referenceCategoriesQuery = gql`
@@ -381,7 +357,7 @@
 			}
 		}
 	`
-	const { data: referenceCategoriesData, pending: referenceCategoriesPending } = useAsyncQuery(referenceCategoriesQuery)
+	const { data: referenceCategoriesData, pending: referenceCategoriesPending } = await useAsyncQuery(referenceCategoriesQuery)
 	activeReferenceBlock.value = referenceCategoriesData.value?.referenceCategories.nodes[0].id
 	watch(referenceCategoriesPending, (val) => {
 		if (!val) activeReferenceBlock.value = referenceCategoriesData.value?.referenceCategories.nodes[0].id
@@ -415,7 +391,7 @@
 			}
 		}
 	`
-	const { data: referencesData } = useAsyncQuery(referencesQuery)
+	const { data: referencesData } = await useAsyncQuery(referencesQuery)
 </script>
 <style lang="scss">
 	.categories__switcher {
