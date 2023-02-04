@@ -137,7 +137,8 @@
 		background-image: url(/career-form-bg.svg);
 		background-repeat: no-repeat;
 		background-position: top right;
-		h2,
+		width: 100%;
+		i h2,
 		h3 {
 			color: $color-black;
 			&::after {
@@ -188,5 +189,15 @@
 	button {
 		justify-content: center;
 		width: 100%;
+	}
+	@media (max-width: 767px) {
+		.form-wrapper {
+			padding: 40px 20px;
+		}
+		.form-header {
+			h2 {
+				font-size: rem(24);
+			}
+		}
 	}
 </style>

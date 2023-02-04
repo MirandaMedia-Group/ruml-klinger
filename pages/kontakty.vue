@@ -3,8 +3,9 @@
 		v-bind="kontakty.page.rumlKlingerKontakty.hero"
 		:white="true"
 		:center="true"
-		:contactBox="true" />
-	<section class="container">
+		:contactBox="true"
+		:nowrap="true" />
+	<section class="container overflow-hidden">
 		<div class="billing-info">
 			<div class="column">
 				<h2>Identifikační údaje</h2>
@@ -125,8 +126,14 @@
 		</div>
 	</section>
 	<section class="container">
-		<h2 class="center">Kontakty na naše specialisty</h2>
-		<AnchorsBlock :style="{ marginTop: '100px' }">
+		<h2
+			v-if="screenWidth > 767"
+			class="center">
+			Kontakty na naše specialisty
+		</h2>
+		<AnchorsBlock
+			v-if="screenWidth > 767"
+			:style="{ marginTop: `${screenWidth > 767 ? 100 : 50}px` }">
 			<ul>
 				<li
 					v-for="(item, index) in kontakty.page.rumlKlingerKontakty.contactGroup"
@@ -141,7 +148,11 @@
 			:id="slugify(item.groupTitle)"
 			class="contacts__block center"
 			:class="{ divider: index !== kontakty.page.rumlKlingerKontakty.contactGroup.length - 1 }">
-			<h3 class="contacts__title">{{ item.groupTitle }}</h3>
+			<h3
+				class="contacts__title"
+				@click.prevent="toggleContacts">
+				{{ item.groupTitle }}
+			</h3>
 			<div class="contacts__group">
 				<div
 					v-for="(person, index) in item.person"
@@ -180,9 +191,8 @@
 			.replace(/[^\w\s-]/g, '')
 			.replace(/[\s_-]+/g, '-')
 			.replace(/^-+|-+$/g, '')
-
-	const kontakty = useState('kontakty', () => null)
-	const certificates = useState('certificates', () => null)
+	const screenWidth = useState('screenWidth')
+	const toggleContacts = (e) => e.target.parentElement.classList.toggle('active')
 	const kontaktyQuery = gql`
 		query {
 			page(id: "cG9zdDo2MDQ=") {
@@ -244,8 +254,7 @@
 			}
 		}
 	`
-	const { data: kontaktyResponse } = await useAsyncQuery(kontaktyQuery)
-	kontakty.value = kontaktyResponse.value
+	const { data: kontakty } = await useAsyncQuery(kontaktyQuery)
 
 	const certificatesQuery = gql`
 		query {
@@ -267,15 +276,15 @@
 			}
 		}
 	`
-	const { data: certificatesResponse } = await useAsyncQuery(certificatesQuery)
-	certificates.value = certificatesResponse.value
+	const { data: certificates } = await useAsyncQuery(certificatesQuery)
 </script>
 <style lang="scss">
 	.billing-info {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-		margin-left: -21px;
-		margin-right: -21px;
+		gap: 20px;
+		margin-left: calc(-2rem - 1px);
+		margin-right: calc(-2rem - 1px);
 		h2 {
 			font-size: rem(24);
 			&::after {
@@ -387,6 +396,92 @@
 			color: $color-primary-light;
 			&:not(:last-child) {
 				margin-bottom: 10px;
+			}
+		}
+	}
+	@media (max-width: 767px) {
+		.billing-info {
+			margin-left: -21px;
+			margin-right: -21px;
+			h2 {
+				font-size: rem(22);
+			}
+		}
+		.pobocky {
+			.pobocka__content {
+				padding: 50px 20px;
+			}
+		}
+		.contacts__block {
+			padding-bottom: 0;
+			margin-bottom: 0;
+			&::after,
+			&::before {
+				display: none;
+			}
+			&:not(.active) {
+				.contacts__group {
+					max-height: 0;
+					margin-bottom: 0;
+					overflow: hidden;
+				}
+				.contacts__title {
+					margin-bottom: 0;
+				}
+			}
+		}
+		.contacts__group {
+			// overflow: auto;
+			gap: 40px;
+			margin-bottom: 20px;
+			max-height: 1000px;
+			height: 100%;
+			transition: all 0.15s ease-in-out;
+		}
+		.contacts__title {
+			font-size: 1rem;
+			text-align: left;
+			margin-bottom: em(20, 16);
+			color: $color-black;
+			padding: em(10) em(20);
+			border-bottom: 1px solid $color-inactive;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			cursor: pointer;
+			gap: 20px;
+			&::after {
+				content: '';
+				display: block;
+				width: 8px;
+				height: 8px;
+				border: 2px solid $color-black;
+				border-style: none solid solid none;
+				transform: rotate(45deg);
+				transition: all 0.15s ease-in-out;
+			}
+		}
+		.person {
+			flex: auto;
+			text-align: left;
+			display: grid;
+			column-gap: 20px;
+			grid-template-columns: 60px auto;
+			& > * {
+				grid-column-start: 2;
+			}
+			&__image {
+				grid-column-start: 1;
+				grid-row-end: span 4;
+				align-self: start;
+				margin-bottom: 0;
+				picture,
+				img {
+					width: 100%;
+				}
+			}
+			&__name {
+				font-size: rem(20);
 			}
 		}
 	}

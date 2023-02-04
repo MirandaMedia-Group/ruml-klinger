@@ -179,4 +179,14 @@
 			margin-bottom: 20px;
 		}
 	}
+	@media (max-width: 767px) {
+		.career {
+			&__content {
+				padding: 20px;
+			}
+			&__content h2 {
+				font-size: rem(24);
+			}
+		}
+	}
 </style>

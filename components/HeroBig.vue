@@ -1,13 +1,13 @@
 <template>
 	<section
 		class="hero"
-		:class="{ white: props.white, center: props.center }">
+		:class="{ white: props.white, center: props.center, nowrap: props.nowrap }">
 		<NuxtPicture
 			:src="image.sourceUrl"
 			:width="image.mediaDetails.width"
 			:height="image.mediaDetails.height"
 			:alt="image.altText"
-			:img-attrs="{ style: 'display: block' }"
+			:img-attrs="{ style: 'display: block; height: 100%; object-fit: cover;' }"
 			provider="ipx" />
 		<div class="container">
 			<div class="content">
@@ -92,7 +92,7 @@
 	</section>
 </template>
 <script setup>
-	const props = defineProps(['title', 'perex', 'btnPrimary', 'btnSecondary', 'image', 'white', 'center', 'contactBox'])
+	const props = defineProps(['title', 'perex', 'btnPrimary', 'btnSecondary', 'image', 'white', 'center', 'contactBox', 'nowrap'])
 </script>
 <style lang="scss" scoped>
 	.hero {
@@ -108,6 +108,9 @@
 			.container {
 				justify-content: center;
 			}
+		}
+		&.nowrap {
+			height: 580px;
 		}
 		h1 {
 			font-size: clamp(rem(30), 3vw, rem(42));
@@ -141,7 +144,8 @@
 	.contact-box {
 		background-color: rgba(22, 22, 23, 0.3);
 		display: flex;
-		gap: 20px;
+		flex-wrap: wrap;
+		gap: 40px;
 		padding: 20px;
 		color: $color-white;
 		& > div {
@@ -166,15 +170,17 @@
 		}
 	}
 	@media (max-width: 991px) {
-		.container {
-			position: initial;
-			transform: none;
+		.hero:not(.nowrap) {
+			.container {
+				position: initial;
+				transform: none;
+			}
+			.content {
+				max-width: unset;
+				padding: 40px 0;
+			}
 		}
-		.content {
-			max-width: unset;
-			padding: 40px 0;
-		}
-		.hero.white {
+		.hero.white:not(.nowrap) {
 			h1 {
 				color: $color-primary;
 			}
@@ -189,6 +195,9 @@
 	@media (max-width: 767px) {
 		.excerpt {
 			font-size: 1rem;
+		}
+		.contact-box {
+			gap: 20px;
 		}
 	}
 </style>

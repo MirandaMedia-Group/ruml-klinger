@@ -20,7 +20,8 @@
 			flex: 1 1 640px;
 		}
 		#sidebar {
-			flex: 0 0 480px;
+			flex: 0 1 480px;
+			width: 100%;
 		}
 	}
 	@media (max-width: 767px) {

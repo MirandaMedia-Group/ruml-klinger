@@ -90,6 +90,7 @@
 	@media (max-width: 767px) {
 		.detail-header {
 			background: none;
+			margin-bottom: 50px;
 			.container {
 				padding: 0;
 			}

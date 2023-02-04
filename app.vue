@@ -361,7 +361,12 @@
 			background-color: $color-white;
 		}
 	}
-
+	.overflow-hidden {
+		overflow: hidden;
+	}
+	input[type='file'] {
+		width: 100%;
+	}
 	@media (max-width: 767px) {
 		section {
 			margin-bottom: 50px;

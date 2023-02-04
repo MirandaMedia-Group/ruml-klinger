@@ -23,51 +23,44 @@
 </template>
 <script setup>
 	const screenWidth = useState('screenWidth')
-	const hpBannerTop = useState('hpBannerTop', () => null)
-	const getBannerTop = async () => {
-		const homepageQuery = gql`
-			query {
-				page(id: "cG9zdDo1OTI=") {
-					title
-					slug
-					rumlKlingerHomepage {
-						bannerTop {
-							title
-							perex
-							btn {
-								text
-								file {
-									fileSize
-									mediaItemUrl
-								}
+	const homepageQuery = gql`
+		query {
+			page(id: "cG9zdDo1OTI=") {
+				title
+				slug
+				rumlKlingerHomepage {
+					bannerTop {
+						title
+						perex
+						btn {
+							text
+							file {
+								fileSize
+								mediaItemUrl
 							}
-							image {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
+						}
+						image {
+							altText
+							sourceUrl
+							mediaDetails {
+								height
+								width
 							}
-							imageMobile {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
+						}
+						imageMobile {
+							altText
+							sourceUrl
+							mediaDetails {
+								height
+								width
 							}
 						}
 					}
 				}
 			}
-		`
-		const { data: homepageResponse } = await useAsyncQuery(homepageQuery)
-		hpBannerTop.value = homepageResponse.value
-	}
-	if (!hpBannerTop.value) {
-		getBannerTop()
-	}
+		}
+	`
+	const { data: hpBannerTop } = await useAsyncQuery(homepageQuery)
 </script>
 <style lang="scss" scoped>
 	.banner {
