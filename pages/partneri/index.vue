@@ -33,7 +33,6 @@
 	</section>
 </template>
 <script setup>
-	const allPartners = useState('allPartners', () => null)
 	const allPartnersQuery = gql`
 		{
 			partners {
@@ -55,8 +54,7 @@
 			}
 		}
 	`
-	const { data: allPartnersData } = await useAsyncQuery(allPartnersQuery)
-	allPartners.value = allPartnersData.value
+	const { data: allPartners } = await useAsyncQuery(allPartnersQuery)
 </script>
 <style lang="scss">
 	.partners-grid {

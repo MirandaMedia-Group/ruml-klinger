@@ -53,76 +53,66 @@
 	</section>
 </template>
 <script setup>
-	const referenceCategories = useState('referenceCategories')
-	const references = useState('references')
 	const activeReferenceBlock = useState('activeReferenceBlock')
 
-	const getReferenceCategories = async () => {
-		const referenceCategoriesQuery = gql`
-			{
-				referenceCategories {
-					nodes {
-						id
-						name
-						link
-						uri
-						slug
-						referenceCategoryAcf {
-							image {
-								sourceUrl
-								altText
-								mediaDetails {
-									height
-									width
-								}
+	const referenceCategoriesQuery = gql`
+		{
+			referenceCategories {
+				nodes {
+					id
+					name
+					link
+					uri
+					slug
+					referenceCategoryAcf {
+						image {
+							sourceUrl
+							altText
+							mediaDetails {
+								height
+								width
 							}
-							technologies
+						}
+						technologies
+					}
+				}
+			}
+		}
+	`
+	const { data: referenceCategories, pending: referenceCategoriesPending } = await useAsyncQuery(referenceCategoriesQuery)
+	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
+	watch(referenceCategoriesPending, (val) => {
+		if (!val) activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
+	})
+
+	const referencesQuery = gql`
+		{
+			references {
+				nodes {
+					id
+					title
+					slug
+					featuredImage {
+						node {
+							sourceUrl
+							altText
+							mediaDetails {
+								height
+								width
+							}
+						}
+					}
+					referenceCategories {
+						nodes {
+							name
+							id
 						}
 					}
 				}
 			}
-		`
-		const { data } = await useAsyncQuery(referenceCategoriesQuery)
-		referenceCategories.value = data
-		activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
-	}
-	if (!referenceCategories.value) {
-		getReferenceCategories()
-	}
-	const getReferences = async () => {
-		const referencesQuery = gql`
-			{
-				references {
-					nodes {
-						id
-						title
-						slug
-						featuredImage {
-							node {
-								sourceUrl
-								altText
-								mediaDetails {
-									height
-									width
-								}
-							}
-						}
-						referenceCategories {
-							nodes {
-								name
-								id
-							}
-						}
-					}
-				}
-			}
-		`
-		const { data } = await useAsyncQuery(referencesQuery)
-		references.value = data
-	}
-	if (!references.value) {
-		getReferences()
-	}
+		}
+	`
+	const { data: references } = await useAsyncQuery(referencesQuery)
 </script>
 <style lang="scss">
 	.reference-category {
@@ -177,6 +167,25 @@
 					top: 0.7em;
 				}
 			}
+		}
+	}
+	@media (max-width: 767px) {
+		.reference-category {
+			&__header {
+				height: 240px;
+				margin-bottom: 20px;
+				img {
+					height: 100%;
+					width: 100%;
+					object-fit: cover;
+				}
+			}
+			h2 {
+				font-size: rem(24);
+			}
+		}
+		.technologies {
+			padding: 20px;
 		}
 	}
 </style>

@@ -195,6 +195,7 @@
 	}
 	.columns {
 		display: flex;
+		flex-wrap: wrap;
 		&.col-2 {
 			.column {
 				flex: 1 1 420px;

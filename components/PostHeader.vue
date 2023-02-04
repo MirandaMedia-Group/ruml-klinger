@@ -87,4 +87,21 @@
 			color: rgba($color-font, 0.6);
 		}
 	}
+	@media (max-width: 767px) {
+		.detail-header {
+			background: none;
+			.container {
+				padding: 0;
+			}
+			&__columns {
+				position: initial;
+			}
+			&__info {
+				padding: 20px;
+			}
+			&__excerpt {
+				font-size: rem(16);
+			}
+		}
+	}
 </style>

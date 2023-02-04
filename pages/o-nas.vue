@@ -52,7 +52,9 @@
 		<div class="narrow center">
 			<h2>Vedení společnosti</h2>
 		</div>
-		<div class="owners">
+		<div
+			class="owners"
+			v-if="screenWidth > 767">
 			<div
 				v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person"
 				:key="index"
@@ -70,6 +72,34 @@
 					<div class="owner__position">{{ owner.position }}</div>
 				</div>
 				<div class="owner__text">
+					<div v-html="owner.perex"></div>
+				</div>
+			</div>
+		</div>
+		<div
+			v-else
+			class="owners-mobile">
+			<div
+				v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person"
+				:key="index"
+				class="owner-mobile">
+				<div
+					class="owner-mobile__heading"
+					@click.prevent="toggleOwner">
+					<div class="owner-mobile__image">
+						<NuxtPicture
+							:src="owner.image.sourceUrl"
+							:alt="owner.image.altText"
+							:width="owner.image.mediaDetails.width"
+							:height="owner.image.mediaDetails.height"
+							provider="ipx" />
+					</div>
+					<div class="owner-mobile__name">
+						<strong>{{ owner.name }}</strong>
+						<div class="owner-mobile__position">{{ owner.position }}</div>
+					</div>
+				</div>
+				<div class="owner-mobile__text">
 					<div v-html="owner.perex"></div>
 				</div>
 			</div>
@@ -122,8 +152,8 @@
 		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
 </template>
 <script setup>
-	const onas = useState('onas', () => null)
-	const careerBanner = useState('careerBanner', () => null)
+	const screenWidth = useState('screenWidth')
+	const toggleOwner = (event) => event.target.classList.toggle('active')
 	const onasQuery = gql`
 		query {
 			page(id: "cG9zdDo2MDI=") {
@@ -224,8 +254,7 @@
 			}
 		}
 	`
-	const { data: onasData } = await useAsyncQuery(onasQuery)
-	onas.value = onasData.value
+	const { data: onas } = await useAsyncQuery(onasQuery)
 
 	const careerBannerQuery = gql`
 		query {
@@ -250,8 +279,7 @@
 			}
 		}
 	`
-	const { data: careerBannerData } = await useAsyncQuery(careerBannerQuery)
-	careerBanner.value = careerBannerData.value
+	const { data: careerBanner } = await useAsyncQuery(careerBannerQuery)
 </script>
 <style lang="scss">
 	.usp-wrapper {
@@ -338,7 +366,7 @@
 		flex-wrap: wrap;
 		gap: 36px;
 		.owner {
-			flex: 1 1 320px;
+			flex: 1 1 420px;
 			position: relative;
 			&__image {
 				img {
@@ -376,14 +404,14 @@
 				z-index: 1;
 				background-color: rgba($color-primary, 0.8);
 				padding: 0 70px;
-				font-size: rem(20);
+				font-size: clamp(rem(14), 1.4vw, rem(20));
 				line-height: em(36, 20);
 			}
 			&:hover,
 			&:focus {
 				.owner__text {
 					top: 0;
-					padding: 120px 70px;
+					padding: 40px 70px 90px;
 				}
 			}
 		}
@@ -424,6 +452,92 @@
 		&__perex {
 			margin-bottom: 15px;
 			min-height: 84px;
+		}
+	}
+	.owner-mobile {
+		&:not(:last-of-type) {
+			border-bottom: 1px solid $color-inactive;
+			// padding-bottom: 20px;
+			margin-bottom: 20px;
+		}
+		&__heading {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+			&:not(.active) {
+				&::after {
+					transform: rotate(45deg);
+				}
+				& + .owner-mobile__text {
+					max-height: 0;
+					padding: 0 20px;
+				}
+			}
+			&::after {
+				content: '';
+				display: block;
+				width: 8px;
+				height: 8px;
+				border: 2px solid $color-black;
+				border-style: none solid solid none;
+				transform: rotate(-135deg);
+				transition: all 0.15s ease-in-out;
+				margin-left: auto;
+			}
+		}
+		&__image {
+			flex: 0 0 70px;
+		}
+		&__name {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+		&__text {
+			max-height: 500px;
+			transition: all 0.15s ease-in-out;
+			overflow: hidden;
+			background-color: rgba($color-primary, 0.1);
+			padding: 20px;
+			margin-top: 20px;
+		}
+	}
+	@media (max-width: 1080px) {
+		.owners {
+			.owner {
+				&__text {
+					padding: 0 20px;
+				}
+				&:hover,
+				&:focus {
+					.owner__text {
+						padding: 40px 20px 90px;
+					}
+				}
+			}
+		}
+	}
+	@media (max-width: 767px) {
+		.usp-wrapper {
+			gap: 10px;
+		}
+		.usp {
+			margin-top: 0px;
+			align-items: flex-start;
+			padding: 20px;
+			gap: 0;
+			strong {
+				font-size: rem(30);
+				&::after {
+					display: none;
+				}
+			}
+			span {
+				font-size: rem(20);
+			}
+		}
+		.company__info {
+			padding: 30px 20px;
 		}
 	}
 </style>

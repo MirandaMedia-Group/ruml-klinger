@@ -22,7 +22,8 @@
 						:alt="service.featuredImage.node.altText"
 						:width="service.featuredImage.node.mediaDetails.width"
 						:height="service.featuredImage.node.mediaDetails.height"
-						provider="ipx" />
+						provider="ipx"
+						:imgAttrs="{ style: 'height: 100%; object-fit: cover;' }" />
 				</div>
 				<div class="service__content column">
 					<h2 class="service__title">{{ service.title }}</h2>
@@ -44,37 +45,30 @@
 	</section>
 </template>
 <script setup>
-	const servicesData = useState('servicesData')
-	const getServicesData = async () => {
-		const servicesQuery = gql`
-			query {
-				pages(where: { parent: "cG9zdDo1OTg=" }) {
-					nodes {
-						title
-						slug
-						featuredImage {
-							node {
-								sourceUrl
-								altText
-								mediaDetails {
-									height
-									width
-								}
+	const servicesQuery = gql`
+		query {
+			pages(where: { parent: "cG9zdDo1OTg=" }) {
+				nodes {
+					title
+					slug
+					featuredImage {
+						node {
+							sourceUrl
+							altText
+							mediaDetails {
+								height
+								width
 							}
 						}
-						rumlKlingerSluzby {
-							shortDescription
-						}
+					}
+					rumlKlingerSluzby {
+						shortDescription
 					}
 				}
 			}
-		`
-		const { data } = await useAsyncQuery(servicesQuery)
-		servicesData.value = data.value
-	}
-	if (!servicesData.value) {
-		getServicesData()
-	}
+		}
+	`
+	const { data: servicesData } = await useAsyncQuery(servicesQuery)
 </script>
 <style lang="scss" scoped>
 	.page-image-header {
@@ -104,7 +98,9 @@
 	.service {
 		margin-bottom: 40px;
 		&__image {
+			picture,
 			img {
+				display: block;
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
@@ -124,6 +120,25 @@
 		}
 		&__description {
 			min-height: unset;
+		}
+	}
+	@media (max-width: 767px) {
+		.page-image-header {
+			padding: 60px 0;
+			p {
+				font-size: 1rem;
+			}
+		}
+		.service {
+			margin-left: -20px;
+			margin-right: -20px;
+			margin-bottom: 0;
+			&__image {
+				aspect-ratio: 1;
+			}
+			h2 {
+				font-size: rem(24);
+			}
 		}
 	}
 </style>

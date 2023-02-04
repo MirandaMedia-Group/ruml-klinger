@@ -7,6 +7,7 @@
 			:width="image.mediaDetails.width"
 			:height="image.mediaDetails.height"
 			:alt="image.altText"
+			:img-attrs="{ style: 'display: block' }"
 			provider="ipx" />
 		<div class="container">
 			<div class="content">
@@ -172,6 +173,17 @@
 		.content {
 			max-width: unset;
 			padding: 40px 0;
+		}
+		.hero.white {
+			h1 {
+				color: $color-primary;
+			}
+			.excerpt {
+				color: $color-black;
+			}
+			.container {
+				background-color: $color-bg;
+			}
 		}
 	}
 	@media (max-width: 767px) {

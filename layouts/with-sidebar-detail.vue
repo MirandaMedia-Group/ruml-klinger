@@ -26,6 +26,7 @@
 	@media (max-width: 767px) {
 		.content-wrapper {
 			margin-bottom: 50px;
+			gap: 40px;
 		}
 	}
 </style>

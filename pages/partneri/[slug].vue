@@ -38,7 +38,6 @@
 </template>
 <script setup>
 	const router = useRouter()
-	const singlePartner = ref(null)
 	const singlePartnerQuery = gql`
 			query {
 				partners(where: { name: "${router.currentRoute.value.params.slug}" }) {
@@ -72,9 +71,7 @@
 				}
 			}
 		`
-	const { data: singlePartnerResponse } = await useAsyncQuery(singlePartnerQuery)
-	singlePartner.value = singlePartnerResponse.value
-	console.log(singlePartner.value)
+	const { data: singlePartner } = await useAsyncQuery(singlePartnerQuery)
 </script>
 <style lang="scss">
 	.partner-header {
@@ -117,6 +114,22 @@
 			line-height: em(36, 20);
 			color: rgba($color-black, 0.9);
 			margin-bottom: 40px;
+		}
+	}
+	@media (max-width: 767px) {
+		.partner-header {
+			height: 375px;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			&__content {
+				padding: 10px 20px;
+			}
+		}
+		.content-wrapper {
+			gap: 40px;
 		}
 	}
 </style>

@@ -90,6 +90,8 @@
 	@media (max-width: 767px) {
 		.has-background {
 			background: none;
+			margin: -50px 0 0;
+			padding: 50px 0;
 		}
 		.about-us__perex {
 			font-size: rem(18);
