@@ -39,4 +39,18 @@
 			}
 		}
 	}
+	@media (max-width: 767px) {
+		.page-header {
+			background: $color-white;
+			margin-bottom: 50px;
+			&__content {
+				position: initial;
+				padding: 60px 0;
+				background-size: 50%;
+				p {
+					font-size: 1rem;
+				}
+			}
+		}
+	}
 </style>

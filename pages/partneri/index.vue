@@ -97,4 +97,21 @@
 			}
 		}
 	}
+	@media (max-width: 767px) {
+		.partners-grid {
+			grid-template-columns: minmax(1px, 1fr);
+		}
+		.partners-grid {
+			gap: 20px;
+			.partner {
+				.partner__excerpt {
+					font-size: 1rem;
+				}
+				padding: 20px;
+				.buttons-wrapper {
+					justify-content: center;
+				}
+			}
+		}
+	}
 </style>
