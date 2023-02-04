@@ -11,6 +11,9 @@
 		margin-bottom: 100px;
 		nav {
 			margin-bottom: -1px;
+			overflow-x: auto;
+			overflow-y: hidden;
+			white-space: nowrap;
 			ul {
 				display: flex;
 				list-style: none;
@@ -34,6 +37,11 @@
 					font-weight: 700;
 				}
 			}
+		}
+	}
+	@media (max-width: 767px) {
+		.anchors {
+			margin-bottom: 50px;
 		}
 	}
 </style>

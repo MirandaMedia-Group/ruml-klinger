@@ -152,6 +152,7 @@
 		gap: 4px;
 		width: 44px;
 		height: 44px;
+		cursor: pointer;
 		span {
 			width: 16px;
 			height: 2px;

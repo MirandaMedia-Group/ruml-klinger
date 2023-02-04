@@ -376,5 +376,10 @@
 				font-size: rem(16);
 			}
 		}
+		.divider {
+			&.top {
+				padding-top: 50px;
+			}
+		}
 	}
 </style>
