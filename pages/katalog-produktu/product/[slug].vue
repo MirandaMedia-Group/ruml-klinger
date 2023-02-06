@@ -64,7 +64,7 @@
 							<a href="#additional-products">Podobné produkty</a>
 						</li>
 						<li>
-							<a href="#kontakt">Poptávkový formulář</a>
+							<a href="#formular">Poptávkový formulář</a>
 						</li>
 					</ul>
 				</nav>
@@ -115,6 +115,7 @@
 			</div>
 		</section>
 	</div>
+	<ContactForm />
 </template>
 <script setup>
 	const router = useRouter()
@@ -285,6 +286,7 @@
 			line-height: em(28, 16) !important;
 			border-collapse: collapse;
 			display: block;
+			float: none;
 			caption,
 			tbody {
 				display: block;

@@ -35,6 +35,9 @@
 		a {
 			text-decoration: none;
 			color: rgba($color-black, 0.6);
+			display: flex;
+			flex-direction: column;
+			height: 100%;
 			&:hover,
 			&:focus {
 				.product__image {
@@ -51,7 +54,6 @@
 		}
 		.product__image {
 			overflow: hidden;
-
 			img {
 				display: block;
 				transition: all 0.15s ease-in-out;

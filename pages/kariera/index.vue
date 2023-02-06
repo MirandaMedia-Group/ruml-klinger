@@ -5,17 +5,19 @@
 		<strong>
 			Právě máme
 			{{
-				careerList?.careers.nodes.length === 1
+				careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
 					? 'volnou'
-					: careerList?.careers.nodes.length >= 2 || careerList?.careers.nodes.length <= 4
+					: careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 ||
+					  careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
 					? 'volné'
 					: 'volných'
 			}}
-			{{ careerList?.careers.nodes.length }}
+			{{ careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length }}
 			{{
-				careerList?.careers.nodes.length === 1
+				careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
 					? 'pozici'
-					: careerList?.careers.nodes.length >= 2 || careerList?.careers.nodes.length <= 4
+					: careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 ||
+					  careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
 					? 'pozice'
 					: 'pozic'
 			}}

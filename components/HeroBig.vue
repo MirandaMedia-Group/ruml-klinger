@@ -69,19 +69,20 @@
 					v-if="btnPrimary && btnSecondary"
 					class="buttons-vertical">
 					<NuxtLink
-						v-if="btnPrimary.type === 'internal'"
+						v-if="btnPrimary.type === 'internal' && btnPrimary.urlInternal"
 						:to="btnPrimary.urlInternal"
 						class="btn btn-primary">
 						{{ btnPrimary.text }}
 					</NuxtLink>
 					<a
-						v-else-if="btnPrimary.type === 'external'"
+						v-else-if="btnPrimary.type === 'external' && btnPrimary.urlExternal"
 						:href="btnPrimary.urlExternal"
 						class="btn btn-primary"
 						target="_blank">
 						{{ btnPrimary.text }}
 					</a>
 					<BtnSecondary
+						v-if="btnSecondary.urlInternal || btnSecondary.urlExternal"
 						:type="btnSecondary.type"
 						:href="btnSecondary.type === 'internal' ? btnSecondary.urlInternal : btnSecondary.urlExternal">
 						{{ btnSecondary.text }}

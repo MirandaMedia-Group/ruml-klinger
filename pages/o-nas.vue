@@ -129,7 +129,8 @@
 							:src="company.logo.sourceUrl"
 							:alt="company.logo.altText"
 							:width="company.logo.mediaDetails.width"
-							:height="company.logo.mediaDetails.height" />
+							:height="company.logo.mediaDetails.height"
+							provider="ipx" />
 					</div>
 				</div>
 				<div class="company__info">
