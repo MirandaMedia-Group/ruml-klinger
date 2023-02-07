@@ -1,5 +1,7 @@
 <template>
-	<div class="banner__top container">
+	<div
+		v-if="hpBannerTop"
+		class="banner__top container">
 		<div
 			class="banner"
 			:style="`background-image: url(${

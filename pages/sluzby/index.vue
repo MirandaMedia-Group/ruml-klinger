@@ -47,7 +47,7 @@
 <script setup>
 	const servicesQuery = gql`
 		query {
-			pages(where: { parent: "cG9zdDo1OTg=" }) {
+			pages(where: { parent: "cG9zdDo1OTg=", orderby: { field: DATE, order: ASC } }) {
 				nodes {
 					title
 					slug
