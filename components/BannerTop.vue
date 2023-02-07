@@ -62,7 +62,7 @@
 			}
 		}
 	`
-	const { data: hpBannerTop } = await useAsyncQuery(homepageQuery)
+	const { data: hpBannerTop } = useAsyncQuery(homepageQuery)
 </script>
 <style lang="scss" scoped>
 	.banner {

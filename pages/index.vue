@@ -1,19 +1,19 @@
 <template>
-	<div v-if="homepageDataPending">Načítám</div>
+	<div v-if="pending"></div>
 	<div v-else>
 		<HeroBig v-bind="homepageData.page.rumlKlingerHomepage.hero" />
 		<section class="categories container">
 			<div class="narrow center">
-				<h2>{{ homepageData?.page.rumlKlingerHomepage.categoriesBlock.title }}</h2>
-				<p>{{ homepageData?.page.rumlKlingerHomepage.categoriesBlock.perex }}</p>
+				<h2>{{ homepageData.page.rumlKlingerHomepage.categoriesBlock.title }}</h2>
+				<p>{{ homepageData.page.rumlKlingerHomepage.categoriesBlock.perex }}</p>
 				<!-- <div class="categories__switcher">
-						<strong>Zobrazit kategorie podle:</strong>
-						<div class="switcher__control"><button class="active">Zboží</button>|<button>Výrobci</button></div>
-					</div> -->
+					<strong>Zobrazit kategorie podle:</strong>
+					<div class="switcher__control"><button class="active">Zboží</button>|<button>Výrobci</button></div>
+				</div> -->
 			</div>
 			<div class="categories-grid">
 				<NuxtLink
-					v-for="category in homepageData?.page.rumlKlingerHomepage.categoriesBlock.categories"
+					v-for="category in homepageData.page.rumlKlingerHomepage.categoriesBlock.categories"
 					:key="category.title"
 					:to="category.url"
 					class="category">
@@ -37,13 +37,13 @@
 		</section>
 		<section class="services container">
 			<div class="narrow center">
-				<h2>{{ homepageData?.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
-				<p>{{ homepageData?.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
+				<h2>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
+				<p>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
 			</div>
 			<div class="services-wrap">
 				<div
 					class="service"
-					v-for="(item, index) in homepageData?.pages.nodes"
+					v-for="(item, index) in homepageData.pages.nodes"
 					:key="index">
 					<div class="service__image">
 						<NuxtPicture
@@ -68,9 +68,7 @@
 		</section>
 
 		<section class="container">
-			<VideoCarousel
-				v-if="homepageData"
-				:data="homepageData.page.rumlKlingerHomepage.videoCarousel.video" />
+			<VideoCarousel :data="homepageData.page.rumlKlingerHomepage.videoCarousel.video" />
 		</section>
 
 		<section class="partners">
@@ -79,7 +77,7 @@
 				<div class="partners-list">
 					<div
 						class="partner"
-						v-for="(item, index) in homepageData?.partners.nodes"
+						v-for="(item, index) in homepageData.partners.nodes"
 						:key="index">
 						<NuxtPicture
 							:src="item.featuredImage.node.sourceUrl"
@@ -94,7 +92,6 @@
 			</div>
 		</section>
 		<TextImageBlock
-			v-if="homepageData"
 			:data="homepageData.page.rumlKlingerHomepage.aboutUs"
 			:hasBackground="true"
 			:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
@@ -109,7 +106,7 @@
 						<ul>
 							<li
 								class="references__category--item"
-								v-for="(item, index) in homepageData?.referenceCategories.nodes"
+								v-for="(item, index) in homepageData.referenceCategories.nodes"
 								:class="{ active: item.id === activeReferenceBlock }"
 								:key="index">
 								<button @click.prevent="activeReferenceBlock = item.id">
@@ -120,20 +117,20 @@
 					</nav>
 				</div>
 				<div
-					v-for="item in homepageData?.referenceCategories.nodes"
+					v-for="item in homepageData.referenceCategories.nodes"
 					:key="item.id"
 					:class="{ active: item.id === activeReferenceBlock }"
 					class="references__block">
 					<ReferencesList
-						v-if="homepageData?.references"
-						:references="homepageData?.references.nodes"
+						v-if="homepageData.references"
+						:references="homepageData.references.nodes"
 						:category="item" />
 				</div>
 			</div>
 			<div v-else>
 				<div
 					class="mobile-references__wrapper"
-					v-for="(item, index) in homepageData?.referenceCategories.nodes"
+					v-for="(item, index) in homepageData.referenceCategories.nodes"
 					:class="{ active: item.id === activeReferenceBlock }"
 					:key="index">
 					<button @click.prevent="activeReferenceBlock = item.id">
@@ -141,7 +138,7 @@
 					</button>
 					<div class="mobile-references__block">
 						<ReferencesList
-							:references="homepageData?.references.nodes"
+							:references="homepageData.references.nodes"
 							:category="item" />
 					</div>
 				</div>
@@ -151,7 +148,6 @@
 			</div>
 		</section>
 		<TextImageBlock
-			v-if="homepageData"
 			:data="homepageData.page.rumlKlingerHomepage.career"
 			:reverse="true"
 			:btn="{ text: 'Zobrazit pozice', url: '/kariera' }"
@@ -365,8 +361,7 @@
 			}
 		}
 	`
-
-	const { data: homepageData, pending: homepageDataPending } = await useAsyncQuery(homepageQuery)
+	const { data: homepageData, pending } = await useAsyncQuery(homepageQuery)
 	activeReferenceBlock.value = homepageData?.value.referenceCategories.nodes[0].id
 	watch(homepageData, (val) => {
 		if (!val) activeReferenceBlock.value = homepageData?.value.referenceCategories.nodes[0].id

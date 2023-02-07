@@ -6,6 +6,7 @@
 			:key="reference.slug">
 			<div class="reference__image">
 				<NuxtPicture
+					v-if="reference.featuredImage?.node"
 					:src="reference.featuredImage.node.sourceUrl"
 					:alt="reference.featuredImage.node.altText"
 					:width="reference.featuredImage.node.mediaDetails.width"
