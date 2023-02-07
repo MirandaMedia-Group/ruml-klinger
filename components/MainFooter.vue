@@ -27,9 +27,9 @@
 							<li>
 								<nuxt-link to="/o-nas">O nás</nuxt-link>
 							</li>
-							<li>
+							<!-- <li>
 								<nuxt-link to="/financni-vysledky">Finanční výsledky</nuxt-link>
-							</li>
+							</li> -->
 							<li>
 								<nuxt-link to="/o-nas#historie">Historie</nuxt-link>
 							</li>
