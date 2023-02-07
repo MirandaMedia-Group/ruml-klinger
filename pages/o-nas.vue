@@ -155,7 +155,7 @@
 	const screenWidth = useState('screenWidth')
 	const toggleOwner = (event) => event.target.classList.toggle('active')
 	const onasQuery = gql`
-		query {
+		query getOnas {
 			page(id: "cG9zdDo2MDI=") {
 				id
 				slug
@@ -257,7 +257,7 @@
 	const { data: onas, pending: onasPending } = await useAsyncData('onas', () => useAsyncQuery(onasQuery))
 
 	const careerBannerQuery = gql`
-		query {
+		query getCareerBanner {
 			page(id: "cG9zdDo1OTI=") {
 				title
 				slug

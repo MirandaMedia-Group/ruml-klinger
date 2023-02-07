@@ -1,19 +1,21 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	routeRules: {
-		'/': { static: true },
-		'/o-nas': { static: true },
-		'/kontakty': { static: true },
-		'/sluzby': { static: true },
-		'/sluzby/**': { swr: 3600 },
-		'/reference': { static: true },
-		'/reference/**': { swr: 3600 },
-		'/partneri': { static: true },
-		'/partneri/**': { swr: 3600 },
-		'/kariera': { static: true },
-		'/kariera/**': { swr: 3600 },
-		'/katalog-produktu': { static: true },
-		'/katalog-produktu/**': { swr: 3600 },
+	nitro: {
+		routeRules: {
+			'/': { static: true },
+			'/o-nas': { static: true },
+			'/kontakty': { static: true },
+			'/sluzby': { static: true },
+			'/sluzby/**': { swr: 3600 },
+			'/reference': { static: true },
+			'/reference/**': { swr: 3600 },
+			'/partneri': { static: true },
+			'/partneri/**': { swr: 3600 },
+			'/kariera': { static: true },
+			'/kariera/**': { swr: 3600 },
+			'/katalog-produktu': { static: true },
+			'/katalog-produktu/**': { swr: 3600 },
+		},
 	},
 	vite: {
 		css: {
