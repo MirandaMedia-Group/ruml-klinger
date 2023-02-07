@@ -2,13 +2,13 @@
 	<div class="container">
 		<section class="product-top">
 			<div class="product__info">
-				<h1>{{ singleProduct.products.nodes[0].title }}</h1>
-				<div v-html="singleProduct.products.nodes[0].productAcf.shortDescription"></div>
+				<h1>{{ singleProduct.data.products.nodes[0].title }}</h1>
+				<div v-html="singleProduct.data.products.nodes[0].productAcf.shortDescription"></div>
 				<div class="product__base-parameters">
-					<h2>{{ singleProduct.products.nodes[0].productAcf.baseParameters.heading }}</h2>
+					<h2>{{ singleProduct.data.products.nodes[0].productAcf.baseParameters.heading }}</h2>
 					<div class="product__base-parameters-list">
 						<div
-							v-for="(item, index) in singleProduct.products.nodes[0].productAcf.baseParameters.values"
+							v-for="(item, index) in singleProduct.data.products.nodes[0].productAcf.baseParameters.values"
 							:key="index">
 							<div class="product__base-parameters-list-item">
 								<div class="product__base-parameters-list-item-name">
@@ -31,13 +31,14 @@
 						navigation
 						pagination>
 						<SwiperSlide
-							v-for="(item, index) in singleProduct.products.nodes[0].productAcf.gallery"
+							v-for="(item, index) in singleProduct.data.products.nodes[0].productAcf.gallery"
 							:key="index">
 							<NuxtPicture
 								:src="item.sourceUrl"
 								:alt="item.altText"
 								:width="item.mediaDetails.width"
 								:height="item.mediaDetails.height"
+								loading="lazy"
 								provider="ipx" />
 						</SwiperSlide>
 					</Swiper>
@@ -48,19 +49,19 @@
 			<AnchorsBlock>
 				<nav>
 					<ul>
-						<li v-if="singleProduct.products.nodes[0].content">
+						<li v-if="singleProduct.data.products.nodes[0].content">
 							<a href="#description">Detailní info</a>
 						</li>
-						<li v-if="singleProduct.products.nodes[0].productAcf.tabulkaParametru">
+						<li v-if="singleProduct.data.products.nodes[0].productAcf.tabulkaParametru">
 							<a href="#parameters">Typické hodnoty</a>
 						</li>
-						<li v-if="singleProduct.products.nodes[0].productAcf.productFiles?.length">
+						<li v-if="singleProduct.data.products.nodes[0].productAcf.productFiles?.length">
 							<a href="#product-files">Dokumenty ke stažení</a>
 						</li>
-						<li v-if="singleProduct.products.nodes[0].productAcf.productVideos">
+						<li v-if="singleProduct.data.products.nodes[0].productAcf.productVideos">
 							<a href="#product-videos">Video představení</a>
 						</li>
-						<li v-if="singleProduct.products.nodes[0].productAcf.additionalProducts?.length">
+						<li v-if="singleProduct.data.products.nodes[0].productAcf.additionalProducts?.length">
 							<a href="#additional-products">Podobné produkty</a>
 						</li>
 						<li>
@@ -73,45 +74,45 @@
 		<section
 			id="description"
 			class="divider"
-			v-if="singleProduct.products.nodes[0].content">
+			v-if="singleProduct.data.products.nodes[0].content">
 			<div
 				class="product__content"
-				v-html="singleProduct.products.nodes[0].content"></div>
+				v-html="singleProduct.data.products.nodes[0].content"></div>
 		</section>
 		<section
 			id="parameters"
 			class="narrow"
-			v-if="singleProduct.products.nodes[0].productAcf.tabulkaParametru">
+			v-if="singleProduct.data.products.nodes[0].productAcf.tabulkaParametru">
 			<div
 				class="product__parameters"
-				v-html="singleProduct.products.nodes[0].productAcf.tabulkaParametru"></div>
+				v-html="singleProduct.data.products.nodes[0].productAcf.tabulkaParametru"></div>
 		</section>
 		<section
 			id="product-videos"
 			class="full-width"
-			v-if="singleProduct.products.nodes[0].productAcf.productVideos?.length">
+			v-if="singleProduct.data.products.nodes[0].productAcf.productVideos?.length">
 			<div class="container">
 				<VideoCarousel
-					:data="singleProduct.products.nodes[0].productAcf.productVideos"
+					:data="singleProduct.data.products.nodes[0].productAcf.productVideos"
 					:white="true" />
 			</div>
 		</section>
 		<section
 			id="product-files"
 			class="narrow"
-			v-if="singleProduct.products.nodes[0].productAcf.productFiles?.length">
+			v-if="singleProduct.data.products.nodes[0].productAcf.productFiles?.length">
 			<h2>Dokumenty ke stažení</h2>
-			<FilesTable :data="singleProduct.products.nodes[0].productAcf.productFiles" />
+			<FilesTable :data="singleProduct.data.products.nodes[0].productAcf.productFiles" />
 		</section>
 		<section
 			id="additional-products"
 			class="divider top"
-			v-if="singleProduct.products.nodes[0].productAcf.additionalProducts?.length">
+			v-if="singleProduct.data.products.nodes[0].productAcf.additionalProducts?.length">
 			<div class="center">
 				<h2>Podobné produkty</h2>
 			</div>
 			<div class="products-grid">
-				<ProductsBlock :data="singleProduct.products.nodes[0].productAcf.additionalProducts" />
+				<ProductsBlock :data="singleProduct.data.products.nodes[0].productAcf.additionalProducts" />
 			</div>
 		</section>
 	</div>
@@ -119,10 +120,12 @@
 </template>
 <script setup>
 	const router = useRouter()
-	const singleProduct = ref(null)
+	const variables = ref({
+		slug: router.currentRoute.value.params.slug,
+	})
 	const singleProductQuery = gql`
-		query {
-			products(where: { name: "${router.currentRoute.value.params.slug}" }) {
+		query getProduct($slug: String!) {
+			products(where: { name: $slug }) {
 				nodes {
 					title
 					content
@@ -173,8 +176,8 @@
 						shortDescription
 						tabulkaParametru
 						gallery {
-          					sourceUrl
-          					mediaDetails {
+							sourceUrl
+							mediaDetails {
 								height
 								width
 							}
@@ -185,8 +188,7 @@
 			}
 		}
 	`
-	const { data: singleProductData } = await useAsyncQuery(singleProductQuery)
-	singleProduct.value = singleProductData.value
+	const { data: singleProduct } = await useAsyncData('product', () => useAsyncQuery(singleProductQuery, variables.value))
 </script>
 <style lang="scss">
 	.full-width {

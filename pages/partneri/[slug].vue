@@ -1,77 +1,80 @@
 <template>
 	<section class="partner-header">
 		<NuxtPicture
-			:src="singlePartner.partners.nodes[0].partnerAcf.hero.sourceUrl"
-			:alt="singlePartner.partners.nodes[0].partnerAcf.hero.altText"
-			:width="singlePartner.partners.nodes[0].partnerAcf.hero.mediaDetails.width"
-			:height="singlePartner.partners.nodes[0].partnerAcf.hero.mediaDetails.height"
+			:src="singlePartner.data.partners.nodes[0].partnerAcf.hero.sourceUrl"
+			:alt="singlePartner.data.partners.nodes[0].partnerAcf.hero.altText"
+			:width="singlePartner.data.partners.nodes[0].partnerAcf.hero.mediaDetails.width"
+			:height="singlePartner.data.partners.nodes[0].partnerAcf.hero.mediaDetails.height"
+			loading="lazy"
 			provider="ipx" />
 		<div class="container partner-header__content center">
 			<NuxtPicture
-				:src="singlePartner.partners.nodes[0].featuredImage.node.sourceUrl"
-				:alt="singlePartner.partners.nodes[0].featuredImage.node.altText"
-				:width="singlePartner.partners.nodes[0].featuredImage.node.mediaDetails.width"
-				:height="singlePartner.partners.nodes[0].featuredImage.node.mediaDetails.height"
+				:src="singlePartner.data.partners.nodes[0].featuredImage.node.sourceUrl"
+				:alt="singlePartner.data.partners.nodes[0].featuredImage.node.altText"
+				:width="singlePartner.data.partners.nodes[0].featuredImage.node.mediaDetails.width"
+				:height="singlePartner.data.partners.nodes[0].featuredImage.node.mediaDetails.height"
+				loading="lazy"
 				provider="ipx" />
 		</div>
 	</section>
 	<section class="container">
 		<div class="narrow center">
-			<h1>{{ singlePartner.partners.nodes[0].title }}</h1>
+			<h1>{{ singlePartner.data.partners.nodes[0].title }}</h1>
 		</div>
 		<div class="content-wrapper">
 			<div class="content">
 				<div
 					class="partner__excerpt"
-					v-html="singlePartner.partners.nodes[0].excerpt"></div>
+					v-html="singlePartner.data.partners.nodes[0].excerpt"></div>
 				<div
 					class="partner__description"
-					v-html="singlePartner.partners.nodes[0].partnerAcf.description"></div>
+					v-html="singlePartner.data.partners.nodes[0].partnerAcf.description"></div>
 			</div>
 			<div class="sidebar">
 				<div
 					class="sidebar-box"
-					v-html="singlePartner.partners.nodes[0].partnerAcf.sidebarBox"></div>
+					v-html="singlePartner.data.partners.nodes[0].partnerAcf.sidebarBox"></div>
 			</div>
 		</div>
 	</section>
 </template>
 <script setup>
 	const router = useRouter()
+	const variables = ref({ name: router.currentRoute.value.params.slug })
 	const singlePartnerQuery = gql`
-			query {
-				partners(where: { name: "${router.currentRoute.value.params.slug}" }) {
-					nodes {
-						title
-						slug
-						excerpt
-						featuredImage {
-							node {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
+		query getSinglePartner($name: String!) {
+			partners(where: { name: $name }) {
+				nodes {
+					title
+					slug
+					excerpt
+					featuredImage {
+						node {
+							altText
+							sourceUrl
+							mediaDetails {
+								height
+								width
 							}
 						}
-						partnerAcf {
-							description
-							sidebarBox
-							hero {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
+					}
+					partnerAcf {
+						description
+						sidebarBox
+						hero {
+							altText
+							sourceUrl
+							mediaDetails {
+								height
+								width
 							}
 						}
 					}
 				}
 			}
-		`
-	const { data: singlePartner } = await useAsyncQuery(singlePartnerQuery)
+		}
+	`
+	const { data: singlePartner } = await useAsyncData('parner', () => useAsyncQuery(singlePartnerQuery, variables.value))
 </script>
 <style lang="scss">
 	.partner-header {

@@ -1,16 +1,15 @@
 <template>
 	<PostHeader
-		:image="service.pages.nodes[0].featuredImage.node"
-		:title="service.pages.nodes[0].title"
-		:excerpt="service.pages.nodes[0].rumlKlingerSluzby.shortDescription" />
+		:image="service.data.pages.nodes[0].featuredImage.node"
+		:title="service.data.pages.nodes[0].title"
+		:excerpt="service.data.pages.nodes[0].rumlKlingerSluzby.shortDescription" />
 </template>
 <script setup>
 	const router = useRouter()
-	const service = ref(null)
-
+	const variables = ref({ name: router.currentRoute.value.params.slug })
 	const serviceQuery = gql`
-		query {
-			pages(where: { name: "${router.currentRoute.value.params.slug}" }) {
+		query getService($name: String!) {
+			pages(where: { name: $name }) {
 				nodes {
 					title
 					slug
@@ -31,7 +30,6 @@
 			}
 		}
 	`
-	const { data: serviceResponse } = await useAsyncQuery(serviceQuery)
-	service.value = serviceResponse.value
+	const { data: service } = await useAsyncData('service', () => useAsyncQuery(serviceQuery, variables.value))
 </script>
 <style lang="scss"></style>

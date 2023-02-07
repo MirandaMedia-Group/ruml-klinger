@@ -13,7 +13,7 @@
 	<section>
 		<div class="container">
 			<div
-				v-for="(service, index) in servicesData?.pages.nodes"
+				v-for="(service, index) in servicesData.data.pages.nodes"
 				:key="index"
 				class="service columns col-2">
 				<div class="service__image column">
@@ -22,6 +22,7 @@
 						:alt="service.featuredImage.node.altText"
 						:width="service.featuredImage.node.mediaDetails.width"
 						:height="service.featuredImage.node.mediaDetails.height"
+						loading="lazy"
 						provider="ipx"
 						:imgAttrs="{ style: 'height: 100%; object-fit: cover;' }" />
 				</div>
@@ -46,7 +47,7 @@
 </template>
 <script setup>
 	const servicesQuery = gql`
-		query {
+		query getAllServices {
 			pages(where: { parent: "cG9zdDo1OTg=", orderby: { field: DATE, order: ASC } }) {
 				nodes {
 					title
@@ -68,7 +69,7 @@
 			}
 		}
 	`
-	const { data: servicesData } = await useAsyncQuery(servicesQuery)
+	const { data: servicesData } = await useAsyncData('allServices', () => useAsyncQuery(servicesQuery))
 </script>
 <style lang="scss" scoped>
 	.page-image-header {

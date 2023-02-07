@@ -1,13 +1,13 @@
 <template>
 	<div>
 		<PostHeader
-			:image="careerDetail.careers.nodes[0].featuredImage.node"
-			:logo="careerDetail.careers.nodes[0].careerAcf.company"
-			:title="careerDetail.careers.nodes[0].title"
-			:excerpt="careerDetail.careers.nodes[0].excerpt" />
+			:image="careerDetail.data.careers.nodes[0].featuredImage.node"
+			:logo="careerDetail.data.careers.nodes[0].careerAcf.company"
+			:title="careerDetail.data.careers.nodes[0].title"
+			:excerpt="careerDetail.data.careers.nodes[0].excerpt" />
 		<NuxtLayout name="with-sidebar-detail">
 			<template #main>
-				<div v-html="careerDetail.careers.nodes[0].content"></div>
+				<div v-html="careerDetail.data.careers.nodes[0].content"></div>
 			</template>
 			<template #sidebar>
 				<CareerForm />
@@ -25,29 +25,14 @@
 		layout: false,
 	})
 
-	const careerDetail = ref(null)
 	const router = useRouter()
-
-	const companyLogos = ref({
-		klinger: '/loga/ruml-group.png',
-		service: '/loga/ruml-service.png',
-		emes: '/loga/ruml-emes.png',
-		industry: '/loga/ruml-industry.png',
-		tesneni: '/loga/ruml-tesneni.png',
-		group: '/loga/ruml-group.png',
-	})
-	const companyURLs = ref({
-		klinger: 'www.ruml-klinger.cz',
-		service: 'www.ruml-service.cz',
-		emes: 'www.ruml-emes.cz',
-		industry: 'www.ruml-industry.cz',
-		tesneni: 'www.ruml-tesneni.cz',
-		group: 'www.ruml-group.cz',
+	const variables = ref({
+		slug: router.currentRoute.value.params.slug,
 	})
 
 	const careerDetailQuery = gql`
-		query {
-			careers(where: { name: "${router.currentRoute.value.params.slug}" }) {
+		query getCareerDetail($slug: String) {
+			careers(where: { name: $slug }) {
 				nodes {
 					title
 					slug
@@ -70,6 +55,5 @@
 			}
 		}
 	`
-	const { data: careerDetailResponse } = await useAsyncQuery(careerDetailQuery)
-	careerDetail.value = careerDetailResponse.value
+	const { data: careerDetail } = await useAsyncData('careerDetail', () => useAsyncQuery(careerDetailQuery, variables.value))
 </script>

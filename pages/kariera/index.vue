@@ -5,19 +5,19 @@
 		<strong>
 			Právě máme
 			{{
-				careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
+				careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
 					? 'volnou'
-					: careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 ||
-					  careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
+					: careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 ||
+					  careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
 					? 'volné'
 					: 'volných'
 			}}
-			{{ careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length }}
+			{{ careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length }}
 			{{
-				careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
+				careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
 					? 'pozici'
-					: careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 ||
-					  careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
+					: careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 ||
+					  careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
 					? 'pozice'
 					: 'pozic'
 			}}
@@ -27,7 +27,7 @@
 		<div class="career-list">
 			<div
 				class="career"
-				v-for="(post, index) in careerList?.careers.nodes.filter((post) => post.careerAcf.company === 'klinger')"
+				v-for="(post, index) in careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger')"
 				:key="index">
 				<div class="career__image">
 					<NuxtPicture
@@ -35,6 +35,7 @@
 						:alt="post.featuredImage.node.altText"
 						:width="post.featuredImage.node.mediaDetails.width"
 						:height="post.featuredImage.node.mediaDetails.height"
+						loading="lazy"
 						provider="ipx"
 						:img-attrs="{ style: 'display:block;' }" />
 				</div>
@@ -42,7 +43,10 @@
 					<div class="career__company">
 						<NuxtPicture
 							:src="companyLogos[post.careerAcf.company]"
-							:alt="post.careerAcf.company" />
+							:alt="post.careerAcf.company"
+							width="139"
+							height="68"
+							loading="lazy" />
 					</div>
 					<h2 class="career__title">{{ post.title }}</h2>
 					<div class="career__website">
@@ -62,8 +66,7 @@
 		</div>
 	</section>
 	<TextImageBlock
-		v-if="aboutUsBanner"
-		:data="aboutUsBanner.page.rumlKlingerHomepage.aboutUs"
+		:data="aboutUsBanner.data.page.rumlKlingerHomepage.aboutUs"
 		:hasBackground="true"
 		:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
 		:alignCenter="true" />
@@ -73,8 +76,6 @@
 </template>
 
 <script setup>
-	const careerList = useState('careerList', () => null)
-	const aboutUsBanner = useState('aboutUsBanner', () => null)
 	const companyLogos = ref({
 		klinger: '/loga/ruml-group.png',
 		service: '/loga/ruml-service.png',
@@ -93,7 +94,7 @@
 	})
 
 	const careerListQuery = gql`
-		query {
+		query getCareerList {
 			careers {
 				nodes {
 					excerpt
@@ -116,11 +117,10 @@
 			}
 		}
 	`
-	const { data: careerListData } = await useAsyncQuery(careerListQuery)
-	careerList.value = careerListData.value
+	const { data: careerList } = await useAsyncData('careerList', () => useAsyncQuery(careerListQuery))
 
-	const homepageQuery = gql`
-		query {
+	const aboutUsBannerQuery = gql`
+		query getOnasBanner {
 			page(id: "cG9zdDo1OTI=") {
 				title
 				slug
@@ -142,8 +142,7 @@
 			}
 		}
 	`
-	const { data: homepageResponse } = await useAsyncQuery(homepageQuery)
-	aboutUsBanner.value = homepageResponse.value
+	const { data: aboutUsBanner } = await useAsyncData('onasBanner', () => useAsyncQuery(aboutUsBannerQuery))
 </script>
 
 <style lang="scss" scoped>

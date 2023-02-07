@@ -12,7 +12,7 @@
 			<nav>
 				<ul>
 					<li
-						v-for="(category, index) in referenceCategories?.referenceCategories.nodes"
+						v-for="(category, index) in referenceCategories.data.referenceCategories.nodes"
 						:key="index">
 						<a :href="`#${category.slug}`">{{ category.name }}</a>
 					</li>
@@ -21,7 +21,7 @@
 		</AnchorsBlock>
 		<div
 			class="reference-category"
-			v-for="(category, index) in referenceCategories?.referenceCategories.nodes"
+			v-for="(category, index) in referenceCategories.data.referenceCategories.nodes"
 			:id="category.slug"
 			:key="index">
 			<div class="reference-category__header">
@@ -30,11 +30,12 @@
 					:alt="category.referenceCategoryAcf.image.altText"
 					:width="category.referenceCategoryAcf.image.mediaDetails.width"
 					:height="category.referenceCategoryAcf.image.mediaDetails.height"
+					loading="lazy"
 					provider="ipx" />
 				<h2>{{ category.name }}</h2>
 			</div>
 			<ReferencesList
-				:references="references?.references.nodes"
+				:references="references.data.references.nodes"
 				:category="category" />
 			<div
 				v-if="category.referenceCategoryAcf.technologies"
@@ -56,7 +57,7 @@
 	const activeReferenceBlock = useState('activeReferenceBlock')
 
 	const referenceCategoriesQuery = gql`
-		{
+		query getReferenceCategories {
 			referenceCategories {
 				nodes {
 					id
@@ -79,14 +80,16 @@
 			}
 		}
 	`
-	const { data: referenceCategories, pending: referenceCategoriesPending } = await useAsyncQuery(referenceCategoriesQuery)
-	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
+	const { data: referenceCategories, pending: referenceCategoriesPending } = await useAsyncData('referenceCategories', () =>
+		useAsyncQuery(referenceCategoriesQuery)
+	)
+	activeReferenceBlock.value = referenceCategories.data?.value.referenceCategories.nodes[0].id
 	watch(referenceCategoriesPending, (val) => {
-		if (!val) activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
+		if (!val) activeReferenceBlock.value = referenceCategories.data.value.referenceCategories.nodes[0].id
 	})
 
 	const referencesQuery = gql`
-		{
+		query getReferences {
 			references {
 				nodes {
 					id
@@ -112,7 +115,7 @@
 			}
 		}
 	`
-	const { data: references } = await useAsyncQuery(referencesQuery)
+	const { data: references } = await useAsyncData('references', () => useAsyncQuery(referencesQuery))
 </script>
 <style lang="scss">
 	.reference-category {

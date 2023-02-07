@@ -6,7 +6,7 @@
 		<div class="partners-grid">
 			<div
 				class="partner"
-				v-for="(partner, index) in allPartners?.partners.nodes"
+				v-for="(partner, index) in allPartners.data.partners.nodes"
 				:key="index">
 				<div class="partner__image">
 					<NuxtPicture
@@ -14,6 +14,7 @@
 						:alt="partner.featuredImage.node.altText"
 						:width="partner.featuredImage.node.mediaDetails.width"
 						:height="partner.featuredImage.node.mediaDetails.height"
+						loading="lazy"
 						provider="ipx" />
 				</div>
 				<h2 class="partner__title">{{ partner.title }}</h2>
@@ -34,8 +35,8 @@
 </template>
 <script setup>
 	const allPartnersQuery = gql`
-		{
-			partners {
+		query getPartners {
+			partners(where: { orderby: { field: TITLE, order: ASC } }) {
 				nodes {
 					featuredImage {
 						node {
@@ -54,7 +55,7 @@
 			}
 		}
 	`
-	const { data: allPartners } = await useAsyncQuery(allPartnersQuery)
+	const { data: allPartners } = await useAsyncData('partners', () => useAsyncQuery(allPartnersQuery))
 </script>
 <style lang="scss">
 	.partners-grid {
