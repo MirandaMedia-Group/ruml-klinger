@@ -1,164 +1,162 @@
 <template>
-	<NuxtLayout>
-		<div v-if="homepageDataPending">Načítám</div>
-		<div v-else>
-			<HeroBig v-bind="homepageData.page.rumlKlingerHomepage.hero" />
-			<section class="categories container">
-				<div class="narrow center">
-					<h2>{{ homepageData?.page.rumlKlingerHomepage.categoriesBlock.title }}</h2>
-					<p>{{ homepageData?.page.rumlKlingerHomepage.categoriesBlock.perex }}</p>
-					<!-- <div class="categories__switcher">
+	<div v-if="homepageDataPending">Načítám</div>
+	<div v-else>
+		<HeroBig v-bind="homepageData.page.rumlKlingerHomepage.hero" />
+		<section class="categories container">
+			<div class="narrow center">
+				<h2>{{ homepageData?.page.rumlKlingerHomepage.categoriesBlock.title }}</h2>
+				<p>{{ homepageData?.page.rumlKlingerHomepage.categoriesBlock.perex }}</p>
+				<!-- <div class="categories__switcher">
 						<strong>Zobrazit kategorie podle:</strong>
 						<div class="switcher__control"><button class="active">Zboží</button>|<button>Výrobci</button></div>
 					</div> -->
-				</div>
-				<div class="categories-grid">
-					<NuxtLink
-						v-for="category in homepageData?.page.rumlKlingerHomepage.categoriesBlock.categories"
-						:key="category.title"
-						:to="category.url"
-						class="category">
-						<div class="category__image">
-							<NuxtPicture
-								:src="category.image.sourceUrl"
-								:alt="category.image.altText"
-								:width="category.image.mediaDetails.width"
-								:height="category.image.mediaDetails.height"
-								loading="lazy"
-								provider="ipx" />
-						</div>
-						<div class="category__content">
-							<h3>{{ category.title }}</h3>
-						</div>
-					</NuxtLink>
-				</div>
-			</section>
-			<section>
-				<BannerTop />
-			</section>
-			<section class="services container">
-				<div class="narrow center">
-					<h2>{{ homepageData?.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
-					<p>{{ homepageData?.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
-				</div>
-				<div class="services-wrap">
-					<div
-						class="service"
-						v-for="(item, index) in homepageData?.pages.nodes"
-						:key="index">
-						<div class="service__image">
-							<NuxtPicture
-								:src="item.featuredImage?.node.sourceUrl"
-								:width="item.featuredImage?.node.mediaDetails.width"
-								:height="item.featuredImage?.node.mediaDetails.height"
-								:alt="item.featuredImage?.node.altText"
-								loading="lazy"
-								provider="ipx" />
-						</div>
-						<div class="service__content">
-							<h3>{{ item.title }}</h3>
-							<p class="service__description">{{ item.rumlKlingerSluzby.shortDescription }}</p>
-							<NuxtLink
-								:to="`/sluzby/${item.slug}`"
-								class="btn btn-primary">
-								Zobrazit službu
-							</NuxtLink>
-						</div>
+			</div>
+			<div class="categories-grid">
+				<NuxtLink
+					v-for="category in homepageData?.page.rumlKlingerHomepage.categoriesBlock.categories"
+					:key="category.title"
+					:to="category.url"
+					class="category">
+					<div class="category__image">
+						<NuxtPicture
+							:src="category.image.sourceUrl"
+							:alt="category.image.altText"
+							:width="category.image.mediaDetails.width"
+							:height="category.image.mediaDetails.height"
+							loading="lazy"
+							provider="ipx" />
+					</div>
+					<div class="category__content">
+						<h3>{{ category.title }}</h3>
+					</div>
+				</NuxtLink>
+			</div>
+		</section>
+		<section>
+			<BannerTop />
+		</section>
+		<section class="services container">
+			<div class="narrow center">
+				<h2>{{ homepageData?.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
+				<p>{{ homepageData?.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
+			</div>
+			<div class="services-wrap">
+				<div
+					class="service"
+					v-for="(item, index) in homepageData?.pages.nodes"
+					:key="index">
+					<div class="service__image">
+						<NuxtPicture
+							:src="item.featuredImage?.node.sourceUrl"
+							:width="item.featuredImage?.node.mediaDetails.width"
+							:height="item.featuredImage?.node.mediaDetails.height"
+							:alt="item.featuredImage?.node.altText"
+							loading="lazy"
+							provider="ipx" />
+					</div>
+					<div class="service__content">
+						<h3>{{ item.title }}</h3>
+						<p class="service__description">{{ item.rumlKlingerSluzby.shortDescription }}</p>
+						<NuxtLink
+							:to="`/sluzby/${item.slug}`"
+							class="btn btn-primary">
+							Zobrazit službu
+						</NuxtLink>
 					</div>
 				</div>
-			</section>
+			</div>
+		</section>
 
-			<section class="container">
-				<VideoCarousel
-					v-if="homepageData"
-					:data="homepageData.page.rumlKlingerHomepage.videoCarousel.video" />
-			</section>
-
-			<section class="partners">
-				<div class="container center">
-					<h2>Partneři</h2>
-					<div class="partners-list">
-						<div
-							class="partner"
-							v-for="(item, index) in homepageData?.partners.nodes"
-							:key="index">
-							<NuxtPicture
-								:src="item.featuredImage.node.sourceUrl"
-								:alt="item.featuredImage.node.altText"
-								:width="item.featuredImage.node.mediaDetails.width"
-								:height="item.featuredImage.node.mediaDetails.height"
-								loading="lazy"
-								provider="ipx" />
-						</div>
-					</div>
-					<BtnSecondary href="/partneri"> Další partneři </BtnSecondary>
-				</div>
-			</section>
-			<TextImageBlock
+		<section class="container">
+			<VideoCarousel
 				v-if="homepageData"
-				:data="homepageData.page.rumlKlingerHomepage.aboutUs"
-				:hasBackground="true"
-				:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
-				:alignCenter="true" />
-			<section class="references container">
-				<div class="narrow center">
-					<h2>Reference</h2>
-				</div>
-				<div v-if="screenWidth > 900">
-					<div class="references__categories">
-						<nav>
-							<ul>
-								<li
-									class="references__category--item"
-									v-for="(item, index) in homepageData?.referenceCategories.nodes"
-									:class="{ active: item.id === activeReferenceBlock }"
-									:key="index">
-									<button @click.prevent="activeReferenceBlock = item.id">
-										{{ item.name }}
-									</button>
-								</li>
-							</ul>
-						</nav>
-					</div>
+				:data="homepageData.page.rumlKlingerHomepage.videoCarousel.video" />
+		</section>
+
+		<section class="partners">
+			<div class="container center">
+				<h2>Partneři</h2>
+				<div class="partners-list">
 					<div
-						v-for="item in homepageData?.referenceCategories.nodes"
-						:key="item.id"
-						:class="{ active: item.id === activeReferenceBlock }"
-						class="references__block">
+						class="partner"
+						v-for="(item, index) in homepageData?.partners.nodes"
+						:key="index">
+						<NuxtPicture
+							:src="item.featuredImage.node.sourceUrl"
+							:alt="item.featuredImage.node.altText"
+							:width="item.featuredImage.node.mediaDetails.width"
+							:height="item.featuredImage.node.mediaDetails.height"
+							loading="lazy"
+							provider="ipx" />
+					</div>
+				</div>
+				<BtnSecondary href="/partneri"> Další partneři </BtnSecondary>
+			</div>
+		</section>
+		<TextImageBlock
+			v-if="homepageData"
+			:data="homepageData.page.rumlKlingerHomepage.aboutUs"
+			:hasBackground="true"
+			:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
+			:alignCenter="true" />
+		<section class="references container">
+			<div class="narrow center">
+				<h2>Reference</h2>
+			</div>
+			<div v-if="screenWidth > 900">
+				<div class="references__categories">
+					<nav>
+						<ul>
+							<li
+								class="references__category--item"
+								v-for="(item, index) in homepageData?.referenceCategories.nodes"
+								:class="{ active: item.id === activeReferenceBlock }"
+								:key="index">
+								<button @click.prevent="activeReferenceBlock = item.id">
+									{{ item.name }}
+								</button>
+							</li>
+						</ul>
+					</nav>
+				</div>
+				<div
+					v-for="item in homepageData?.referenceCategories.nodes"
+					:key="item.id"
+					:class="{ active: item.id === activeReferenceBlock }"
+					class="references__block">
+					<ReferencesList
+						v-if="homepageData?.references"
+						:references="homepageData?.references.nodes"
+						:category="item" />
+				</div>
+			</div>
+			<div v-else>
+				<div
+					class="mobile-references__wrapper"
+					v-for="(item, index) in homepageData?.referenceCategories.nodes"
+					:class="{ active: item.id === activeReferenceBlock }"
+					:key="index">
+					<button @click.prevent="activeReferenceBlock = item.id">
+						{{ item.name }}
+					</button>
+					<div class="mobile-references__block">
 						<ReferencesList
-							v-if="homepageData?.references"
 							:references="homepageData?.references.nodes"
 							:category="item" />
 					</div>
 				</div>
-				<div v-else>
-					<div
-						class="mobile-references__wrapper"
-						v-for="(item, index) in homepageData?.referenceCategories.nodes"
-						:class="{ active: item.id === activeReferenceBlock }"
-						:key="index">
-						<button @click.prevent="activeReferenceBlock = item.id">
-							{{ item.name }}
-						</button>
-						<div class="mobile-references__block">
-							<ReferencesList
-								:references="homepageData?.references.nodes"
-								:category="item" />
-						</div>
-					</div>
-				</div>
-				<div class="buttons-wrapper buttons-center">
-					<BtnSecondary href="/reference">Všechny reference</BtnSecondary>
-				</div>
-			</section>
-			<TextImageBlock
-				v-if="homepageData"
-				:data="homepageData.page.rumlKlingerHomepage.career"
-				:reverse="true"
-				:btn="{ text: 'Zobrazit pozice', url: '/kariera' }"
-				:alignCenter="true" />
-		</div>
-	</NuxtLayout>
+			</div>
+			<div class="buttons-wrapper buttons-center">
+				<BtnSecondary href="/reference">Všechny reference</BtnSecondary>
+			</div>
+		</section>
+		<TextImageBlock
+			v-if="homepageData"
+			:data="homepageData.page.rumlKlingerHomepage.career"
+			:reverse="true"
+			:btn="{ text: 'Zobrazit pozice', url: '/kariera' }"
+			:alignCenter="true" />
+	</div>
 </template>
 
 <script setup>
@@ -175,11 +173,6 @@
 	const screenWidth = useState('screenWidth')
 
 	// STATES
-	// const homepageData = useState('homepageData', () => null)
-	// const referenceCategoriesData = useState('referenceCategoriesData', () => null)
-	// const referencesData = useState('referencesData', () => null)
-	// const partnersData = useState('partnersData', () => null)
-	// const servicesData = useState('servicesData', () => null)
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
 
 	const homepageQuery = gql`
@@ -378,123 +371,6 @@
 	watch(homepageData, (val) => {
 		if (!val) activeReferenceBlock.value = homepageData?.value.referenceCategories.nodes[0].id
 	})
-
-	// // SLUZBY
-	// const servicesQuery = gql`
-	// 	query getServices {
-	// 		pages(where: { parent: "cG9zdDo1OTg=", orderby: { field: DATE, order: ASC } }, first: 2) {
-	// 			nodes {
-	// 				title
-	// 				slug
-	// 				featuredImage {
-	// 					node {
-	// 						sourceUrl
-	// 						altText
-	// 						mediaDetails {
-	// 							height
-	// 							width
-	// 						}
-	// 					}
-	// 				}
-	// 				rumlKlingerSluzby {
-	// 					shortDescription
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// `
-	// const { data: servicesResponse } = await useAsyncQuery(servicesQuery)
-	// servicesData.value = servicesResponse.value
-	// if (!servicesData.value) servicesData.value = useQuery(servicesQuery)
-
-	// // PARTNERI
-	// const partnersQuery = gql`
-	// 	query getPartners {
-	// 		partners(first: 5) {
-	// 			nodes {
-	// 				id
-	// 				title
-	// 				featuredImage {
-	// 					node {
-	// 						sourceUrl
-	// 						altText
-	// 						mediaDetails {
-	// 							height
-	// 							width
-	// 						}
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// `
-	// const { data: partnersResponse } = await useAsyncQuery(partnersQuery)
-	// partnersData.value = partnersResponse.value
-	// if (!partnersData.value) partnersData.value = useQuery(partnersQuery)
-
-	// // KATEGORIE REFERENCI
-	// const referenceCategoriesQuery = gql`
-	// 	query getReferenceCategories {
-	// 		referenceCategories {
-	// 			nodes {
-	// 				id
-	// 				name
-	// 				link
-	// 				uri
-	// 				slug
-	// 				referenceCategoryAcf {
-	// 					image {
-	// 						sourceUrl
-	// 						altText
-	// 						mediaDetails {
-	// 							height
-	// 							width
-	// 						}
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// `
-	// const { data: referenceCategoriesResponse, pending: referenceCategoriesPending } = await useAsyncQuery(referenceCategoriesQuery)
-	// referenceCategoriesData.value = referenceCategoriesResponse.value
-	// activeReferenceBlock.value = referenceCategoriesData?.value.referenceCategories.nodes[0].id
-	// if (!referenceCategoriesData.value) referenceCategoriesData.value = useQuery(referenceCategoriesQuery)
-	// watch(referenceCategoriesData, (val) => {
-	// 	if (!val) activeReferenceBlock.value = referenceCategoriesData?.value.referenceCategories.nodes[0].id
-	// })
-
-	// // REFERENCE
-	// const referencesQuery = gql`
-	// 	query getReferences {
-	// 		references {
-	// 			nodes {
-	// 				id
-	// 				title
-	// 				slug
-	// 				featuredImage {
-	// 					node {
-	// 						sourceUrl
-	// 						altText
-	// 						mediaDetails {
-	// 							height
-	// 							width
-	// 						}
-	// 					}
-	// 				}
-	// 				referenceCategories {
-	// 					nodes {
-	// 						name
-	// 						id
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// `
-	// const { data: referencesResponse } = await useAsyncQuery(referencesQuery)
-	// referencesData.value = referencesResponse.value
-	// if (!referencesData.value) referencesData.value = useQuery(referencesQuery)
 </script>
 <style lang="scss">
 	.categories__switcher {
