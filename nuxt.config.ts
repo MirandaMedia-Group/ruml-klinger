@@ -1,5 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	routeRules: {
+		'/': { static: true },
+		'/o-nas': { static: true },
+		'/kontakty': { static: true },
+		'/sluzby': { static: true },
+		'/sluzby/**': { swr: 3600 },
+		'/reference': { static: true },
+		'/reference/**': { swr: 3600 },
+		'/partneri': { static: true },
+		'/partneri/**': { swr: 3600 },
+		'/kariera': { static: true },
+		'/kariera/**': { swr: 3600 },
+		'/katalog-produktu': { static: true },
+		'/katalog-produktu/**': { swr: 3600 },
+	},
 	vite: {
 		css: {
 			preprocessorOptions: {
@@ -22,23 +37,8 @@ export default defineNuxtConfig({
 	apollo: {
 		clients: {
 			default: {
-				httpEndpoint: 'https://wp-miranda-1.axfone.eu/graphql',
+				httpEndpoint: 'https://ruml-api.mirandamedia.cz/graphql',
 			},
 		},
-	},
-	routeRules: {
-		'/': { static: true },
-		'/o-nas': { static: true },
-		'/kontakty': { static: true },
-		'/sluzby': { static: true },
-		'/sluzby/**': { swr: 3600 },
-		'/reference': { static: true },
-		'/reference/**': { swr: 3600 },
-		'/partneri': { static: true },
-		'/partneri/**': { swr: 3600 },
-		'/kariera': { static: true },
-		'/kariera/**': { swr: 3600 },
-		'/katalog-produktu': { static: true },
-		'/katalog-produktu/**': { swr: 3600 },
 	},
 })
