@@ -1,92 +1,63 @@
 <template>
-	<HeroBig
-		v-bind="onas.page.rumlKlingerOnas.hero"
-		:white="true" />
-	<TextImageBlock
-		:data="onas.page.rumlKlingerOnas.firstBlock"
-		:has-background="true"
-		:divider="true" />
-	<section
-		id="usp"
-		class="container">
-		<USPBlock />
-	</section>
-	<section
-		id="historie"
-		v-if="onas.page.rumlKlingerOnas.timeline">
-		<div class="container">
-			<div class="timeline__columns">
-				<div class="timeline__info">
-					<h2>{{ onas.page.rumlKlingerOnas.timeline.titulek }}</h2>
-					<div
-						class="timeline__description"
-						v-html="onas.page.rumlKlingerOnas.timeline.perex"></div>
-				</div>
-				<div class="timeline__slider-wrapper">
-					<div
-						v-for="(history, index) in onas.page.rumlKlingerOnas.timeline.history"
-						:key="index">
-						<div class="timeline__slider--item">
-							<div class="timeline-item__content__image">
-								<img
-									:src="history.image.sourceUrl"
-									:alt="history.image.altText"
-									:width="history.image.mediaDetails.width"
-									:height="history.image.mediaDetails.height" />
-							</div>
-							<h3 class="timeline-item__year">
-								{{ history.year }}
-							</h3>
-							<div class="timeline-item__content__text">
-								<div v-html="history.perex"></div>
+	<div v-if="onasPending"></div>
+	<div v-else>
+		<HeroBig
+			v-bind="onas.data.page.rumlKlingerOnas.hero"
+			:white="true" />
+		<TextImageBlock
+			:data="onas.data.page.rumlKlingerOnas.firstBlock"
+			:has-background="true"
+			:divider="true" />
+		<section
+			id="usp"
+			class="container">
+			<USPBlock />
+		</section>
+		<section id="historie">
+			<div class="container">
+				<div class="timeline__columns">
+					<div class="timeline__info">
+						<h2>{{ onas.data.page.rumlKlingerOnas.timeline.titulek }}</h2>
+						<div
+							class="timeline__description"
+							v-html="onas.data.page.rumlKlingerOnas.timeline.perex"></div>
+					</div>
+					<div class="timeline__slider-wrapper">
+						<div
+							v-for="(history, index) in onas.data.page.rumlKlingerOnas.timeline.history"
+							:key="index">
+							<div class="timeline__slider--item">
+								<div class="timeline-item__content__image">
+									<img
+										:src="history.image.sourceUrl"
+										:alt="history.image.altText"
+										:width="history.image.mediaDetails.width"
+										:height="history.image.mediaDetails.height" />
+								</div>
+								<h3 class="timeline-item__year">
+									{{ history.year }}
+								</h3>
+								<div class="timeline-item__content__text">
+									<div v-html="history.perex"></div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</section>
-	<section
-		class="container"
-		v-if="onas.page.rumlKlingerOnas.owners">
-		<div class="narrow center">
-			<h2>Vedení společnosti</h2>
-		</div>
-		<div
-			class="owners"
-			v-if="screenWidth > 767">
-			<div
-				v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person"
-				:key="index"
-				class="owner">
-				<div class="owner__image">
-					<NuxtPicture
-						:src="owner.image.sourceUrl"
-						:alt="owner.image.altText"
-						:width="owner.image.mediaDetails.width"
-						:height="owner.image.mediaDetails.height"
-						provider="ipx" />
-				</div>
-				<div class="owner__name">
-					<strong>{{ owner.name }}</strong>
-					<div class="owner__position">{{ owner.position }}</div>
-				</div>
-				<div class="owner__text">
-					<div v-html="owner.perex"></div>
-				</div>
+		</section>
+		<section class="container">
+			<div class="narrow center">
+				<h2>Vedení společnosti</h2>
 			</div>
-		</div>
-		<div
-			v-else
-			class="owners-mobile">
 			<div
-				v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person"
-				:key="index"
-				class="owner-mobile">
+				class="owners"
+				v-if="screenWidth > 767">
 				<div
-					class="owner-mobile__heading"
-					@click.prevent="toggleOwner">
-					<div class="owner-mobile__image">
+					v-for="(owner, index) in onas.data.page.rumlKlingerOnas.owners.person"
+					:key="index"
+					class="owner">
+					<div class="owner__image">
 						<NuxtPicture
 							:src="owner.image.sourceUrl"
 							:alt="owner.image.altText"
@@ -94,63 +65,91 @@
 							:height="owner.image.mediaDetails.height"
 							provider="ipx" />
 					</div>
-					<div class="owner-mobile__name">
+					<div class="owner__name">
 						<strong>{{ owner.name }}</strong>
-						<div class="owner-mobile__position">{{ owner.position }}</div>
+						<div class="owner__position">{{ owner.position }}</div>
+					</div>
+					<div class="owner__text">
+						<div v-html="owner.perex"></div>
 					</div>
 				</div>
-				<div class="owner-mobile__text">
-					<div v-html="owner.perex"></div>
-				</div>
 			</div>
-		</div>
-	</section>
-	<section
-		class="container"
-		id="nase-spolocnosti"
-		v-if="onas.page.rumlKlingerOnas.ourCompanies">
-		<div class="narrow center">
-			<h2>Naše společnosti</h2>
-		</div>
-		<div class="companies">
 			<div
-				class="company"
-				v-for="(company, index) in onas.page.rumlKlingerOnas.ourCompanies.company"
-				:key="index">
-				<div class="company__image">
-					<NuxtPicture
-						:src="company.image.sourceUrl"
-						:alt="company.image.altText"
-						:width="company.image.mediaDetails.width"
-						:height="company.image.mediaDetails.height"
-						provider="ipx" />
-					<div class="company__logo">
-						<NuxtPicture
-							:src="company.logo.sourceUrl"
-							:alt="company.logo.altText"
-							:width="company.logo.mediaDetails.width"
-							:height="company.logo.mediaDetails.height"
-							provider="ipx" />
+				v-else
+				class="owners-mobile">
+				<div
+					v-for="(owner, index) in onas.data.page.rumlKlingerOnas.owners.person"
+					:key="index"
+					class="owner-mobile">
+					<div
+						class="owner-mobile__heading"
+						@click.prevent="toggleOwner">
+						<div class="owner-mobile__image">
+							<NuxtPicture
+								:src="owner.image.sourceUrl"
+								:alt="owner.image.altText"
+								:width="owner.image.mediaDetails.width"
+								:height="owner.image.mediaDetails.height"
+								provider="ipx" />
+						</div>
+						<div class="owner-mobile__name">
+							<strong>{{ owner.name }}</strong>
+							<div class="owner-mobile__position">{{ owner.position }}</div>
+						</div>
+					</div>
+					<div class="owner-mobile__text">
+						<div v-html="owner.perex"></div>
 					</div>
 				</div>
-				<div class="company__info">
-					<h3 class="company__title">{{ company.title }}</h3>
-					<div class="company__perex">{{ company.perex }}</div>
-					<a
-						class="btn btn-primary"
-						:href="company.url"
-						target="_blank">
-						Přejít na web
-					</a>
+			</div>
+		</section>
+		<section
+			class="container"
+			id="nase-spolocnosti">
+			<div class="narrow center">
+				<h2>Naše společnosti</h2>
+			</div>
+			<div class="companies">
+				<div
+					class="company"
+					v-for="(company, index) in onas.data.page.rumlKlingerOnas.ourCompanies.company"
+					:key="index">
+					<div class="company__image">
+						<NuxtPicture
+							:src="company.image.sourceUrl"
+							:alt="company.image.altText"
+							:width="company.image.mediaDetails.width"
+							:height="company.image.mediaDetails.height"
+							provider="ipx" />
+						<div class="company__logo">
+							<NuxtPicture
+								:src="company.logo.sourceUrl"
+								:alt="company.logo.altText"
+								:width="company.logo.mediaDetails.width"
+								:height="company.logo.mediaDetails.height"
+								provider="ipx" />
+						</div>
+					</div>
+					<div class="company__info">
+						<h3 class="company__title">{{ company.title }}</h3>
+						<div class="company__perex">{{ company.perex }}</div>
+						<a
+							class="btn btn-primary"
+							:href="company.url"
+							target="_blank">
+							Přejít na web
+						</a>
+					</div>
 				</div>
 			</div>
-		</div>
-	</section>
-	<TextImageBlock
-		:data="careerBanner.page.rumlKlingerHomepage.career"
-		:align-center="true"
-		:reverse="true"
-		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
+		</section>
+		<TextImageBlock
+			v-if="!careerPending"
+			:data="careerBanner.data.page.rumlKlingerHomepage.career"
+			:align-center="true"
+			:reverse="true"
+			:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
+	</div>
 </template>
 <script setup>
 	const screenWidth = useState('screenWidth')
@@ -255,7 +254,7 @@
 			}
 		}
 	`
-	const { data: onas } = await useAsyncQuery(onasQuery)
+	const { data: onas, pending: onasPending } = await useAsyncData('onas', () => useAsyncQuery(onasQuery))
 
 	const careerBannerQuery = gql`
 		query {
@@ -280,7 +279,7 @@
 			}
 		}
 	`
-	const { data: careerBanner } = await useAsyncQuery(careerBannerQuery)
+	const { data: careerBanner, pending: careerPending } = await useAsyncData('careerBanner', () => useAsyncQuery(careerBannerQuery))
 </script>
 <style lang="scss">
 	.usp-wrapper {
