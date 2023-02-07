@@ -1,17 +1,17 @@
 <template>
-	<HeroBig v-bind="homepageData.data.page.rumlKlingerHomepage.hero" />
+	<HeroBig v-bind="homepageData.page.rumlKlingerHomepage.hero" />
 	<section class="categories container">
 		<div class="narrow center">
-			<h2>{{ homepageData.data.page.rumlKlingerHomepage.categoriesBlock.title }}</h2>
-			<p>{{ homepageData.data.page.rumlKlingerHomepage.categoriesBlock.perex }}</p>
+			<h2>{{ homepageData.page.rumlKlingerHomepage.categoriesBlock.title }}</h2>
+			<p>{{ homepageData.page.rumlKlingerHomepage.categoriesBlock.perex }}</p>
 			<!-- <div class="categories__switcher">
-					<strong>Zobrazit kategorie podle:</strong>
-					<div class="switcher__control"><button class="active">Zboží</button>|<button>Výrobci</button></div>
-				</div> -->
+				<strong>Zobrazit kategorie podle:</strong>
+				<div class="switcher__control"><button class="active">Zboží</button>|<button>Výrobci</button></div>
+			</div> -->
 		</div>
 		<div class="categories-grid">
 			<NuxtLink
-				v-for="category in homepageData.data.page.rumlKlingerHomepage.categoriesBlock.categories"
+				v-for="category in homepageData.page.rumlKlingerHomepage.categoriesBlock.categories"
 				:key="category.title"
 				:to="category.url"
 				class="category">
@@ -35,13 +35,13 @@
 	</section>
 	<section class="services container">
 		<div class="narrow center">
-			<h2>{{ homepageData.data.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
-			<p>{{ homepageData.data.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
+			<h2>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
+			<p>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
 		</div>
 		<div class="services-wrap">
 			<div
 				class="service"
-				v-for="(item, index) in homepageData.data.pages.nodes"
+				v-for="(item, index) in homepageData.pages.nodes"
 				:key="index">
 				<div class="service__image">
 					<NuxtPicture
@@ -66,7 +66,7 @@
 	</section>
 
 	<section class="container">
-		<VideoCarousel :data="homepageData.data.page.rumlKlingerHomepage.videoCarousel.video" />
+		<VideoCarousel :data="homepageData.page.rumlKlingerHomepage.videoCarousel.video" />
 	</section>
 
 	<section class="partners">
@@ -75,7 +75,7 @@
 			<div class="partners-list">
 				<div
 					class="partner"
-					v-for="(item, index) in homepageData.data.partners.nodes"
+					v-for="(item, index) in homepageData.partners.nodes"
 					:key="index">
 					<NuxtPicture
 						:src="item.featuredImage.node.sourceUrl"
@@ -90,7 +90,7 @@
 		</div>
 	</section>
 	<TextImageBlock
-		:data="homepageData.data.page.rumlKlingerHomepage.aboutUs"
+		:data="homepageData.page.rumlKlingerHomepage.aboutUs"
 		:hasBackground="true"
 		:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
 		:alignCenter="true" />
@@ -104,7 +104,7 @@
 					<ul>
 						<li
 							class="references__category--item"
-							v-for="(item, index) in homepageData.data.referenceCategories.nodes"
+							v-for="(item, index) in homepageData.referenceCategories.nodes"
 							:class="{ active: item.id === activeReferenceBlock }"
 							:key="index">
 							<button @click.prevent="activeReferenceBlock = item.id">
@@ -115,20 +115,20 @@
 				</nav>
 			</div>
 			<div
-				v-for="item in homepageData.data.referenceCategories.nodes"
+				v-for="item in homepageData.referenceCategories.nodes"
 				:key="item.id"
 				:class="{ active: item.id === activeReferenceBlock }"
 				class="references__block">
 				<ReferencesList
-					v-if="homepageData.data.references"
-					:references="homepageData.data.references.nodes"
+					v-if="homepageData.references"
+					:references="homepageData.references.nodes"
 					:category="item" />
 			</div>
 		</div>
 		<div v-else>
 			<div
 				class="mobile-references__wrapper"
-				v-for="(item, index) in homepageData.data.referenceCategories.nodes"
+				v-for="(item, index) in homepageData.referenceCategories.nodes"
 				:class="{ active: item.id === activeReferenceBlock }"
 				:key="index">
 				<button @click.prevent="activeReferenceBlock = item.id">
@@ -136,7 +136,7 @@
 				</button>
 				<div class="mobile-references__block">
 					<ReferencesList
-						:references="homepageData.data.references.nodes"
+						:references="homepageData.references.nodes"
 						:category="item" />
 				</div>
 			</div>
@@ -146,7 +146,7 @@
 		</div>
 	</section>
 	<TextImageBlock
-		:data="homepageData.data.page.rumlKlingerHomepage.career"
+		:data="homepageData.page.rumlKlingerHomepage.career"
 		:reverse="true"
 		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }"
 		:alignCenter="true" />
@@ -358,11 +358,32 @@
 			}
 		}
 	`
-	const { data: homepageData, pending: homepagePending } = await useAsyncData('hompageData', () => useAsyncQuery(homepageQuery))
-	activeReferenceBlock.value = homepageData?.value.data.referenceCategories.nodes[0].id
-	watch(homepageData, (val) => {
-		if (!val) activeReferenceBlock.value = homepageData?.value.data.referenceCategories.nodes[0].id
-	})
+	// const { data: homepageData, pending: homepagePending } = await useAsyncData('hompageData', () => useAsyncQuery(homepageQuery))
+	// activeReferenceBlock.value = homepageData?.value.data.referenceCategories.nodes[0].id
+	// watch(homepageData, (val) => {
+	// 	if (!val) activeReferenceBlock.value = homepageData?.value.data.referenceCategories.nodes[0].id
+	// })
+	const homepageData = useState(() => null)
+	if (!homepageData.value) {
+		const { data } = await useAsyncQuery(homepageQuery)
+		homepageData.value = data.value
+		activeReferenceBlock.value = data.value.referenceCategories.nodes[0].id
+	}
+
+	// if (!homepageData.value) {
+	// 	const { data } = await useAsyncQuery(homepageQuery)
+	// 	homepageData.value = data.value
+	// }
+
+	// const { data, refresh } = useAsyncQuery(homepageQuery)
+	// homepageData.value = data.value
+	// if (!homepageData.value) {
+	// 	refresh()
+	// 	homepageData.value = data.value
+	// }
+	// console.log(homepageData.value)
+	// const { data: homepageData, pending: homepagePending, refresh: refreshHomepageData } = await useAsyncQuery(homepageQuery)
+	// if (!homepageData.value) refreshHomepageData()
 </script>
 <style lang="scss">
 	.categories__switcher {

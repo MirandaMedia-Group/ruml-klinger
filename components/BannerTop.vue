@@ -4,18 +4,18 @@
 			class="banner"
 			:style="`background-image: url(${
 				screenWidth >= 768
-					? hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.image.sourceUrl
-					: hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.imageMobile.sourceUrl
+					? hpBannerTop.page.rumlKlingerHomepage.bannerTop.image.sourceUrl
+					: hpBannerTop.page.rumlKlingerHomepage.bannerTop.imageMobile.sourceUrl
 			})`">
 			<div class="banner__content">
-				<h3>{{ hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.title }}</h3>
-				<p>{{ hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.perex }}</p>
+				<h3>{{ hpBannerTop.page.rumlKlingerHomepage.bannerTop.title }}</h3>
+				<p>{{ hpBannerTop.page.rumlKlingerHomepage.bannerTop.perex }}</p>
 				<a
 					class="btn btn-primary"
-					:href="hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.btn.file.mediaItemUrl"
+					:href="hpBannerTop.page.rumlKlingerHomepage.bannerTop.btn.file.mediaItemUrl"
 					target="_blank">
-					{{ hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.btn.text }}
-					({{ (hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
+					{{ hpBannerTop.page.rumlKlingerHomepage.bannerTop.btn.text }}
+					({{ (hpBannerTop.page.rumlKlingerHomepage.bannerTop.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
 				</a>
 			</div>
 		</div>
@@ -60,7 +60,12 @@
 			}
 		}
 	`
-	const { data: hpBannerTop } = await useAsyncData('bannerTop', () => useAsyncQuery(homepageQuery))
+	const hpBannerTop = useState('hpBannerTop', () => null)
+	if (!hpBannerTop.value) {
+		const { data } = await useAsyncQuery(homepageQuery)
+		hpBannerTop.value = data.value
+	}
+	// const { data: hpBannerTop } = await useAsyncData('bannerTop', () => useAsyncQuery(homepageQuery))
 </script>
 <style lang="scss" scoped>
 	.banner {

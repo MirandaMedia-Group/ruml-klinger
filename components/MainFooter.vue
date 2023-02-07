@@ -10,7 +10,7 @@
 				</a>
 				<NuxtLink
 					class="btn btn-primary"
-					to="/kontakt">
+					to="/kontakty">
 					Naši specialisté
 				</NuxtLink>
 			</div>
