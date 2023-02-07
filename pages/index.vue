@@ -1,158 +1,155 @@
 <template>
-	<div v-if="homepagePending"></div>
-	<div v-else>
-		<HeroBig v-bind="homepageData.data.page.rumlKlingerHomepage.hero" />
-		<section class="categories container">
-			<div class="narrow center">
-				<h2>{{ homepageData.data.page.rumlKlingerHomepage.categoriesBlock.title }}</h2>
-				<p>{{ homepageData.data.page.rumlKlingerHomepage.categoriesBlock.perex }}</p>
-				<!-- <div class="categories__switcher">
+	<HeroBig v-bind="homepageData.data.page.rumlKlingerHomepage.hero" />
+	<section class="categories container">
+		<div class="narrow center">
+			<h2>{{ homepageData.data.page.rumlKlingerHomepage.categoriesBlock.title }}</h2>
+			<p>{{ homepageData.data.page.rumlKlingerHomepage.categoriesBlock.perex }}</p>
+			<!-- <div class="categories__switcher">
 					<strong>Zobrazit kategorie podle:</strong>
 					<div class="switcher__control"><button class="active">Zboží</button>|<button>Výrobci</button></div>
 				</div> -->
+		</div>
+		<div class="categories-grid">
+			<NuxtLink
+				v-for="category in homepageData.data.page.rumlKlingerHomepage.categoriesBlock.categories"
+				:key="category.title"
+				:to="category.url"
+				class="category">
+				<div class="category__image">
+					<NuxtPicture
+						:src="category.image.sourceUrl"
+						:alt="category.image.altText"
+						:width="category.image.mediaDetails.width"
+						:height="category.image.mediaDetails.height"
+						loading="lazy"
+						provider="ipx" />
+				</div>
+				<div class="category__content">
+					<h3>{{ category.title }}</h3>
+				</div>
+			</NuxtLink>
+		</div>
+	</section>
+	<section>
+		<BannerTop />
+	</section>
+	<section class="services container">
+		<div class="narrow center">
+			<h2>{{ homepageData.data.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
+			<p>{{ homepageData.data.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
+		</div>
+		<div class="services-wrap">
+			<div
+				class="service"
+				v-for="(item, index) in homepageData.data.pages.nodes"
+				:key="index">
+				<div class="service__image">
+					<NuxtPicture
+						:src="item.featuredImage?.node.sourceUrl"
+						:width="item.featuredImage?.node.mediaDetails.width"
+						:height="item.featuredImage?.node.mediaDetails.height"
+						:alt="item.featuredImage?.node.altText"
+						loading="lazy"
+						provider="ipx" />
+				</div>
+				<div class="service__content">
+					<h3>{{ item.title }}</h3>
+					<p class="service__description">{{ item.rumlKlingerSluzby.shortDescription }}</p>
+					<NuxtLink
+						:to="`/sluzby/${item.slug}`"
+						class="btn btn-primary">
+						Zobrazit službu
+					</NuxtLink>
+				</div>
 			</div>
-			<div class="categories-grid">
-				<NuxtLink
-					v-for="category in homepageData.data.page.rumlKlingerHomepage.categoriesBlock.categories"
-					:key="category.title"
-					:to="category.url"
-					class="category">
-					<div class="category__image">
-						<NuxtPicture
-							:src="category.image.sourceUrl"
-							:alt="category.image.altText"
-							:width="category.image.mediaDetails.width"
-							:height="category.image.mediaDetails.height"
-							loading="lazy"
-							provider="ipx" />
-					</div>
-					<div class="category__content">
-						<h3>{{ category.title }}</h3>
-					</div>
-				</NuxtLink>
-			</div>
-		</section>
-		<section>
-			<BannerTop />
-		</section>
-		<section class="services container">
-			<div class="narrow center">
-				<h2>{{ homepageData.data.page.rumlKlingerHomepage.servicesBlock.title }}</h2>
-				<p>{{ homepageData.data.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
-			</div>
-			<div class="services-wrap">
+		</div>
+	</section>
+
+	<section class="container">
+		<VideoCarousel :data="homepageData.data.page.rumlKlingerHomepage.videoCarousel.video" />
+	</section>
+
+	<section class="partners">
+		<div class="container center">
+			<h2>Partneři</h2>
+			<div class="partners-list">
 				<div
-					class="service"
-					v-for="(item, index) in homepageData.data.pages.nodes"
+					class="partner"
+					v-for="(item, index) in homepageData.data.partners.nodes"
 					:key="index">
-					<div class="service__image">
-						<NuxtPicture
-							:src="item.featuredImage?.node.sourceUrl"
-							:width="item.featuredImage?.node.mediaDetails.width"
-							:height="item.featuredImage?.node.mediaDetails.height"
-							:alt="item.featuredImage?.node.altText"
-							loading="lazy"
-							provider="ipx" />
-					</div>
-					<div class="service__content">
-						<h3>{{ item.title }}</h3>
-						<p class="service__description">{{ item.rumlKlingerSluzby.shortDescription }}</p>
-						<NuxtLink
-							:to="`/sluzby/${item.slug}`"
-							class="btn btn-primary">
-							Zobrazit službu
-						</NuxtLink>
-					</div>
+					<NuxtPicture
+						:src="item.featuredImage.node.sourceUrl"
+						:alt="item.featuredImage.node.altText"
+						:width="item.featuredImage.node.mediaDetails.width"
+						:height="item.featuredImage.node.mediaDetails.height"
+						loading="lazy"
+						provider="ipx" />
 				</div>
 			</div>
-		</section>
-
-		<section class="container">
-			<VideoCarousel :data="homepageData.data.page.rumlKlingerHomepage.videoCarousel.video" />
-		</section>
-
-		<section class="partners">
-			<div class="container center">
-				<h2>Partneři</h2>
-				<div class="partners-list">
-					<div
-						class="partner"
-						v-for="(item, index) in homepageData.data.partners.nodes"
-						:key="index">
-						<NuxtPicture
-							:src="item.featuredImage.node.sourceUrl"
-							:alt="item.featuredImage.node.altText"
-							:width="item.featuredImage.node.mediaDetails.width"
-							:height="item.featuredImage.node.mediaDetails.height"
-							loading="lazy"
-							provider="ipx" />
-					</div>
-				</div>
-				<BtnSecondary href="/partneri"> Další partneři </BtnSecondary>
+			<BtnSecondary href="/partneri"> Další partneři </BtnSecondary>
+		</div>
+	</section>
+	<TextImageBlock
+		:data="homepageData.data.page.rumlKlingerHomepage.aboutUs"
+		:hasBackground="true"
+		:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
+		:alignCenter="true" />
+	<section class="references container">
+		<div class="narrow center">
+			<h2>Reference</h2>
+		</div>
+		<div v-if="screenWidth > 900">
+			<div class="references__categories">
+				<nav>
+					<ul>
+						<li
+							class="references__category--item"
+							v-for="(item, index) in homepageData.data.referenceCategories.nodes"
+							:class="{ active: item.id === activeReferenceBlock }"
+							:key="index">
+							<button @click.prevent="activeReferenceBlock = item.id">
+								{{ item.name }}
+							</button>
+						</li>
+					</ul>
+				</nav>
 			</div>
-		</section>
-		<TextImageBlock
-			:data="homepageData.data.page.rumlKlingerHomepage.aboutUs"
-			:hasBackground="true"
-			:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
-			:alignCenter="true" />
-		<section class="references container">
-			<div class="narrow center">
-				<h2>Reference</h2>
+			<div
+				v-for="item in homepageData.data.referenceCategories.nodes"
+				:key="item.id"
+				:class="{ active: item.id === activeReferenceBlock }"
+				class="references__block">
+				<ReferencesList
+					v-if="homepageData.data.references"
+					:references="homepageData.data.references.nodes"
+					:category="item" />
 			</div>
-			<div v-if="screenWidth > 900">
-				<div class="references__categories">
-					<nav>
-						<ul>
-							<li
-								class="references__category--item"
-								v-for="(item, index) in homepageData.data.referenceCategories.nodes"
-								:class="{ active: item.id === activeReferenceBlock }"
-								:key="index">
-								<button @click.prevent="activeReferenceBlock = item.id">
-									{{ item.name }}
-								</button>
-							</li>
-						</ul>
-					</nav>
-				</div>
-				<div
-					v-for="item in homepageData.data.referenceCategories.nodes"
-					:key="item.id"
-					:class="{ active: item.id === activeReferenceBlock }"
-					class="references__block">
+		</div>
+		<div v-else>
+			<div
+				class="mobile-references__wrapper"
+				v-for="(item, index) in homepageData.data.referenceCategories.nodes"
+				:class="{ active: item.id === activeReferenceBlock }"
+				:key="index">
+				<button @click.prevent="activeReferenceBlock = item.id">
+					{{ item.name }}
+				</button>
+				<div class="mobile-references__block">
 					<ReferencesList
-						v-if="homepageData.data.references"
 						:references="homepageData.data.references.nodes"
 						:category="item" />
 				</div>
 			</div>
-			<div v-else>
-				<div
-					class="mobile-references__wrapper"
-					v-for="(item, index) in homepageData.data.referenceCategories.nodes"
-					:class="{ active: item.id === activeReferenceBlock }"
-					:key="index">
-					<button @click.prevent="activeReferenceBlock = item.id">
-						{{ item.name }}
-					</button>
-					<div class="mobile-references__block">
-						<ReferencesList
-							:references="homepageData.data.references.nodes"
-							:category="item" />
-					</div>
-				</div>
-			</div>
-			<div class="buttons-wrapper buttons-center">
-				<BtnSecondary href="/reference">Všechny reference</BtnSecondary>
-			</div>
-		</section>
-		<TextImageBlock
-			:data="homepageData.data.page.rumlKlingerHomepage.career"
-			:reverse="true"
-			:btn="{ text: 'Zobrazit pozice', url: '/kariera' }"
-			:alignCenter="true" />
-	</div>
+		</div>
+		<div class="buttons-wrapper buttons-center">
+			<BtnSecondary href="/reference">Všechny reference</BtnSecondary>
+		</div>
+	</section>
+	<TextImageBlock
+		:data="homepageData.data.page.rumlKlingerHomepage.career"
+		:reverse="true"
+		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }"
+		:alignCenter="true" />
 </template>
 
 <script setup>
