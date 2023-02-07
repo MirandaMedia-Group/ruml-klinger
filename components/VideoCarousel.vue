@@ -69,6 +69,7 @@
 						alt=""
 						width="950"
 						height="550"
+						loading="lazy"
 						:src="`https://img.youtube.com/vi/${youtubeID(props.data[activeVideo].video)}/hqdefault.jpg`" />
 				</a>
 				<iframe

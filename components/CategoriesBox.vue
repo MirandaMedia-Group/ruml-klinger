@@ -2,7 +2,7 @@
 	<nav v-if="screenWidth > 900">
 		<ul class="menu__level-1">
 			<li
-				v-for="(level1, index1) in categoriesData?.productCategories.nodes"
+				v-for="(level1, index1) in categoriesData.data.productCategories.nodes"
 				:class="{ 'has-children': level1?.children.nodes.length, expanded: $route.fullPath.indexOf(level1.slug) >= 0 }"
 				:key="index1">
 				<NuxtLink
@@ -31,7 +31,7 @@
 		<button @click.prevent="toggleCategories">Kategorie</button>
 		<ul v-if="router.currentRoute.value.params?.slug">
 			<li
-				v-for="(item, index) in categoriesData?.productCategories.nodes.filter(
+				v-for="(item, index) in categoriesData.data.productCategories.nodes.filter(
 					(node) => node.slug === router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
 				)[0]?.children.nodes"
 				:key="index">
@@ -40,7 +40,7 @@
 		</ul>
 		<ul v-else>
 			<li
-				v-for="(item, index) in categoriesData?.productCategories.nodes"
+				v-for="(item, index) in categoriesData.data.productCategories.nodes"
 				:key="index">
 				<nuxt-link :to="`/katalog-produktu/${item.slug}`">{{ item.name }}</nuxt-link>
 			</li>
@@ -52,7 +52,7 @@
 	const screenWidth = useState('screenWidth')
 	const router = useRouter()
 	const productCategoriesQuery = gql`
-		query {
+		query getCategories {
 			productCategories(where: { parent: 0 }) {
 				nodes {
 					name
@@ -73,7 +73,7 @@
 			}
 		}
 	`
-	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery)
+	const { data: categoriesData } = await useAsyncData('categorie', () => useAsyncQuery(productCategoriesQuery))
 	const toggleExpanded = (e) => e.target.closest('.has-children').classList.toggle('expanded')
 	const toggleCategories = (e) => e.target.parentElement.classList.toggle('expanded')
 </script>

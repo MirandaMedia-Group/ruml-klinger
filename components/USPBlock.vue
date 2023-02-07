@@ -5,7 +5,7 @@
 	</div>
 	<div class="usp-wrapper">
 		<div
-			v-for="(usp, index) in usp.page.rumlKlingerOnas.secondBlock.usp"
+			v-for="(usp, index) in usp.data.page.rumlKlingerOnas.secondBlock.usp"
 			:key="index"
 			class="usp">
 			<strong>{{ usp.value }}</strong>
@@ -14,9 +14,8 @@
 	</div>
 </template>
 <script setup>
-	const usp = useState('usp', () => null)
 	const uspQuery = gql`
-		query {
+		query getUSP {
 			page(id: "cG9zdDo2MDI=") {
 				id
 				slug
@@ -34,6 +33,5 @@
 			}
 		}
 	`
-	const { data: uspResponse } = await useAsyncQuery(uspQuery)
-	usp.value = uspResponse.value
+	const { data: usp } = await useAsyncData('usp', () => useAsyncQuery(uspQuery))
 </script>

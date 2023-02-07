@@ -1,23 +1,21 @@
 <template>
-	<div
-		v-if="hpBannerTop"
-		class="banner__top container">
+	<div class="banner__top container">
 		<div
 			class="banner"
 			:style="`background-image: url(${
 				screenWidth >= 768
-					? hpBannerTop.page.rumlKlingerHomepage.bannerTop.image.sourceUrl
-					: hpBannerTop.page.rumlKlingerHomepage.bannerTop.imageMobile.sourceUrl
+					? hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.image.sourceUrl
+					: hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.imageMobile.sourceUrl
 			})`">
 			<div class="banner__content">
-				<h3>{{ hpBannerTop.page.rumlKlingerHomepage.bannerTop.title }}</h3>
-				<p>{{ hpBannerTop.page.rumlKlingerHomepage.bannerTop.perex }}</p>
+				<h3>{{ hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.title }}</h3>
+				<p>{{ hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.perex }}</p>
 				<a
 					class="btn btn-primary"
-					:href="hpBannerTop.page.rumlKlingerHomepage.bannerTop.btn.file.mediaItemUrl"
+					:href="hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.btn.file.mediaItemUrl"
 					target="_blank">
-					{{ hpBannerTop.page.rumlKlingerHomepage.bannerTop.btn.text }}
-					({{ (hpBannerTop.page.rumlKlingerHomepage.bannerTop.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
+					{{ hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.btn.text }}
+					({{ (hpBannerTop.data.page.rumlKlingerHomepage.bannerTop.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
 				</a>
 			</div>
 		</div>
@@ -26,7 +24,7 @@
 <script setup>
 	const screenWidth = useState('screenWidth')
 	const homepageQuery = gql`
-		query {
+		query getBannerTop {
 			page(id: "cG9zdDo1OTI=") {
 				title
 				slug
@@ -62,7 +60,7 @@
 			}
 		}
 	`
-	const { data: hpBannerTop } = useAsyncQuery(homepageQuery)
+	const { data: hpBannerTop } = await useAsyncData('bannerTop', () => useAsyncQuery(homepageQuery))
 </script>
 <style lang="scss" scoped>
 	.banner {

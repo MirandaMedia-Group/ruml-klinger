@@ -10,6 +10,7 @@
 						:alt="props.image.altText"
 						:width="props.image.mediaDetails.width"
 						:height="props.image.mediaDetails.height"
+						loading="lazy"
 						provider="ipx" />
 				</div>
 				<div class="column detail-header__info">

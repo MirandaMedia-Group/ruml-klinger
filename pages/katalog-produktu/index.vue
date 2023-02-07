@@ -81,6 +81,10 @@
 						shortDescription
 						gallery {
 							sourceUrl
+							mediaDetails {
+								width
+								height
+							}
 						}
 					}
 				}
