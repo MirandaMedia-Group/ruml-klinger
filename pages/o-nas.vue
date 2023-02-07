@@ -61,6 +61,7 @@
 						:alt="owner.image.altText"
 						:width="owner.image.mediaDetails.width"
 						:height="owner.image.mediaDetails.height"
+						loading="lazy"
 						provider="ipx" />
 				</div>
 				<div class="owner__name">
@@ -88,6 +89,7 @@
 							:alt="owner.image.altText"
 							:width="owner.image.mediaDetails.width"
 							:height="owner.image.mediaDetails.height"
+							loading="lazy"
 							provider="ipx" />
 					</div>
 					<div class="owner-mobile__name">
@@ -118,6 +120,7 @@
 						:alt="company.image.altText"
 						:width="company.image.mediaDetails.width"
 						:height="company.image.mediaDetails.height"
+						loading="lazy"
 						provider="ipx" />
 					<div class="company__logo">
 						<NuxtPicture
@@ -125,6 +128,7 @@
 							:alt="company.logo.altText"
 							:width="company.logo.mediaDetails.width"
 							:height="company.logo.mediaDetails.height"
+							loading="lazy"
 							provider="ipx" />
 					</div>
 				</div>

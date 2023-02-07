@@ -165,12 +165,14 @@
 							:alt="person.image.altText"
 							:width="person.image.mediaDetails.width"
 							:height="person.image.mediaDetails.height"
+							loading="lazy"
 							provider="ipx" />
 						<NuxtPicture
 							v-else
 							src="/kontaktni_osoby/placeholder.jpg"
 							width="150"
 							height="150"
+							loading="lazy"
 							alt="" />
 					</div>
 					<div class="person__name">{{ person.name }}</div>
