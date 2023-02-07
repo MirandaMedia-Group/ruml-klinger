@@ -1,7 +1,7 @@
 <template>
 	<div class="narrow center">
-		<h2>{{ usp.page.rumlKlingerOnas.secondBlock.title }}</h2>
-		<div v-html="usp.page.rumlKlingerOnas.secondBlock.perex"></div>
+		<h2>{{ usp.data.page.rumlKlingerOnas.secondBlock.title }}</h2>
+		<div v-html="usp.data.page.rumlKlingerOnas.secondBlock.perex"></div>
 	</div>
 	<div class="usp-wrapper">
 		<div
