@@ -4,7 +4,7 @@
 			<template #main>
 				<div class="category__header">
 					<div
-						v-if="categoryInfoData.productCategories.nodes[0].productCategoriesAfc?.featuredimage"
+						v-if="categoryInfoData.productCategories.nodes[0].productCategoriesAfc?.featuredimage?.sourceUrl"
 						class="category__image">
 						<NuxtPicture
 							:src="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.sourceUrl"

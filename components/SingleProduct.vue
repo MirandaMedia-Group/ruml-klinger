@@ -3,7 +3,7 @@
 		<NuxtLink :to="`/katalog-produktu/product/${props.slug}`">
 			<div class="product__image">
 				<NuxtPicture
-					v-if="props.productAcf?.gallery"
+					v-if="props.productAcf?.gallery?.[0]"
 					:src="props.productAcf.gallery?.[0].sourceUrl"
 					:alt="props.productAcf.gallery?.[0].altText"
 					:width="props.productAcf.gallery?.[0].mediaDetails.width"
