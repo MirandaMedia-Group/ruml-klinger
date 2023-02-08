@@ -6,7 +6,7 @@
 		<div class="partners-grid">
 			<div
 				class="partner"
-				v-for="(partner, index) in allPartners.data.partners.nodes"
+				v-for="(partner, index) in allPartners.partners.nodes"
 				:key="index">
 				<div class="partner__image">
 					<NuxtPicture
@@ -55,7 +55,11 @@
 			}
 		}
 	`
-	const { data: allPartners } = await useAsyncData('partners', () => useAsyncQuery(allPartnersQuery))
+	const allPartners = useState('allPartners', () => null)
+	if (!allPartners.value) {
+		const { data } = await useAsyncQuery(allPartnersQuery)
+		allPartners.value = data.value
+	}
 </script>
 <style lang="scss">
 	.partners-grid {

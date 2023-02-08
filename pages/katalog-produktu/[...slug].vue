@@ -4,21 +4,19 @@
 			<template #main>
 				<div class="category__header">
 					<div
-						v-if="categoryInfoData.data.productCategories.nodes[0].productCategoriesAfc?.featuredimage"
+						v-if="categoryInfoData.productCategories.nodes[0].productCategoriesAfc?.featuredimage"
 						class="category__image">
 						<NuxtPicture
-							:src="categoryInfoData.data.productCategories.nodes[0].productCategoriesAfc.featuredimage.sourceUrl"
-							:alt="categoryInfoData.data.productCategories.nodes[0].productCategoriesAfc.featuredimage.altText"
-							:width="categoryInfoData.data.productCategories.nodes[0].productCategoriesAfc.featuredimage.mediaDetails.width"
-							:height="
-								categoryInfoData.data.productCategories.nodes[0].productCategoriesAfc.featuredimage.mediaDetails.height
-							"
+							:src="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.sourceUrl"
+							:alt="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.altText"
+							:width="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.mediaDetails.width"
+							:height="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.mediaDetails.height"
 							loading="lazy"
 							:img-attrs="{ style: 'display: block; height: 100%; object-fit: cover;' }" />
 					</div>
 					<div class="category__info">
-						<h1>{{ categoryInfoData.data.productCategories.nodes[0].name }}</h1>
-						<p>{{ categoryInfoData.data.productCategories.nodes[0].description }}</p>
+						<h1>{{ categoryInfoData.productCategories.nodes[0].name }}</h1>
+						<p>{{ categoryInfoData.productCategories.nodes[0].description }}</p>
 					</div>
 				</div>
 				<div v-if="screenWidth <= 900">
@@ -32,23 +30,23 @@
 					</div>
 					<div
 						class="center"
-						v-else-if="!categoryProductsData.data.productCategories.nodes[0].contentNodes.nodes.length">
+						v-else-if="!categoryProductsData.productCategories.nodes[0].contentNodes.nodes.length">
 						<p><strong>Tato kategorie neobsahuje žádné produkty ...</strong></p>
 					</div>
 					<ProductsBlock
 						v-else
-						:data="categoryProductsData.data.productCategories.nodes[0].contentNodes.nodes" />
+						:data="categoryProductsData.productCategories.nodes[0].contentNodes.nodes" />
 				</div>
 				<div class="pagination">
 					<button
 						class="button-prev"
-						v-if="categoryProductsData.data.productCategories.nodes[0].contentNodes.pageInfo.hasPreviousPage"
+						v-if="categoryProductsData.productCategories.nodes[0].contentNodes.pageInfo.hasPreviousPage"
 						@click.prevent="handlePrevPage">
 						Předchozí
 					</button>
 					<button
 						class="button-next"
-						v-if="categoryProductsData.data.productCategories.nodes[0].contentNodes.pageInfo.hasNextPage"
+						v-if="categoryProductsData.productCategories.nodes[0].contentNodes.pageInfo.hasNextPage"
 						@click.prevent="handleNextPage">
 						Další
 					</button>
@@ -66,21 +64,29 @@
 	})
 	const screenWidth = useState('screenWidth')
 	const router = useRouter()
-	const slugVariable = ref({ slug: [router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]] })
+	const slugVariable = ref({
+		slug: router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
+			? [router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]]
+			: [],
+	})
 	const variables = ref({
 		first: 15,
 		last: null,
 		after: null,
 		before: null,
+		slug: router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
+			? [router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]]
+			: [],
 	})
 	const productsAnchor = ref(null)
 	const handleNextPage = () => {
 		setTimeout(() => productsAnchor.value.scrollIntoView(), 10)
+		console.log(variables.value)
 		variables.value.after = categoryProductsData.value.productCategories.nodes[0].contentNodes.pageInfo.endCursor
 		variables.value.first = 15
 		variables.value.before = null
 		variables.value.last = null
-		categoryProductsRefresh()
+		refresh()
 	}
 	const handlePrevPage = () => {
 		setTimeout(() => productsAnchor.value.scrollIntoView(), 10)
@@ -88,7 +94,7 @@
 		variables.value.last = 15
 		variables.value.first = null
 		variables.value.after = null
-		categoryProductsRefresh()
+		refresh()
 	}
 
 	const categoryInfoQuery = gql`
@@ -112,7 +118,9 @@
 			}
 		}
 	`
-	const { data: categoryInfoData } = await useAsyncData('categoryInfo', () => useAsyncQuery(categoryInfoQuery, slugVariable.value))
+	const categoryInfoData = useState('categoryInfoData', () => null)
+	const { data } = await useAsyncQuery(categoryInfoQuery, slugVariable.value)
+	categoryInfoData.value = data.value
 
 	const categoryProductsQuery = gql`
 		query getProducts($first: Int, $last: Int, $after: String, $before: String, $slug: [String]) {
@@ -149,11 +157,8 @@
 			}
 		}
 	`
-	const {
-		data: categoryProductsData,
-		pending,
-		refresh: categoryProductsRefresh,
-	} = await useAsyncData('products', () => useAsyncQuery(categoryProductsQuery, { ...variables.value, ...slugVariable.value }))
+
+	const { data: categoryProductsData, refresh, pending } = await useAsyncQuery(categoryProductsQuery, variables.value)
 </script>
 <style lang="scss">
 	.category__header {

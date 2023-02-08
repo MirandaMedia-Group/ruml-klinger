@@ -2,7 +2,7 @@
 	<div>
 		<NuxtLayout name="with-sidebar">
 			<template #main>
-				<div class="category__header">
+				<div class="">
 					<!-- <div class="category__image"></div> -->
 					<div class="category__info">
 						<h1>Produkty</h1>
@@ -19,18 +19,18 @@
 					</div>
 					<ProductsBlock
 						v-else
-						:data="allProductsData.data.products.nodes" />
+						:data="allProductsData.products.nodes" />
 				</div>
 				<div class="pagination">
 					<button
 						class="button-prev"
-						v-if="allProductsData.data.products.pageInfo.hasPreviousPage"
+						v-if="allProductsData.products.pageInfo.hasPreviousPage"
 						@click.prevent="handlePrevPage">
 						Předchozí
 					</button>
 					<button
 						class="button-next"
-						v-if="allProductsData.data.products.pageInfo.hasNextPage"
+						v-if="allProductsData.products.pageInfo.hasNextPage"
 						@click.prevent="handleNextPage">
 						Další
 					</button>
@@ -55,19 +55,19 @@
 	})
 	const handleNextPage = () => {
 		setTimeout(() => productsAnchor.value.scrollIntoView(), 10)
-		variables.value.after = allProductsData.value.data.products.pageInfo.endCursor
+		variables.value.after = allProductsData.value.products.pageInfo.endCursor
 		variables.value.first = 15
 		variables.value.before = null
 		variables.value.last = null
-		allProductRefresh()
+		refresh()
 	}
 	const handlePrevPage = () => {
 		setTimeout(() => productsAnchor.value.scrollIntoView(), 10)
-		variables.value.before = allProductsData.value.data.products.pageInfo.startCursor
+		variables.value.before = allProductsData.value.products.pageInfo.startCursor
 		variables.value.last = 15
 		variables.value.first = null
 		variables.value.after = null
-		allProductRefresh()
+		refresh()
 	}
 	const productsAnchor = ref(null)
 	const screenWidth = useState('screenWidth')
@@ -97,11 +97,7 @@
 			}
 		}
 	`
-	const {
-		data: allProductsData,
-		refresh: allProductRefresh,
-		pending,
-	} = await useAsyncData('rootCategory', () => useAsyncQuery(allProductsQuery, variables.value))
+	const { data: allProductsData, refresh, pending } = await useAsyncQuery(allProductsQuery, variables.value)
 </script>
 <style lang="scss">
 	#products {

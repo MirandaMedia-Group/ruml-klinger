@@ -12,7 +12,7 @@
 			<nav>
 				<ul>
 					<li
-						v-for="(category, index) in referenceCategories.data.referenceCategories.nodes"
+						v-for="(category, index) in referenceCategories.referenceCategories.nodes"
 						:key="index">
 						<a :href="`#${category.slug}`">{{ category.name }}</a>
 					</li>
@@ -21,7 +21,7 @@
 		</AnchorsBlock>
 		<div
 			class="reference-category"
-			v-for="(category, index) in referenceCategories.data.referenceCategories.nodes"
+			v-for="(category, index) in referenceCategories.referenceCategories.nodes"
 			:id="category.slug"
 			:key="index">
 			<div class="reference-category__header">
@@ -35,7 +35,7 @@
 				<h2>{{ category.name }}</h2>
 			</div>
 			<ReferencesList
-				:references="references.data.references.nodes"
+				:references="references.references.nodes"
 				:category="category" />
 			<div
 				v-if="category.referenceCategoryAcf.technologies"
@@ -54,8 +54,6 @@
 	</section>
 </template>
 <script setup>
-	const activeReferenceBlock = useState('activeReferenceBlock')
-
 	const referenceCategoriesQuery = gql`
 		query getReferenceCategories {
 			referenceCategories {
@@ -80,13 +78,11 @@
 			}
 		}
 	`
-	const { data: referenceCategories, pending: referenceCategoriesPending } = await useAsyncData('referenceCategories', () =>
-		useAsyncQuery(referenceCategoriesQuery)
-	)
-	activeReferenceBlock.value = referenceCategories.data?.value.referenceCategories.nodes[0].id
-	watch(referenceCategoriesPending, (val) => {
-		if (!val) activeReferenceBlock.value = referenceCategories.data.value.referenceCategories.nodes[0].id
-	})
+	const referenceCategories = useState('referenceCategories', () => null)
+	if (!referenceCategories.value) {
+		const { data } = await useAsyncQuery(referenceCategoriesQuery)
+		referenceCategories.value = data.value
+	}
 
 	const referencesQuery = gql`
 		query getReferences {
@@ -115,7 +111,11 @@
 			}
 		}
 	`
-	const { data: references } = await useAsyncData('references', () => useAsyncQuery(referencesQuery))
+	const references = useState('references', () => null)
+	if (!references.value) {
+		const { data } = await useAsyncQuery(referencesQuery)
+		references.value = data.value
+	}
 </script>
 <style lang="scss">
 	.reference-category {

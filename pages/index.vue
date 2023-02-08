@@ -104,7 +104,7 @@
 					<ul>
 						<li
 							class="references__category--item"
-							v-for="(item, index) in homepageData.referenceCategories.nodes"
+							v-for="(item, index) in referenceCategories.referenceCategories.nodes"
 							:class="{ active: item.id === activeReferenceBlock }"
 							:key="index">
 							<button @click.prevent="activeReferenceBlock = item.id">
@@ -115,20 +115,19 @@
 				</nav>
 			</div>
 			<div
-				v-for="item in homepageData.referenceCategories.nodes"
+				v-for="item in referenceCategories.referenceCategories.nodes"
 				:key="item.id"
 				:class="{ active: item.id === activeReferenceBlock }"
 				class="references__block">
 				<ReferencesList
-					v-if="homepageData.references"
-					:references="homepageData.references.nodes"
+					:references="references.references.nodes"
 					:category="item" />
 			</div>
 		</div>
 		<div v-else>
 			<div
 				class="mobile-references__wrapper"
-				v-for="(item, index) in homepageData.referenceCategories.nodes"
+				v-for="(item, index) in referenceCategories.referenceCategories.nodes"
 				:class="{ active: item.id === activeReferenceBlock }"
 				:key="index">
 				<button @click.prevent="activeReferenceBlock = item.id">
@@ -136,7 +135,7 @@
 				</button>
 				<div class="mobile-references__block">
 					<ReferencesList
-						:references="homepageData.references.nodes"
+						:references="references.references.nodes"
 						:category="item" />
 				</div>
 			</div>
@@ -314,6 +313,15 @@
 					}
 				}
 			}
+		}
+	`
+	const homepageData = useState('homepageData', () => null)
+	if (!homepageData.value) {
+		const { data } = await useAsyncQuery(homepageQuery)
+		homepageData.value = data.value
+	}
+	const referenceCategoriesQuery = gql`
+		query getReferenceCategories {
 			referenceCategories {
 				nodes {
 					id
@@ -330,9 +338,21 @@
 								width
 							}
 						}
+						technologies
 					}
 				}
 			}
+		}
+	`
+	const referenceCategories = useState('referenceCategories', () => null)
+	if (!referenceCategories.value) {
+		const { data } = await useAsyncQuery(referenceCategoriesQuery)
+		referenceCategories.value = data.value
+		activeReferenceBlock.value = data.value.referenceCategories.nodes[0].id
+	}
+
+	const referencesQuery = gql`
+		query getReferences {
 			references {
 				nodes {
 					id
@@ -358,32 +378,11 @@
 			}
 		}
 	`
-	// const { data: homepageData, pending: homepagePending } = await useAsyncData('hompageData', () => useAsyncQuery(homepageQuery))
-	// activeReferenceBlock.value = homepageData?.value.data.referenceCategories.nodes[0].id
-	// watch(homepageData, (val) => {
-	// 	if (!val) activeReferenceBlock.value = homepageData?.value.data.referenceCategories.nodes[0].id
-	// })
-	const homepageData = useState(() => null)
-	if (!homepageData.value) {
-		const { data } = await useAsyncQuery(homepageQuery)
-		homepageData.value = data.value
-		activeReferenceBlock.value = data.value.referenceCategories.nodes[0].id
+	const references = useState('references', () => null)
+	if (!references.value) {
+		const { data } = await useAsyncQuery(referencesQuery)
+		references.value = data.value
 	}
-
-	// if (!homepageData.value) {
-	// 	const { data } = await useAsyncQuery(homepageQuery)
-	// 	homepageData.value = data.value
-	// }
-
-	// const { data, refresh } = useAsyncQuery(homepageQuery)
-	// homepageData.value = data.value
-	// if (!homepageData.value) {
-	// 	refresh()
-	// 	homepageData.value = data.value
-	// }
-	// console.log(homepageData.value)
-	// const { data: homepageData, pending: homepagePending, refresh: refreshHomepageData } = await useAsyncQuery(homepageQuery)
-	// if (!homepageData.value) refreshHomepageData()
 </script>
 <style lang="scss">
 	.categories__switcher {

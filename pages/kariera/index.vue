@@ -5,19 +5,19 @@
 		<strong>
 			Právě máme
 			{{
-				careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
+				careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
 					? 'volnou'
-					: careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 ||
-					  careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
+					: careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 ||
+					  careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
 					? 'volné'
 					: 'volných'
 			}}
-			{{ careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length }}
+			{{ careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length }}
 			{{
-				careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
+				careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
 					? 'pozici'
-					: careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 ||
-					  careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
+					: careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 ||
+					  careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
 					? 'pozice'
 					: 'pozic'
 			}}
@@ -27,7 +27,7 @@
 		<div class="career-list">
 			<div
 				class="career"
-				v-for="(post, index) in careerList.data.careers.nodes.filter((post) => post.careerAcf.company === 'klinger')"
+				v-for="(post, index) in careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger')"
 				:key="index">
 				<div class="career__image">
 					<NuxtPicture
@@ -66,7 +66,7 @@
 		</div>
 	</section>
 	<TextImageBlock
-		:data="aboutUsBanner.data.page.rumlKlingerHomepage.aboutUs"
+		:data="aboutUsBanner.page.rumlKlingerHomepage.aboutUs"
 		:hasBackground="true"
 		:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
 		:alignCenter="true" />
@@ -117,7 +117,11 @@
 			}
 		}
 	`
-	const { data: careerList } = await useAsyncData('careerList', () => useAsyncQuery(careerListQuery))
+	const careerList = useState('careerList', () => null)
+	if (!careerList.value) {
+		const { data } = await useAsyncQuery(careerListQuery)
+		careerList.value = data.value
+	}
 
 	const aboutUsBannerQuery = gql`
 		query getOnasBanner {
@@ -142,7 +146,11 @@
 			}
 		}
 	`
-	const { data: aboutUsBanner } = await useAsyncData('onasBanner', () => useAsyncQuery(aboutUsBannerQuery))
+	const aboutUsBanner = useState('aboutUsBanner', () => null)
+	if (!aboutUsBanner.value) {
+		const { data } = await useAsyncQuery(aboutUsBannerQuery)
+		aboutUsBanner.value = data.value
+	}
 </script>
 
 <style lang="scss" scoped>

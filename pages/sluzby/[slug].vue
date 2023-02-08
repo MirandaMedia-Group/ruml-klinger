@@ -1,8 +1,8 @@
 <template>
 	<PostHeader
-		:image="service.data.pages.nodes[0].featuredImage.node"
-		:title="service.data.pages.nodes[0].title"
-		:excerpt="service.data.pages.nodes[0].rumlKlingerSluzby.shortDescription" />
+		:image="service.pages.nodes[0].featuredImage.node"
+		:title="service.pages.nodes[0].title"
+		:excerpt="service.pages.nodes[0].rumlKlingerSluzby.shortDescription" />
 </template>
 <script setup>
 	const router = useRouter()
@@ -30,6 +30,8 @@
 			}
 		}
 	`
-	const { data: service } = await useAsyncData('service', () => useAsyncQuery(serviceQuery, variables.value))
+	const service = useState('singleService', () => null)
+	const { data } = await useAsyncQuery(serviceQuery, variables.value)
+	service.value = data.value
 </script>
 <style lang="scss"></style>

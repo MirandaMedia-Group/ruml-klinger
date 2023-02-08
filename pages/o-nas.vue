@@ -1,9 +1,9 @@
 <template>
 	<HeroBig
-		v-bind="onas.data.page.rumlKlingerOnas.hero"
+		v-bind="onas.page.rumlKlingerOnas.hero"
 		:white="true" />
 	<TextImageBlock
-		:data="onas.data.page.rumlKlingerOnas.firstBlock"
+		:data="onas.page.rumlKlingerOnas.firstBlock"
 		:has-background="true"
 		:divider="true" />
 	<section
@@ -15,14 +15,14 @@
 		<div class="container">
 			<div class="timeline__columns">
 				<div class="timeline__info">
-					<h2>{{ onas.data.page.rumlKlingerOnas.timeline.titulek }}</h2>
+					<h2>{{ onas.page.rumlKlingerOnas.timeline.titulek }}</h2>
 					<div
 						class="timeline__description"
-						v-html="onas.data.page.rumlKlingerOnas.timeline.perex"></div>
+						v-html="onas.page.rumlKlingerOnas.timeline.perex"></div>
 				</div>
 				<div class="timeline__slider-wrapper">
 					<div
-						v-for="(history, index) in onas.data.page.rumlKlingerOnas.timeline.history"
+						v-for="(history, index) in onas.page.rumlKlingerOnas.timeline.history"
 						:key="index">
 						<div class="timeline__slider--item">
 							<div class="timeline-item__content__image">
@@ -52,7 +52,7 @@
 			class="owners"
 			v-if="screenWidth > 767">
 			<div
-				v-for="(owner, index) in onas.data.page.rumlKlingerOnas.owners.person"
+				v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person"
 				:key="index"
 				class="owner">
 				<div class="owner__image">
@@ -77,7 +77,7 @@
 			v-else
 			class="owners-mobile">
 			<div
-				v-for="(owner, index) in onas.data.page.rumlKlingerOnas.owners.person"
+				v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person"
 				:key="index"
 				class="owner-mobile">
 				<div
@@ -112,7 +112,7 @@
 		<div class="companies">
 			<div
 				class="company"
-				v-for="(company, index) in onas.data.page.rumlKlingerOnas.ourCompanies.company"
+				v-for="(company, index) in onas.page.rumlKlingerOnas.ourCompanies.company"
 				:key="index">
 				<div class="company__image">
 					<NuxtPicture
@@ -146,7 +146,7 @@
 		</div>
 	</section>
 	<TextImageBlock
-		:data="careerBanner.data.page.rumlKlingerHomepage.career"
+		:data="careerBanner.page.rumlKlingerHomepage.career"
 		:align-center="true"
 		:reverse="true"
 		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
@@ -254,7 +254,11 @@
 			}
 		}
 	`
-	const { data: onas, pending: onasPending } = await useAsyncData('onas', () => useAsyncQuery(onasQuery))
+	const onas = useState('onas', () => null)
+	if (!onas.value) {
+		const { data } = await useAsyncQuery(onasQuery)
+		onas.value = data.value
+	}
 
 	const careerBannerQuery = gql`
 		query getCareerBanner {
@@ -279,7 +283,11 @@
 			}
 		}
 	`
-	const { data: careerBanner, pending: careerPending } = await useAsyncData('careerBanner', () => useAsyncQuery(careerBannerQuery))
+	const careerBanner = useState('careerBanner', () => null)
+	if (!careerBanner.value) {
+		const { data } = await useAsyncQuery(careerBannerQuery)
+		careerBanner.value = data.value
+	}
 </script>
 <style lang="scss">
 	.usp-wrapper {

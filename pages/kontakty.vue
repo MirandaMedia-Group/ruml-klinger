@@ -1,6 +1,6 @@
 <template>
 	<HeroBig
-		v-bind="kontakty.data.page.rumlKlingerKontakty.hero"
+		v-bind="kontakty.page.rumlKlingerKontakty.hero"
 		:white="true"
 		:center="true"
 		:contactBox="true"
@@ -12,31 +12,31 @@
 				<div class="billing-info__table">
 					<div class="tr">
 						<div class="th">IČO</div>
-						<div class="td">{{ kontakty.data.page.rumlKlingerKontakty.billingAddress.ico }}</div>
+						<div class="td">{{ kontakty.page.rumlKlingerKontakty.billingAddress.ico }}</div>
 					</div>
 					<div class="tr">
 						<div class="th">DIČ</div>
-						<div class="td">{{ kontakty.data.page.rumlKlingerKontakty.billingAddress.dic }}</div>
+						<div class="td">{{ kontakty.page.rumlKlingerKontakty.billingAddress.dic }}</div>
 					</div>
 					<div class="tr">
 						<div class="th">Sídlo</div>
 						<div
 							class="td"
-							v-html="kontakty.data.page.rumlKlingerKontakty.billingAddress.address"></div>
+							v-html="kontakty.page.rumlKlingerKontakty.billingAddress.address"></div>
 					</div>
 					<div class="tr">
 						<div class="th">Datová schránka</div>
-						<div class="td">{{ kontakty.data.page.rumlKlingerKontakty.billingAddress.datovaSchranka }}</div>
+						<div class="td">{{ kontakty.page.rumlKlingerKontakty.billingAddress.datovaSchranka }}</div>
 					</div>
 					<div class="tr">
-						<a :href="kontakty.data.page.rumlKlingerKontakty.billingAddress.obchodniRejstrik">Výpis z obchodního rejstříku</a>
+						<a :href="kontakty.page.rumlKlingerKontakty.billingAddress.obchodniRejstrik">Výpis z obchodního rejstříku</a>
 					</div>
 				</div>
 			</div>
 			<div class="column">
 				<h2>Bankovní spojení</h2>
 				<div
-					v-for="(item, index) in kontakty.data.page.rumlKlingerKontakty.spojeni"
+					v-for="(item, index) in kontakty.page.rumlKlingerKontakty.spojeni"
 					:key="index">
 					<div class="billing-info__table">
 						<div class="tr">
@@ -65,10 +65,10 @@
 			</div>
 			<div class="column">
 				<div
-					v-if="certificates.data.page.rumlKlingerOnas.firstBlock.certificates"
+					v-if="certificates.page.rumlKlingerOnas.firstBlock.certificates"
 					class="certificates">
 					<h2>Certifikáty</h2>
-					<FilesTable :data="certificates.data.page.rumlKlingerOnas.firstBlock.certificates" />
+					<FilesTable :data="certificates.page.rumlKlingerOnas.firstBlock.certificates" />
 				</div>
 			</div>
 		</div>
@@ -76,7 +76,7 @@
 	<section class="container">
 		<div class="pobocky">
 			<div
-				v-for="(item, index) in kontakty.data.page.rumlKlingerKontakty.pobocky"
+				v-for="(item, index) in kontakty.page.rumlKlingerKontakty.pobocky"
 				:key="index"
 				class="pobocka">
 				<div class="pobocka__content">
@@ -136,18 +136,18 @@
 			:style="{ marginTop: `${screenWidth > 767 ? 100 : 50}px` }">
 			<ul>
 				<li
-					v-for="(item, index) in kontakty.data.page.rumlKlingerKontakty.contactGroup"
+					v-for="(item, index) in kontakty.page.rumlKlingerKontakty.contactGroup"
 					:key="index">
 					<a :href="`#${slugify(item.groupTitle)}`">{{ item.groupTitle }}</a>
 				</li>
 			</ul>
 		</AnchorsBlock>
 		<div
-			v-for="(item, index) in kontakty.data.page.rumlKlingerKontakty.contactGroup"
+			v-for="(item, index) in kontakty.page.rumlKlingerKontakty.contactGroup"
 			:key="index"
 			:id="slugify(item.groupTitle)"
 			class="contacts__block center"
-			:class="{ divider: index !== kontakty.data.page.rumlKlingerKontakty.contactGroup.length - 1 }">
+			:class="{ divider: index !== kontakty.page.rumlKlingerKontakty.contactGroup.length - 1 }">
 			<h3
 				class="contacts__title"
 				@click.prevent="toggleContacts">
@@ -256,7 +256,11 @@
 			}
 		}
 	`
-	const { data: kontakty } = await useAsyncData('kontakty', () => useAsyncQuery(kontaktyQuery))
+	const kontakty = useState('kontakty', () => null)
+	if (!kontakty.value) {
+		const { data } = await useAsyncQuery(kontaktyQuery)
+		kontakty.value = data.value
+	}
 
 	const certificatesQuery = gql`
 		query getCertificates {
@@ -278,7 +282,11 @@
 			}
 		}
 	`
-	const { data: certificates } = await useAsyncData('certificates', () => useAsyncQuery(certificatesQuery))
+	const certificates = useState('certificates', () => null)
+	if (!certificates.value) {
+		const { data } = await useAsyncQuery(certificatesQuery)
+		certificates.value = data.value
+	}
 </script>
 <style lang="scss">
 	.billing-info {

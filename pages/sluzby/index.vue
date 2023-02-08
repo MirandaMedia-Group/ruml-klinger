@@ -13,7 +13,7 @@
 	<section>
 		<div class="container">
 			<div
-				v-for="(service, index) in servicesData.data.pages.nodes"
+				v-for="(service, index) in servicesData.pages.nodes"
 				:key="index"
 				class="service columns col-2">
 				<div class="service__image column">
@@ -69,7 +69,11 @@
 			}
 		}
 	`
-	const { data: servicesData } = await useAsyncData('allServices', () => useAsyncQuery(servicesQuery))
+	const servicesData = useState('servicesData', () => null)
+	if (!servicesData.value) {
+		const { data } = await useAsyncQuery(servicesQuery)
+		servicesData.value = data.value
+	}
 </script>
 <style lang="scss" scoped>
 	.page-image-header {
