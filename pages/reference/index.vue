@@ -86,7 +86,7 @@
 
 	const referencesQuery = gql`
 		query getReferences {
-			references {
+			references(first: 200) {
 				nodes {
 					id
 					title
@@ -116,6 +116,7 @@
 		const { data } = await useAsyncQuery(referencesQuery)
 		references.value = data.value
 	}
+	console.log(references.value)
 </script>
 <style lang="scss">
 	.reference-category {

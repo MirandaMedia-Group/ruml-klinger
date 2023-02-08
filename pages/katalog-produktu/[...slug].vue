@@ -121,6 +121,7 @@
 	const categoryInfoData = useState('categoryInfoData', () => null)
 	const { data } = await useAsyncQuery(categoryInfoQuery, slugVariable.value)
 	categoryInfoData.value = data.value
+	console.log(router.currentRoute.value.params.slug)
 
 	const categoryProductsQuery = gql`
 		query getProducts($first: Int, $last: Int, $after: String, $before: String, $slug: [String]) {

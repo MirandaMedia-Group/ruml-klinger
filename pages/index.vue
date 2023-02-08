@@ -121,6 +121,7 @@
 				class="references__block">
 				<ReferencesList
 					:references="references.references.nodes"
+					:limit="6"
 					:category="item" />
 			</div>
 		</div>
@@ -136,6 +137,7 @@
 				<div class="mobile-references__block">
 					<ReferencesList
 						:references="references.references.nodes"
+						:limit="6"
 						:category="item" />
 				</div>
 			</div>
@@ -353,7 +355,7 @@
 
 	const referencesQuery = gql`
 		query getReferences {
-			references {
+			references(first: 200) {
 				nodes {
 					id
 					title

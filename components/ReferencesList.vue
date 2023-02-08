@@ -1,8 +1,12 @@
 <template>
-	<div class="references__list">
+	<div
+		class="references__list"
+		:class="{ limit: props.limit }">
 		<div
 			class="reference"
-			v-for="reference in props.references.filter((reference) => reference.referenceCategories.nodes[0].id === props.category.id)"
+			v-for="(reference, index) in props.references.filter(
+				(reference) => reference.referenceCategories.nodes[0].id === props.category.id
+			)"
 			:key="reference.slug">
 			<div class="reference__image">
 				<NuxtPicture
@@ -21,7 +25,7 @@
 	</div>
 </template>
 <script setup>
-	const props = defineProps(['references', 'category'])
+	const props = defineProps(['references', 'category', 'limit'])
 </script>
 <style lang="scss" scoped>
 	.references__list {
@@ -54,6 +58,11 @@
 			font-weight: 700;
 			text-align: center;
 			line-height: em(28);
+		}
+		&.limit {
+			.reference:nth-of-type(n + 7) {
+				display: none;
+			}
 		}
 	}
 	@media (max-width: 900px) {
