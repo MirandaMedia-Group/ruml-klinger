@@ -4,7 +4,7 @@
 			<template #main>
 				<div class="">
 					<!-- <div class="category__image"></div> -->
-					<div class="category__info">
+					<div class="">
 						<h1>Produkty</h1>
 					</div>
 				</div>
@@ -109,6 +109,8 @@
 		justify-content: flex-end;
 		gap: 10px;
 		margin-top: 30px;
+		padding-top: 30px;
+		border-top: 1px solid $color-inactive;
 		.button-prev,
 		.button-next {
 			display: block;

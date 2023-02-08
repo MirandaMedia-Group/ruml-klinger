@@ -192,6 +192,8 @@
 		justify-content: flex-end;
 		gap: 10px;
 		margin-top: 30px;
+		padding-top: 30px;
+		border-top: 1px solid $color-inactive;
 		.button-prev,
 		.button-next {
 			display: block;

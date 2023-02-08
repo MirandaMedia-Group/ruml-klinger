@@ -3,8 +3,16 @@
 		:image="service.pages.nodes[0].featuredImage.node"
 		:title="service.pages.nodes[0].title"
 		:excerpt="service.pages.nodes[0].rumlKlingerSluzby.shortDescription" />
+	<div class="narrow container">
+		<div v-html="service.pages.nodes[0].content"></div>
+	</div>
 </template>
 <script setup>
+	useHead({
+		bodyAttrs: {
+			class: 'wp-content',
+		},
+	})
 	const router = useRouter()
 	const variables = ref({ name: router.currentRoute.value.params.slug })
 	const serviceQuery = gql`
@@ -13,6 +21,7 @@
 				nodes {
 					title
 					slug
+					content
 					featuredImage {
 						node {
 							sourceUrl
