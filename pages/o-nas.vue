@@ -19,27 +19,68 @@
 					<div
 						class="timeline__description"
 						v-html="onas.page.rumlKlingerOnas.timeline.perex"></div>
-				</div>
-				<div class="timeline__slider-wrapper">
-					<div
-						v-for="(history, index) in onas.page.rumlKlingerOnas.timeline.history"
-						:key="index">
-						<div class="timeline__slider--item">
-							<div class="timeline-item__content__image">
-								<img
-									:src="history.image.sourceUrl"
-									:alt="history.image.altText"
-									:width="history.image.mediaDetails.width"
-									:height="history.image.mediaDetails.height" />
-							</div>
-							<h3 class="timeline-item__year">
-								{{ history.year }}
-							</h3>
-							<div class="timeline-item__content__text">
-								<div v-html="history.perex"></div>
-							</div>
+					<div class="timeline__controls">
+						<div
+							class="arrow-prev"
+							@click.prevent="historyPrev">
+							<svg
+								width="19"
+								height="15"
+								viewBox="0 0 19 15"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg">
+								<path
+									d="M1.5 7.5L17.5 7.5M17.5 7.5L11 14M17.5 7.5L11 0.999999"
+									stroke="white"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round" />
+							</svg>
+						</div>
+						<div
+							class="arrow-next"
+							@click.prevent="historyNext">
+							<svg
+								width="19"
+								height="15"
+								viewBox="0 0 19 15"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg">
+								<path
+									d="M1.5 7.5L17.5 7.5M17.5 7.5L11 14M17.5 7.5L11 0.999999"
+									stroke="white"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round" />
+							</svg>
 						</div>
 					</div>
+				</div>
+				<div
+					class="timeline__slider-wrapper"
+					ref="historySlider">
+					<TransitionGroup name="history">
+						<div
+							v-for="(history, index) in onas.page.rumlKlingerOnas.timeline.history"
+							:key="index"
+							class="history__slide">
+							<div class="timeline__slider--item">
+								<div class="timeline-item__content__image">
+									<img
+										:src="history.image.sourceUrl"
+										:alt="history.image.altText"
+										:width="history.image.mediaDetails.width"
+										:height="history.image.mediaDetails.height" />
+								</div>
+								<h3 class="timeline-item__year">
+									{{ history.year }}
+								</h3>
+								<div class="timeline-item__content__text">
+									<div v-html="history.perex"></div>
+								</div>
+							</div>
+						</div>
+					</TransitionGroup>
 				</div>
 			</div>
 		</div>
@@ -288,6 +329,26 @@
 		const { data } = await useAsyncQuery(careerBannerQuery)
 		careerBanner.value = data.value
 	}
+
+	const historySlider = ref(null)
+	const historyPrev = () => {
+		const firstSlide = historySlider.value.querySelector('.history__slide:first-child')
+		const lastSlide = historySlider.value.querySelector('.history__slide:last-child')
+		// lastSlide.classList.add('slide-right')
+		historySlider.value.prepend(lastSlide)
+		// setTimeout(() => {
+		// lastSlide.classList.remove('slide-right')
+		// }, 200)
+	}
+	const historyNext = () => {
+		const firstSlide = historySlider.value.querySelector('.history__slide:first-child')
+		const lastSlide = historySlider.value.querySelector('.history__slide:last-child')
+		// firstSlide.classList.add('slide-left')
+		historySlider.value.appendChild(firstSlide)
+		// setTimeout(() => {
+		// firstSlide.classList.remove('slide-left')
+		// }, 200)
+	}
 </script>
 <style lang="scss">
 	.usp-wrapper {
@@ -367,7 +428,42 @@
 					}
 				}
 			}
+			&__controls {
+				display: flex;
+				gap: 10px;
+				justify-content: flex-end;
+				.arrow-prev,
+				.arrow-next {
+					width: 44px;
+					height: 44px;
+					border: 1px solid $color-white;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					svg {
+						display: block;
+						line-height: 0;
+					}
+				}
+				.arrow-prev {
+					transform: rotate(180deg);
+				}
+			}
+			&__slide {
+				// transition: all 0.15s ease-in-out;
+				// &.slide-left {
+				// 	animation: left 0.15s ease-in-out;
+				// }
+				// &.slide-right {
+				// 	animation: right 0.15s ease-in-out;
+				// }
+			}
 		}
+	}
+	.history-move,
+	.history-enter-active,
+	.history-leave-active {
+		transition: all 0.15s ease-in-out;
 	}
 	.owners {
 		display: flex;
