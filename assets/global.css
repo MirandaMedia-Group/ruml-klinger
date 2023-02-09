@@ -12,7 +12,7 @@
 	src: url(./assets/fonts/Montserrat-italic.ttf) format('truetype');
 	font-display: swap;
 }
-@font-face {
+/* @font-face {
 	font-family: 'Gotham';
 	font-style: italic;
 	font-weight: 400;
@@ -25,18 +25,19 @@
 	font-weight: 800;
 	src: url(./assets/fonts/gothambolditalic-webfont.ttf) format('truetype');
 	font-display: swap;
-}
-@font-face {
+} */
+/* @font-face {
 	font-family: 'Gotham';
 	font-style: normal;
 	font-weight: 400;
 	src: url(./assets/fonts/gothammedium-webfont.ttf) format('truetype');
 	font-display: swap;
-}
+} */
 @font-face {
 	font-family: 'Gotham';
 	font-style: normal;
-	font-weight: 800;
-	src: url(./assets/fonts/gothambold-webfont.ttf) format('truetype');
+	font-weight: 700;
+	src: url(./assets/fonts/gotham.ttf) format('truetype'), url(./assets/fonts/gotham.woff) format('woff'),
+		url(./assets/fonts/gotham.woff2) format('woff2');
 	font-display: swap;
 }
