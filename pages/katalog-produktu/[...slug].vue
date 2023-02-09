@@ -12,6 +12,7 @@
 							:width="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.mediaDetails.width"
 							:height="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.mediaDetails.height"
 							loading="lazy"
+							provider="ipx"
 							:img-attrs="{ style: 'display: block; height: 100%; object-fit: cover;' }" />
 					</div>
 					<div class="category__info">

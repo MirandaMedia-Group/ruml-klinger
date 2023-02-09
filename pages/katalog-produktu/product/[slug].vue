@@ -40,8 +40,8 @@
 								<NuxtPicture
 									:src="item.sourceUrl"
 									:alt="item.altText"
-									:width="item.mediaDetails.width"
-									:height="item.mediaDetails.height"
+									:width="item.mediaDetails?.width"
+									:height="item.mediaDetails?.height"
 									loading="lazy"
 									provider="ipx" />
 							</SwiperSlide>

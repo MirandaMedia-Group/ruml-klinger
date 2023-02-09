@@ -116,7 +116,6 @@
 		const { data } = await useAsyncQuery(referencesQuery)
 		references.value = data.value
 	}
-	console.log(references.value)
 </script>
 <style lang="scss">
 	.reference-category {
