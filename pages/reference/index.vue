@@ -189,6 +189,9 @@
 		}
 		.technologies {
 			padding: 20px;
+			ul {
+				grid-template-columns: minmax(1px, 1fr);
+			}
 		}
 	}
 </style>

@@ -26,10 +26,22 @@
 		</ul>
 	</nav>
 	<nav
-		v-else
-		class="mobile-categories">
+		class="mobile-categories"
+		v-if="
+			(router.currentRoute.value.params?.slug &&
+				categoriesData.productCategories.nodes.filter(
+					(node) => node.slug === router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
+				)[0]?.children.nodes?.length) ||
+			!router.currentRoute.value.params?.slug
+		">
 		<button @click.prevent="toggleCategories">Kategorie</button>
-		<ul v-if="router.currentRoute.value.params?.slug">
+		<ul
+			v-if="
+				router.currentRoute.value.params?.slug &&
+				categoriesData.productCategories.nodes.filter(
+					(node) => node.slug === router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
+				)[0]?.children.nodes?.length
+			">
 			<li
 				v-for="(item, index) in categoriesData.productCategories.nodes.filter(
 					(node) => node.slug === router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
@@ -38,7 +50,7 @@
 				<nuxt-link :to="`${router.currentRoute.value.fullPath}/${item.slug}`">{{ item.name }}</nuxt-link>
 			</li>
 		</ul>
-		<ul v-else>
+		<ul v-else-if="!router.currentRoute.value.params?.slug">
 			<li
 				v-for="(item, index) in categoriesData.productCategories.nodes"
 				:key="index">
