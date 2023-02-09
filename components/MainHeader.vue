@@ -28,8 +28,30 @@
 					id="navigation"
 					:class="{ visible: navigationVisible }">
 					<ul>
-						<li>
-							<nuxt-link to="/katalog-produktu">Produkty</nuxt-link>
+						<li class="has-submenu">
+							<nuxt-link to="/katalog-produktu">Produkty <span class="arrow"></span></nuxt-link>
+							<div class="megamenu">
+								<div class="container">
+									<ul class="menu__level-2">
+										<li
+											v-for="(level1, index1) in categoriesData.productCategories.nodes"
+											:key="index1">
+											<NuxtLink :to="`/katalog-produktu/${level1.slug}`">
+												{{ level1.name }}
+											</NuxtLink>
+											<ul class="menu__level-3">
+												<li
+													v-for="(level2, index2) in level1?.children?.nodes"
+													:key="index2">
+													<NuxtLink :to="`/katalog-produktu/${level1.slug}/${level2.slug}`">{{
+														level2.name
+													}}</NuxtLink>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</div>
 						</li>
 						<li>
 							<nuxt-link to="/sluzby">Služby</nuxt-link>
@@ -70,11 +92,38 @@
 </template>
 <script setup>
 	const navigationVisible = useState('navigationVisible', () => false)
+	const productCategoriesQuery = gql`
+		query getCategories {
+			productCategories(where: { parent: 0 }) {
+				nodes {
+					name
+					slug
+					children {
+						nodes {
+							name
+							slug
+							children {
+								nodes {
+									name
+									slug
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	`
+	const categoriesData = useState('categories', () => null)
+	if (!categoriesData.value) {
+		const { data } = await useAsyncQuery(productCategoriesQuery)
+		categoriesData.value = data.value
+	}
 </script>
 <style lang="scss" scoped>
 	header {
-		padding: 20px 0;
 		background-color: $color-white;
+		position: relative;
 	}
 	.site-logo {
 		img {
@@ -114,11 +163,113 @@
 		a {
 			display: inline-block;
 			font-size: rem(14);
-			padding: em(10, 14) em(20, 14);
+			padding: em(40, 14) em(20, 14);
 			text-decoration: none;
 			text-transform: uppercase;
 			color: $color-primary;
 			font-weight: 700;
+		}
+		.has-submenu {
+			& > a {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+			}
+			.arrow {
+				display: block;
+				width: 8px;
+				height: 8px;
+				margin-left: 5px;
+				transition: all 0.3s ease-in-out;
+				position: relative;
+				top: -2px;
+				&::before {
+					content: '';
+					display: block;
+					width: 100%;
+					height: 100%;
+					border: 2px solid $color-primary;
+					border-style: none solid solid none;
+					transform: rotate(45deg);
+				}
+			}
+			&:hover,
+			&:focus {
+				.arrow {
+					transform: rotate(180deg);
+					top: 2px;
+				}
+				.megamenu {
+					max-height: 800px;
+					padding: 45px 0;
+				}
+			}
+		}
+		.megamenu {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			z-index: 2;
+			background-color: #e8ebf5;
+			padding: 0;
+			max-height: 0;
+			overflow: hidden;
+			transition: all 0.3s ease-in-out;
+		}
+		.menu__level-2 {
+			display: block;
+			columns: 6;
+			& > li {
+				display: flex;
+				flex-direction: column;
+				break-inside: avoid-column;
+				margin-bottom: 20px;
+				& > a {
+					flex-basis: 100px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					text-align: center;
+					padding: 10px 20px;
+					background-color: $color-primary;
+					color: $color-white;
+					margin-bottom: 5px;
+				}
+			}
+			a {
+				text-transform: none;
+				font-size: 1rem;
+			}
+		}
+		.menu__level-3 {
+			flex-direction: column;
+			& > li {
+				padding-left: 16px;
+				position: relative;
+				&::before {
+					content: '';
+					display: block;
+					position: absolute;
+					top: 50%;
+					left: 0;
+					width: 6px;
+					height: 6px;
+					border-radius: 50%;
+					background-color: $color-secondary;
+					transform: translateY(-50%);
+				}
+				& > a {
+					font-weight: 400;
+					font-size: rem(14);
+					line-height: em(28, 14);
+					padding: em(5, 14) 0;
+					&:hover,
+					&:focus {
+						font-weight: 700;
+					}
+				}
+			}
 		}
 	}
 	.separator {
@@ -160,6 +311,7 @@
 			background-color: $color-black;
 		}
 	}
+
 	@media (min-width: 1150px) {
 		.hamburger {
 			display: none;
@@ -173,6 +325,7 @@
 	@media (max-width: 1149px) {
 		header {
 			position: relative;
+			padding: 20px 0;
 		}
 		#navigation {
 			position: absolute;
@@ -194,6 +347,12 @@
 			}
 			a {
 				width: 100%;
+				padding: em(10) em(20);
+			}
+			.has-submenu {
+				.arrow {
+					display: none;
+				}
 			}
 		}
 	}
