@@ -31,7 +31,7 @@
 						<Swiper
 							:slides-per-view="1.1"
 							:space-between="20"
-							:modules="[SwiperPagination, SwiperNavigation]"
+							:modules="modules"
 							navigation
 							pagination>
 							<SwiperSlide
@@ -124,6 +124,10 @@
 	<ContactForm />
 </template>
 <script setup>
+	import { Navigation, Pagination } from 'swiper'
+	import { Swiper, SwiperSlide } from 'swiper/vue'
+	import 'swiper/css'
+	const modules = [Navigation, Pagination]
 	const router = useRouter()
 	const variables = ref({
 		slug: router.currentRoute.value.params.slug,
@@ -232,12 +236,17 @@
 		margin: 0;
 		padding-bottom: 60px;
 		.swiper-pagination {
+			position: absolute;
 			left: unset;
 			right: 0;
 			bottom: 8px;
 			width: auto;
+			display: flex;
+			gap: 20px;
 		}
 		.swiper-pagination-bullet {
+			display: block;
+			border-radius: 50%;
 			width: 24px;
 			height: 24px;
 			background-color: $color-inactive;
@@ -248,6 +257,7 @@
 		}
 		.swiper-button-next,
 		.swiper-button-prev {
+			position: absolute;
 			bottom: 0;
 			top: unset;
 			width: 44px;
@@ -259,6 +269,9 @@
 			&::after {
 				content: url(/icon/arrow-black.svg);
 				line-height: 0;
+			}
+			&.swiper-button-disabled {
+				opacity: 0.4;
 			}
 		}
 		.swiper-button-prev {
@@ -354,6 +367,9 @@
 			flex-direction: column-reverse;
 			& > div {
 				flex-basis: auto;
+			}
+			.product__gallery {
+				width: 100%;
 			}
 		}
 	}

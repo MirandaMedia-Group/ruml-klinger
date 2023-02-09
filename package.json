@@ -16,6 +16,6 @@
 		"sass-loader": "10"
 	},
 	"dependencies": {
-		"nuxt-swiper": "^0.1.9"
+		"swiper": "^9.0.3"
 	}
 }

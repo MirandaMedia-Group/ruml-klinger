@@ -12,6 +12,7 @@
 <style lang="scss">
 	.content-wrapper {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: flex-start;
 		gap: 60px;
 		margin-top: 50px;

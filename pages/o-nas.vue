@@ -21,8 +21,8 @@
 						v-html="onas.page.rumlKlingerOnas.timeline.perex"></div>
 					<div class="timeline__controls">
 						<div
-							class="arrow-prev"
-							@click.prevent="historyPrev">
+							ref="swiperPrev"
+							class="arrow-prev">
 							<svg
 								width="19"
 								height="15"
@@ -38,8 +38,8 @@
 							</svg>
 						</div>
 						<div
-							class="arrow-next"
-							@click.prevent="historyNext">
+							ref="swiperNext"
+							class="arrow-next">
 							<svg
 								width="19"
 								height="15"
@@ -56,31 +56,41 @@
 						</div>
 					</div>
 				</div>
-				<div
-					class="timeline__slider-wrapper"
-					ref="historySlider">
-					<TransitionGroup name="history">
-						<div
+				<div class="timeline__slider-wrapper">
+					<Swiper
+						:modules="modules"
+						:spaceBetween="20"
+						:slidesPerView="'auto'"
+						:navigation="{
+							prevEl: swiperPrev,
+							nextEl: swiperNext,
+						}"
+						@beforeInit="
+							(Swiper) => {
+								Swiper.params.navigation.prevEl = swiperPrev
+								Swiper.params.navigation.nextEl = swiperNext
+							}
+						">
+						<SwiperSlide
 							v-for="(history, index) in onas.page.rumlKlingerOnas.timeline.history"
 							:key="index"
-							class="history__slide">
-							<div class="timeline__slider--item">
-								<div class="timeline-item__content__image">
-									<img
-										:src="history.image.sourceUrl"
-										:alt="history.image.altText"
-										:width="history.image.mediaDetails.width"
-										:height="history.image.mediaDetails.height" />
-								</div>
-								<h3 class="timeline-item__year">
-									{{ history.year }}
-								</h3>
-								<div class="timeline-item__content__text">
-									<div v-html="history.perex"></div>
-								</div>
+							class="timeline__slider--item"
+							:class="{ first: index === 0 }">
+							<div class="timeline-item__content__image">
+								<img
+									:src="history.image.sourceUrl"
+									:alt="history.image.altText"
+									:width="history.image.mediaDetails.width"
+									:height="history.image.mediaDetails.height" />
 							</div>
-						</div>
-					</TransitionGroup>
+							<h3 class="timeline-item__year">
+								{{ history.year }}
+							</h3>
+							<div class="timeline-item__content__text">
+								<div v-html="history.perex"></div>
+							</div>
+						</SwiperSlide>
+					</Swiper>
 				</div>
 			</div>
 		</div>
@@ -193,6 +203,12 @@
 		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
 </template>
 <script setup>
+	import { Navigation } from 'swiper'
+	import { Swiper, SwiperSlide } from 'swiper/vue'
+	import 'swiper/css'
+	const modules = [Navigation]
+	const swiperPrev = ref(null)
+	const swiperNext = ref(null)
 	const screenWidth = useState('screenWidth')
 	const toggleOwner = (event) => event.target.classList.toggle('active')
 	const onasQuery = gql`
@@ -329,26 +345,6 @@
 		const { data } = await useAsyncQuery(careerBannerQuery)
 		careerBanner.value = data.value
 	}
-
-	const historySlider = ref(null)
-	const historyPrev = () => {
-		const firstSlide = historySlider.value.querySelector('.history__slide:first-child')
-		const lastSlide = historySlider.value.querySelector('.history__slide:last-child')
-		// lastSlide.classList.add('slide-right')
-		historySlider.value.prepend(lastSlide)
-		// setTimeout(() => {
-		// lastSlide.classList.remove('slide-right')
-		// }, 200)
-	}
-	const historyNext = () => {
-		const firstSlide = historySlider.value.querySelector('.history__slide:first-child')
-		const lastSlide = historySlider.value.querySelector('.history__slide:last-child')
-		// firstSlide.classList.add('slide-left')
-		historySlider.value.appendChild(firstSlide)
-		// setTimeout(() => {
-		// firstSlide.classList.remove('slide-left')
-		// }, 200)
-	}
 </script>
 <style lang="scss">
 	.usp-wrapper {
@@ -389,6 +385,7 @@
 	#historie {
 		background: url(/timeline-bg.jpg) repeat-y center center;
 		padding: 170px 0;
+		overflow: hidden;
 		h2,
 		h3,
 		p,
@@ -418,14 +415,13 @@
 			}
 			&__slider-wrapper {
 				flex: 1 1 480px;
-				overflow: hidden;
-				display: flex;
-				gap: 20px;
-				.timeline__slider--item {
-					width: 240px;
-					&:nth-of-type(1) {
-						width: 520px;
-					}
+				width: 60%;
+				position: relative;
+			}
+			&__slider--item {
+				img {
+					max-width: 100%;
+					width: auto;
 				}
 			}
 			&__controls {
@@ -449,21 +445,17 @@
 					transform: rotate(180deg);
 				}
 			}
-			&__slide {
-				// transition: all 0.15s ease-in-out;
-				// &.slide-left {
-				// 	animation: left 0.15s ease-in-out;
-				// }
-				// &.slide-right {
-				// 	animation: right 0.15s ease-in-out;
-				// }
+		}
+		.swiper-slide {
+			width: auto;
+			max-width: 240px;
+			&:first-of-type {
+				max-width: 520px;
 			}
 		}
-	}
-	.history-move,
-	.history-enter-active,
-	.history-leave-active {
-		transition: all 0.15s ease-in-out;
+		.swiper-button-prev,
+		.swiper-button-next {
+		}
 	}
 	.owners {
 		display: flex;
@@ -606,6 +598,25 @@
 			margin-top: 20px;
 		}
 	}
+	@media (max-width: 1280px) {
+		#historie {
+			.timeline {
+				&__info {
+					flex-basis: 400px;
+				}
+			}
+		}
+	}
+	@media (max-width: 1080px) {
+		.timeline__columns {
+			flex-direction: column;
+		}
+		#historie {
+			.timeline__slider-wrapper {
+				width: auto;
+			}
+		}
+	}
 	@media (max-width: 1080px) {
 		.owners {
 			.owner {
@@ -642,6 +653,18 @@
 		}
 		.company__info {
 			padding: 30px 20px;
+		}
+		#historie {
+			padding: 50px 0;
+			.timeline__info {
+				padding: 0;
+			}
+			.timeline__description p {
+				font-size: 1rem;
+			}
+			.swiper-slide:first-of-type {
+				max-width: calc(100vw - 100px);
+			}
 		}
 	}
 </style>
