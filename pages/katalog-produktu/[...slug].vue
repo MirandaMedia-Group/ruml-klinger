@@ -74,16 +74,19 @@
 	const router = useRouter()
 	const productsCount = useState('productsCount', () => 15)
 	const routerSlug = ref(router.currentRoute.value.params.slug)
+	console.log(routerSlug.value)
 	routerSlug.value = router.currentRoute.value.params.slug.filter((slug) => slug !== '')
+	console.log(routerSlug.value)
 	const slugVariable = ref({
-		slug: routerSlug.value[routerSlug.value - 1] ? [routerSlug.value[routerSlug.value - 1]] : [],
+		slug: routerSlug.value[routerSlug.value.length - 1] ? [routerSlug.value[routerSlug.value.length - 1]] : [],
 	})
+	console.log(slugVariable.value)
 	const variables = ref({
 		first: 15,
 		last: null,
 		after: null,
 		before: null,
-		slug: routerSlug.value[routerSlug.value - 1] ? [routerSlug.value[routerSlug.value - 1]] : [],
+		slug: routerSlug.value[routerSlug.value.length - 1] ? [routerSlug.value[routerSlug.value.length - 1]] : [],
 	})
 	const productsAnchor = ref(null)
 	const handleNextPage = () => {
