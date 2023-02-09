@@ -26,13 +26,13 @@
 						class="button-prev"
 						v-if="allProductsData.products.pageInfo.hasPreviousPage"
 						@click.prevent="handlePrevPage">
-						Předchozí
+						<span class="arrow"></span>
 					</button>
 					<button
 						class="button-next"
 						v-if="allProductsData.products.pageInfo.hasNextPage"
 						@click.prevent="handleNextPage">
-						Další
+						<span class="arrow"></span>
 					</button>
 				</div>
 			</template>
@@ -113,11 +113,32 @@
 		border-top: 1px solid $color-inactive;
 		.button-prev,
 		.button-next {
-			display: block;
-			padding: em(10) em(20);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 44px;
+			height: 44px;
 			border: 1px solid $color-secondary;
 			border-radius: 4px;
 			font-weight: 700;
+			padding: 0;
+			.arrow {
+				display: block;
+				width: 12px;
+				height: 12px;
+				border: 2px solid $color-black;
+				border-style: none solid solid none;
+				transform: rotate(-45deg);
+				position: relative;
+				left: -3px;
+			}
+		}
+		.button-prev {
+			.arrow {
+				transform: rotate(135deg);
+				left: unset;
+				right: -3px;
+			}
 		}
 	}
 </style>

@@ -36,20 +36,26 @@
 					<ProductsBlock
 						v-else
 						:data="categoryProductsData.productCategories.nodes[0].contentNodes.nodes"
-						:banner="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.banner[0]" />
+						:banner="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.banner?.[0]" />
 				</div>
 				<div class="pagination">
+					<!-- <button
+						class="load-more"
+						v-if="categoryProductsData.productCategories.nodes[0].contentNodes.pageInfo.hasNextPage"
+						@click.prevent="loadMoreProducts">
+						Načíst další
+					</button> -->
 					<button
 						class="button-prev"
 						v-if="categoryProductsData.productCategories.nodes[0].contentNodes.pageInfo.hasPreviousPage"
 						@click.prevent="handlePrevPage">
-						Předchozí
+						<span class="arrow"></span>
 					</button>
 					<button
 						class="button-next"
 						v-if="categoryProductsData.productCategories.nodes[0].contentNodes.pageInfo.hasNextPage"
 						@click.prevent="handleNextPage">
-						Další
+						<span class="arrow"></span>
 					</button>
 				</div>
 			</template>
@@ -65,6 +71,7 @@
 	})
 	const screenWidth = useState('screenWidth')
 	const router = useRouter()
+	const productsCount = useState('productsCount', () => 15)
 	const slugVariable = ref({
 		slug: router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
 			? [router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]]
@@ -81,22 +88,32 @@
 	})
 	const productsAnchor = ref(null)
 	const handleNextPage = () => {
+		productsCount.value = 15
 		setTimeout(() => productsAnchor.value.scrollIntoView(), 10)
 		console.log(variables.value)
 		variables.value.after = categoryProductsData.value.productCategories.nodes[0].contentNodes.pageInfo.endCursor
-		variables.value.first = 15
+		variables.value.first = productsCount.value
 		variables.value.before = null
 		variables.value.last = null
 		refresh()
 	}
 	const handlePrevPage = () => {
+		productsCount.value = 15
 		setTimeout(() => productsAnchor.value.scrollIntoView(), 10)
 		variables.value.before = categoryProductsData.value.productCategories.nodes[0].contentNodes.pageInfo.startCursor
-		variables.value.last = 15
+		variables.value.last = productsCount.value
 		variables.value.first = null
 		variables.value.after = null
 		refresh()
 	}
+	// const loadMoreProducts = () => {
+	// 	productsCount.value += 15
+	// 	variables.value.first = productsCount.value
+	// 	variables.value.after = categoryProductsData.value.productCategories.nodes[0].contentNodes.pageInfo.startCursor
+	// 	variables.value.before = null
+	// 	variables.value.last = null
+	// 	refresh()
+	// }
 
 	const categoryInfoQuery = gql`
 		query getCategoryInfo($slug: [String]) {
@@ -144,7 +161,6 @@
 	const categoryInfoData = useState('categoryInfoData', () => null)
 	const { data } = await useAsyncQuery(categoryInfoQuery, slugVariable.value)
 	categoryInfoData.value = data.value
-	console.log(categoryInfoData.value)
 
 	const categoryProductsQuery = gql`
 		query getProducts($first: Int, $last: Int, $after: String, $before: String, $slug: [String]) {
@@ -217,13 +233,37 @@
 		margin-top: 30px;
 		padding-top: 30px;
 		border-top: 1px solid $color-inactive;
+		.load-more {
+			margin-right: auto;
+		}
 		.button-prev,
 		.button-next {
-			display: block;
-			padding: em(10) em(20);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 44px;
+			height: 44px;
 			border: 1px solid $color-secondary;
 			border-radius: 4px;
 			font-weight: 700;
+			padding: 0;
+			.arrow {
+				display: block;
+				width: 12px;
+				height: 12px;
+				border: 2px solid $color-black;
+				border-style: none solid solid none;
+				transform: rotate(-45deg);
+				position: relative;
+				left: -3px;
+			}
+		}
+		.button-prev {
+			.arrow {
+				transform: rotate(135deg);
+				left: unset;
+				right: -3px;
+			}
 		}
 	}
 </style>

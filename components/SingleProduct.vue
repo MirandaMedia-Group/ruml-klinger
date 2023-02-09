@@ -3,11 +3,11 @@
 		<NuxtLink :to="`/katalog-produktu/product/${props.slug}`">
 			<div class="product__image">
 				<NuxtPicture
-					v-if="props.productAcf?.gallery?.[0]"
+					v-if="props.productAcf?.gallery?.[0]?.sourceUrl"
 					:src="props.productAcf.gallery?.[0].sourceUrl"
 					:alt="props.productAcf.gallery?.[0].altText"
-					:width="props.productAcf.gallery?.[0].mediaDetails.width"
-					:height="props.productAcf.gallery?.[0].mediaDetails.height"
+					:width="props.productAcf.gallery?.[0].mediaDetails?.width"
+					:height="props.productAcf.gallery?.[0].mediaDetails?.height"
 					:img-attrs="{ style: 'max-width: 100%; max-height: 340px; object-fit: contain;' }"
 					loading="lazy"
 					provider="ipx" />

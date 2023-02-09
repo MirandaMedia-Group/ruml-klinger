@@ -45,7 +45,6 @@
 </template>
 <script setup>
 	const props = defineProps(['data', 'banner'])
-	console.log(props.banner)
 </script>
 <style lang="scss" scoped>
 	.products-block {
