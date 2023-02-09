@@ -26,6 +26,7 @@
 		</ul>
 	</nav>
 	<nav
+		v-else
 		class="mobile-categories"
 		v-if="
 			(router.currentRoute.value.params?.slug &&
