@@ -69,7 +69,8 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		background: #213eab;
+		background: url(/contact-box-bg.jpg) no-repeat center center;
+		background-size: cover;
 		border-radius: 4px;
 		h3,
 		a {

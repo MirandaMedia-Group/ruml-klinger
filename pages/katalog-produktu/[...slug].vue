@@ -35,7 +35,8 @@
 					</div>
 					<ProductsBlock
 						v-else
-						:data="categoryProductsData.productCategories.nodes[0].contentNodes.nodes" />
+						:data="categoryProductsData.productCategories.nodes[0].contentNodes.nodes"
+						:banner="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.banner[0]" />
 				</div>
 				<div class="pagination">
 					<button
@@ -113,6 +114,28 @@
 								width
 							}
 						}
+						banner {
+							... on CategoryBanner {
+								id
+								title
+								slug
+								excerpt
+								featuredImage {
+									node {
+										altText
+										sourceUrl
+										mediaDetails {
+											height
+											width
+										}
+									}
+								}
+								categoryBanners {
+									btnUrl
+									btnText
+								}
+							}
+						}
 					}
 				}
 			}
@@ -121,7 +144,7 @@
 	const categoryInfoData = useState('categoryInfoData', () => null)
 	const { data } = await useAsyncQuery(categoryInfoQuery, slugVariable.value)
 	categoryInfoData.value = data.value
-	console.log(router.currentRoute.value.params.slug)
+	console.log(categoryInfoData.value)
 
 	const categoryProductsQuery = gql`
 		query getProducts($first: Int, $last: Int, $after: String, $before: String, $slug: [String]) {
