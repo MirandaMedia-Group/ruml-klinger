@@ -30,6 +30,7 @@
 	const navigationVisible = useState('navigationVisible')
 	const router = useRouter()
 	router.beforeEach((to, from, next) => {
+		document.body.classList.remove('search-visible')
 		navigationVisible.value = false
 		next()
 	})

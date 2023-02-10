@@ -153,7 +153,7 @@
 		e.preventDefault()
 		if (searchField.value) {
 			document.body.classList.remove('search-visible')
-			window.location.href = `/vyhledavani?search=${searchField.value}`
+			navigateTo(`/vyhledavani?search=${searchField.value}`)
 		}
 	}
 </script>
@@ -247,7 +247,7 @@
 			top: 100%;
 			left: 0;
 			right: 0;
-			z-index: 2;
+			z-index: 3;
 			background-color: #e8ebf5;
 			padding: 0;
 			max-height: 0;
@@ -358,7 +358,7 @@
 		left: 0;
 		right: 0;
 		top: 100%;
-		z-index: 1;
+		z-index: 2;
 		transition: all 0.15s ease-in-out;
 		.container {
 			display: flex;
