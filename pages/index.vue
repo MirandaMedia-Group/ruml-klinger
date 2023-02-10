@@ -477,13 +477,29 @@
 		gap: 30px;
 		margin-top: 30px;
 	}
+	.service {
+		display: flex;
+		flex-direction: column;
+	}
+	.service__image {
+		img {
+			display: block;
+		}
+	}
 	.service__content {
 		background-color: $color-white;
 		padding: 30px;
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
 		h3 {
 			margin-top: 0;
 			margin-bottom: em(15, 28);
 			font-size: rem(28);
+		}
+		.btn {
+			margin-top: auto;
 		}
 	}
 	.service__description {

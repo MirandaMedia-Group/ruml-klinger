@@ -449,12 +449,10 @@
 		.swiper-slide {
 			width: auto;
 			max-width: 240px;
-			&:first-of-type {
+			&:first-of-type,
+			&:nth-of-type(2) {
 				max-width: 520px;
 			}
-		}
-		.swiper-button-prev,
-		.swiper-button-next {
 		}
 	}
 	.owners {
@@ -662,7 +660,8 @@
 			.timeline__description p {
 				font-size: 1rem;
 			}
-			.swiper-slide:first-of-type {
+			.swiper-slide:first-of-type,
+			.swiper-slide:nth-of-type(2) {
 				max-width: calc(100vw - 100px);
 			}
 		}

@@ -64,13 +64,33 @@
 					v-if="props.data[activeVideo].video && !showVideo"
 					@click.prevent="showVideo = true"
 					:data-youtube="youtubeID(props.data[activeVideo].video)"
-					:href="props.data[activeVideo].video">
+					:href="props.data[activeVideo].video"
+					class="video-link-image">
 					<img
 						alt=""
 						width="950"
 						height="550"
 						loading="lazy"
 						:src="`https://img.youtube.com/vi/${youtubeID(props.data[activeVideo].video)}/hqdefault.jpg`" />
+					<svg
+						id="play-button"
+						width="130"
+						height="130"
+						viewBox="0 0 130 130"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg">
+						<g opacity="0.5">
+							<circle
+								cx="65"
+								cy="65"
+								r="60"
+								stroke="white"
+								stroke-width="10" />
+							<path
+								d="M86.375 63.268C87.7083 64.0378 87.7083 65.9623 86.375 66.7321L55.8125 84.3773C54.4792 85.1471 52.8125 84.1849 52.8125 82.6453L52.8125 47.3547C52.8125 45.8151 54.4792 44.8529 55.8125 45.6227L86.375 63.268Z"
+								fill="white" />
+						</g>
+					</svg>
 				</a>
 				<iframe
 					v-else
@@ -138,6 +158,22 @@
 		a,
 		img {
 			display: block;
+		}
+		.video-link-image {
+			position: relative;
+			max-height: 550px;
+			overflow: hidden;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			#play-button {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
 		}
 	}
 	.carousel__controls {
