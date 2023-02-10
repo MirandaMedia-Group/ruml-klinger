@@ -70,6 +70,11 @@
 				nodes {
 					name
 					slug
+					productCategoriesAfc {
+						menuImage {
+							sourceUrl
+						}
+					}
 					children {
 						nodes {
 							name

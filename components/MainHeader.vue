@@ -36,7 +36,9 @@
 										<li
 											v-for="(level1, index1) in categoriesData.productCategories.nodes"
 											:key="index1">
-											<NuxtLink :to="`/katalog-produktu/${level1.slug}`">
+											<NuxtLink
+												:to="`/katalog-produktu/${level1.slug}`"
+												:style="{ backgroundImage: `url(${level1.productCategoriesAfc.menuImage?.sourceUrl})` }">
 												{{ level1.name }}
 											</NuxtLink>
 											<ul class="menu__level-3">
@@ -123,6 +125,11 @@
 				nodes {
 					name
 					slug
+					productCategoriesAfc {
+						menuImage {
+							sourceUrl
+						}
+					}
 					children {
 						nodes {
 							name
