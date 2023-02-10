@@ -41,4 +41,9 @@ export default defineNuxtConfig({
 			},
 		},
 	},
+	runtimeConfig: {
+		public: {
+			googleMapsAPI: process.env.GOOGLE_MAPS_API,
+		},
+	},
 })
