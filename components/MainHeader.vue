@@ -70,6 +70,9 @@
 						<li>
 							<nuxt-link to="/kariera">Kariéra</nuxt-link>
 						</li>
+						<li>
+							<nuxt-link to="/kontakty">Kontakty</nuxt-link>
+						</li>
 					</ul>
 				</nav>
 				<span class="separator">|</span>

@@ -61,7 +61,7 @@
 
 						<div>
 							<span>Centrála</span>
-							<a href="mailto:ruml@ruml-group.cz">ruml@rumlgroup.cz</a>
+							<a href="mailto:ruml@ruml-group.cz">ruml@ruml-group.cz</a>
 						</div>
 					</div>
 				</div>
