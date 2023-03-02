@@ -170,7 +170,7 @@
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
 
 	const homepageQuery = gql`
-		query getHomepage {
+		query getHomepageKlinger {
 			page(id: "cG9zdDo1OTI=") {
 				title
 				slug
@@ -196,6 +196,15 @@
 								height
 								width
 							}
+						}
+						heroType
+						video {
+							altText
+							mediaDetails {
+								height
+								width
+							}
+							mediaItemUrl
 						}
 						perex
 						title

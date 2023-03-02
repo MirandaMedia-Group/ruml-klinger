@@ -3,12 +3,25 @@
 		class="hero"
 		:class="{ white: props.white, center: props.center, nowrap: props.nowrap }">
 		<NuxtPicture
+			v-if="props.heroType === 'img'"
 			:src="image.sourceUrl"
 			:width="image.mediaDetails.width"
 			:height="image.mediaDetails.height"
 			:alt="image.altText"
 			:img-attrs="{ style: 'display: block; height: 100%; object-fit: cover;' }"
 			provider="ipx" />
+		<div
+			class="video-wrapper"
+			v-else-if="props.heroType === 'video'">
+			<video
+				:src="props.video.mediaItemUrl"
+				autoplay
+				playsinline=""
+				preload=""
+				muted
+				style="width: 100%"
+				loop></video>
+		</div>
 		<div class="container">
 			<div class="content">
 				<h1>{{ props.title }}</h1>
@@ -93,7 +106,20 @@
 	</section>
 </template>
 <script setup>
-	const props = defineProps(['title', 'perex', 'btnPrimary', 'btnSecondary', 'image', 'white', 'center', 'contactBox', 'nowrap'])
+	const props = defineProps([
+		'title',
+		'perex',
+		'btnPrimary',
+		'btnSecondary',
+		'image',
+		'white',
+		'center',
+		'contactBox',
+		'nowrap',
+		'heroType',
+		'video',
+	])
+	console.log(props)
 </script>
 <style lang="scss" scoped>
 	.hero {
@@ -115,6 +141,18 @@
 		}
 		h1 {
 			font-size: clamp(rem(30), 3vw, rem(42));
+		}
+		.video-wrapper {
+			position: relative;
+			&::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: linear-gradient(92.48deg, #dbeffa 27.55%, rgba(219, 239, 250, 0.21) 63.5%);
+			}
 		}
 	}
 	.container {
@@ -180,6 +218,9 @@
 				max-width: unset;
 				padding: 40px 0;
 			}
+		}
+		.hero .video-wrapper::after {
+			display: none;
 		}
 		.hero.white:not(.nowrap) {
 			h1 {
