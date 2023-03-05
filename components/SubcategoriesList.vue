@@ -1,0 +1,104 @@
+<template>
+	<div
+		class="subcategories"
+		v-if="subcategoriesData">
+		<ul v-if="subcategoriesData.productCategories.nodes.length == 1">
+			<li
+				v-for="(item, index) in subcategoriesData.productCategories.nodes[0].children.nodes"
+				:key="index"
+				:style="{ backgroundImage: item.menuImage?.sourceUrl }">
+				<NuxtLink :to="`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`">{{ item.name }}</NuxtLink>
+			</li>
+		</ul>
+		<ul
+			v-else
+			class="subcategories">
+			<li
+				v-for="(item, index) in subcategoriesData.productCategories.nodes"
+				:key="index"
+				:style="{ backgroundImage: `url(${item.productCategoriesAfc.menuImage?.sourceUrl})` }">
+				<NuxtLink :to="`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`">{{ item.name }}</NuxtLink>
+			</li>
+		</ul>
+	</div>
+</template>
+<script setup>
+	const router = useRouter()
+	const routerSlug = ref(router.currentRoute.value.params.slug)
+	routerSlug.value = router.currentRoute.value.params.slug?.length
+		? router.currentRoute.value.params.slug.filter((slug) => slug !== '')
+		: 0
+	const slugVariable = ref({
+		slug: routerSlug.value[routerSlug.value.length - 1] ? [routerSlug.value[routerSlug.value.length - 1]] : 0,
+	})
+	const productSubcategoriesQuery = gql`
+		query ${routerSlug.value !== 0 ? '($slug: [String])' : ''} {
+			productCategories${routerSlug.value !== 0 ? '(where: { name: $slug })' : '(where: {parent: 0})'} {
+				nodes {
+					name
+					slug
+                    productCategoriesAfc {
+                        menuImage {
+                            altText
+                            sourceUrl
+                            mediaDetails {
+                                height
+                                width
+                            }
+                        }
+                    }
+					children {
+						nodes {
+							name
+							slug
+                            productCategoriesAfc {
+                                menuImage {
+                                    altText
+                                    sourceUrl
+                                    mediaDetails {
+                                        height
+                                        width
+                                    }
+                                }
+                            }
+						}
+					}
+				}
+			}
+		}
+	`
+	const subcategoriesData = useState('subcategories', () => null)
+	const { data } = await useAsyncQuery(productSubcategoriesQuery, routerSlug.value !== 0 ? slugVariable.value : {})
+	subcategoriesData.value = data.value
+</script>
+<style lang="scss" scoped>
+	.subcategories {
+		ul {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+			gap: 20px;
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			margin-bottom: 30px;
+			li {
+				background-color: $color-primary;
+				a {
+					padding: em(10) em(20);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					border: 1px solid $color-secondary;
+					min-height: 100px;
+					text-decoration: none;
+					color: $color-white;
+					font-weight: 700;
+					text-align: center;
+					background-repeat: no-repeat;
+					background-size: cover;
+					background-position: center;
+				}
+			}
+		}
+	}
+</style>

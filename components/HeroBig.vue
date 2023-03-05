@@ -3,7 +3,7 @@
 		class="hero"
 		:class="{ white: props.white, center: props.center, nowrap: props.nowrap }">
 		<NuxtPicture
-			v-if="props.heroType === 'img'"
+			v-if="props.heroType === 'img' || !props.heroType"
 			:src="image.sourceUrl"
 			:width="image.mediaDetails.width"
 			:height="image.mediaDetails.height"

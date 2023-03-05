@@ -20,6 +20,17 @@
 						v-for="(level2, index2) in level1?.children?.nodes"
 						:key="index2">
 						<NuxtLink :to="`/katalog-produktu/${level1.slug}/${level2.slug}`">{{ level2.name }}</NuxtLink>
+						<ul
+							v-if="level2?.children?.nodes?.length"
+							class="menu__level-3">
+							<li
+								v-for="(level3, index3) in level2.children.nodes"
+								:key="index3">
+								<NuxtLink :to="`/katalog-produktu/${level1.slug}/${level2.slug}/${level3.slug}`">{{
+									level3.name
+								}}</NuxtLink>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</li>
@@ -83,6 +94,12 @@
 								nodes {
 									name
 									slug
+									children {
+										nodes {
+											name
+											slug
+										}
+									}
 								}
 							}
 						}
@@ -156,7 +173,8 @@
 			}
 		}
 	}
-	.menu__level-2 {
+	.menu__level-2,
+	.menu__level-3 {
 		max-height: 0;
 		overflow: hidden;
 		transition: all 0.15s ease-in-out;
@@ -184,6 +202,18 @@
 					&::before {
 						background-color: $color-secondary;
 					}
+				}
+			}
+		}
+	}
+	.menu__level-3 {
+		max-height: unset;
+		overflow: unset;
+		& > li {
+			& > a {
+				padding-left: 50px;
+				&::before {
+					left: 30px;
 				}
 			}
 		}

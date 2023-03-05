@@ -212,7 +212,7 @@
 	const screenWidth = useState('screenWidth')
 	const toggleOwner = (event) => event.target.classList.toggle('active')
 	const onasQuery = gql`
-		query getOnas {
+		query getOnasKlinger {
 			page(id: "cG9zdDo2MDI=") {
 				id
 				slug

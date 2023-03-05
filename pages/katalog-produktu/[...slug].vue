@@ -23,6 +23,9 @@
 				<div v-if="screenWidth <= 900">
 					<CategoriesBox />
 				</div>
+				<div v-else>
+					<SubcategoriesList />
+				</div>
 				<div
 					id="products"
 					ref="productsAnchor">
@@ -165,7 +168,13 @@
 		query getProducts($first: Int, $last: Int, $after: String, $before: String, $slug: [String]) {
 			productCategories(where: { slug: $slug }) {
 				nodes {
-					contentNodes(first: $first, last: $last, after: $after, before: $before) {
+					contentNodes(
+						first: $first
+						last: $last
+						after: $after
+						before: $before
+						where: { orderby: { field: MENU_ORDER, order: DESC } }
+					) {
 						nodes {
 							... on Product {
 								id

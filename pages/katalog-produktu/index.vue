@@ -11,6 +11,9 @@
 				<div v-if="screenWidth <= 900">
 					<CategoriesBox />
 				</div>
+				<div v-else>
+					<SubcategoriesList />
+				</div>
 				<div
 					id="products"
 					ref="productsAnchor">
@@ -73,7 +76,7 @@
 	const screenWidth = useState('screenWidth')
 	const allProductsQuery = gql`
 		query getRootCategory($first: Int, $last: Int, $after: String, $before: String) {
-			products(first: $first, last: $last, after: $after, before: $before) {
+			products(first: $first, last: $last, after: $after, before: $before, where: { orderby: { field: MENU_ORDER, order: DESC } }) {
 				nodes {
 					slug
 					title
