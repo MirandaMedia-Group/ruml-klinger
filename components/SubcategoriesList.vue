@@ -76,7 +76,7 @@
 		ul {
 			display: grid;
 			grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-			gap: 20px;
+			gap: 30px;
 			list-style: none;
 			margin: 0;
 			padding: 0;
@@ -88,7 +88,6 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					border: 1px solid $color-secondary;
 					min-height: 100px;
 					text-decoration: none;
 					color: $color-white;

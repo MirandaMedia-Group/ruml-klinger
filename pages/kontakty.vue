@@ -79,6 +79,18 @@
 				v-for="(item, index) in kontakty.page.rumlKlingerKontakty.pobocky"
 				:key="index"
 				class="pobocka">
+				<div
+					v-if="item.image"
+					class="pobocka__image">
+					<NuxtPicture
+						:src="item.image.sourceUrl"
+						:alt="item.image.altText"
+						:width="item.image.mediaDetails.width"
+						:height="item.image.mediaDetails.height"
+						loading="lazy"
+						provider="ipx"
+						:img-attrs="{ style: 'display: block; height: 100%; object-fit: cover;' }" />
+				</div>
 				<div class="pobocka__content">
 					<h2 class="pobocka__title">{{ item.title }}</h2>
 					<div
@@ -235,6 +247,14 @@
 						gpsLat
 						gpsLng
 						openingHours
+						image {
+							altText
+							sourceUrl
+							mediaDetails {
+								height
+								width
+							}
+						}
 					}
 					contactGroup {
 						groupTitle
@@ -334,10 +354,16 @@
 		gap: 20px;
 		flex-wrap: wrap;
 		justify-content: center;
+		align-items: flex-start;
 		.pobocka {
 			flex: 1 1 560px;
 			max-width: 710px;
 			background-color: $color-white;
+			&__image {
+				width: 100%;
+				height: 300px;
+				overflow: hidden;
+			}
 			&__content {
 				padding: 50px;
 			}

@@ -183,14 +183,14 @@
 				position: relative;
 				padding: em(10);
 				padding-left: 30px;
-				color: #213eab;
+				color: $color-primary-light;
 				&::before {
 					content: '';
 					display: block;
 					width: 8px;
 					height: 8px;
 					border-radius: 50%;
-					background-color: #213eab;
+					background-color: $color-primary-light;
 					position: absolute;
 					top: 50%;
 					left: 10px;
@@ -214,6 +214,8 @@
 				padding-left: 50px;
 				&::before {
 					left: 30px;
+					background-color: transparent;
+					border: 1px solid $color-primary-light;
 				}
 			}
 		}

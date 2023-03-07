@@ -142,6 +142,11 @@
 		h1 {
 			font-size: clamp(rem(30), 3vw, rem(42));
 		}
+		&:not(.center) {
+			.content {
+				max-width: 600px;
+			}
+		}
 		.video-wrapper {
 			position: relative;
 			&::after {
@@ -164,9 +169,7 @@
 		display: flex;
 		align-items: center;
 	}
-	.content {
-		max-width: 600px;
-	}
+
 	.subheading {
 		color: $color-secondary;
 		font-weight: 700;
