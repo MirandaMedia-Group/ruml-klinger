@@ -86,8 +86,29 @@
 			<section
 				id="parameters"
 				class="narrow"
-				v-if="singleProduct.products.nodes[0].productAcf.tabulkaParametru">
+				v-if="
+					singleProduct.products.nodes[0].productAcf.tabulkaParametru ||
+					singleProduct.products.nodes[0].productAcf.productParameters?.values
+				">
+				<div v-if="singleProduct.products.nodes[0].productAcf.productParameters?.values">
+					<h3 v-if="singleProduct.products.nodes[0].productAcf.productParameters.heading">
+						{{ singleProduct.products.nodes[0].productAcf.productParameters.heading }}
+					</h3>
+					<table>
+						<tbody>
+							<tr
+								v-for="(item, index) in singleProduct.products.nodes[0].productAcf.productParameters.values"
+								:key="index">
+								<td>{{ item.label }}</td>
+								<td>{{ item.name }}</td>
+								<td>{{ item.unit }}</td>
+								<td>{{ item.value }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 				<div
+					v-else-if="singleProduct.products.nodes[0].productAcf.tabulkaParametru"
 					class="product__parameters"
 					v-html="singleProduct.products.nodes[0].productAcf.tabulkaParametru"></div>
 			</section>
@@ -332,18 +353,23 @@
 				&:nth-of-type(even) {
 					background-color: $color-bg-light;
 				}
-				td:first-of-type {
+				td:first-of-type,
+				th:first-of-type {
 					flex: 4;
 					font-weight: 700;
 				}
-				td:nth-of-type(2) {
+				td:nth-of-type(2),
+				th:nth-of-type(2) {
 					flex: 2;
 				}
-				td:nth-of-type(3) {
+				td:nth-of-type(3),
+				th:nth-of-type(3) {
 					text-align: right;
 				}
 				td:nth-of-type(3),
-				td:nth-of-type(4) {
+				td:nth-of-type(4),
+				th:nth-of-type(3),
+				th:nth-of-type(4) {
 					flex: 1;
 				}
 			}
