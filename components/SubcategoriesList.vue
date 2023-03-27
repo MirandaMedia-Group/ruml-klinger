@@ -33,7 +33,7 @@
 	})
 	const productSubcategoriesQuery = gql`
 		query ${routerSlug.value !== 0 ? '($slug: [String])' : ''} {
-			productCategories${routerSlug.value !== 0 ? '(where: { name: $slug })' : '(where: {parent: 0})'} {
+			productCategories${routerSlug.value !== 0 ? '(where: { slug: $slug })' : '(where: {parent: 0})'} {
 				nodes {
 					name
 					slug
