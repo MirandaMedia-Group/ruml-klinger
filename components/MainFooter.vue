@@ -69,7 +69,7 @@
 							</li>
 							<li>
 								<a
-									href="https://www.ruml-emes.cz"
+									href="https://www.ruml-emes.sk"
 									target="_blank">
 									RUML Emes s.r.o.
 								</a>

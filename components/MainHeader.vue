@@ -1,5 +1,5 @@
 <template>
-	<header>
+	<header :class="{ 'show-submenu': showSubmenu }">
 		<div class="container">
 			<div class="site-logo">
 				<nuxt-link to="/">
@@ -28,7 +28,10 @@
 					id="navigation"
 					:class="{ visible: navigationVisible }">
 					<ul>
-						<li class="has-submenu">
+						<li
+							class="has-submenu"
+							@mouseenter="showSubmenu = true"
+							@mouseleave="showSubmenu = false">
 							<nuxt-link to="/katalog-produktu">Produkty <span class="arrow"></span></nuxt-link>
 							<div class="megamenu">
 								<div class="container">
@@ -121,6 +124,14 @@
 	</header>
 </template>
 <script setup>
+	const showSubmenu = ref(false)
+	const router = useRouter()
+
+	router.beforeEach((to, from, next) => {
+		showSubmenu.value = false
+		next()
+	})
+
 	const navigationVisible = useState('navigationVisible', () => false)
 	const productCategoriesQuery = gql`
 		query getCategories {
@@ -171,6 +182,20 @@
 	header {
 		background-color: $color-white;
 		position: relative;
+		&.show-submenu {
+			#navigation {
+				.has-submenu {
+					.arrow {
+						transform: rotate(180deg);
+						top: 2px;
+					}
+					.megamenu {
+						max-height: 1000px;
+						padding: 45px 0;
+					}
+				}
+			}
+		}
 	}
 	.site-logo {
 		img {
@@ -240,17 +265,6 @@
 					transform: rotate(45deg);
 				}
 			}
-			&:hover,
-			&:focus {
-				.arrow {
-					transform: rotate(180deg);
-					top: 2px;
-				}
-				.megamenu {
-					max-height: 800px;
-					padding: 45px 0;
-				}
-			}
 		}
 		.megamenu {
 			position: absolute;
@@ -265,8 +279,12 @@
 			transition: all 0.3s ease-in-out;
 		}
 		.menu__level-2 {
-			display: block;
-			columns: 6;
+			// display: block;
+			// columns: 6;
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+			width: 100%;
+			gap: 20px;
 			& > li {
 				display: flex;
 				flex-direction: column;
