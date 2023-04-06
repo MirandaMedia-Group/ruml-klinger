@@ -527,6 +527,9 @@
 		justify-content: space-evenly;
 		gap: 20px;
 		margin-bottom: 50px;
+		.partner {
+			max-width: 200px;
+		}
 		img {
 			mix-blend-mode: luminosity;
 			opacity: 0.25;
