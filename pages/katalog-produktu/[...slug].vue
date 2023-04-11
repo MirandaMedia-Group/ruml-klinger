@@ -32,11 +32,11 @@
 					<div v-if="pending">
 						<LoadingCircle />
 					</div>
-					<div
+					<!-- <div
 						class="center"
 						v-else-if="!categoryProductsData.productCategories.nodes[0].contentNodes.nodes.length">
 						<p><strong>Tato kategorie neobsahuje žádné produkty ...</strong></p>
-					</div>
+					</div> -->
 					<ProductsBlock
 						v-else
 						:data="categoryProductsData.productCategories.nodes[0].contentNodes.nodes"

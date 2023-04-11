@@ -10,7 +10,7 @@
 			</p>
 		</div>
 	</section>
-	<section>
+	<section class="services-page">
 		<div class="container">
 			<div
 				v-for="(service, index) in servicesData.pages.nodes"
@@ -100,31 +100,34 @@
 			margin-bottom: 0;
 		}
 	}
-	.service {
-		margin-bottom: 40px;
-		&__image {
-			picture,
-			img {
-				display: block;
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-			}
-		}
-		&__content {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			h2 {
-				font-size: rem(32);
-				color: $color-primary-light;
-				&::after {
-					margin-left: 0;
+	.services-page {
+		.service {
+			margin-bottom: 40px;
+			flex-direction: row;
+			&__image {
+				picture,
+				img {
+					display: block;
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
 				}
 			}
-		}
-		&__description {
-			min-height: unset;
+			&__content {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				h2 {
+					font-size: rem(32);
+					color: $color-primary-light;
+					&::after {
+						margin-left: 0;
+					}
+				}
+			}
+			&__description {
+				min-height: unset;
+			}
 		}
 	}
 	@media (max-width: 767px) {
@@ -134,15 +137,17 @@
 				font-size: 1rem;
 			}
 		}
-		.service {
-			margin-left: -20px;
-			margin-right: -20px;
-			margin-bottom: 0;
-			&__image {
-				aspect-ratio: 1;
-			}
-			h2 {
-				font-size: rem(24);
+		.services-page {
+			.service {
+				margin-left: -20px;
+				margin-right: -20px;
+				margin-bottom: 0;
+				&__image {
+					aspect-ratio: 1;
+				}
+				h2 {
+					font-size: rem(24);
+				}
 			}
 		}
 	}
