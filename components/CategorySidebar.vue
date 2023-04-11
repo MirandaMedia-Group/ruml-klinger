@@ -42,7 +42,7 @@
 						stroke-linecap="round"
 						stroke-linejoin="round" />
 				</svg>
-				<a href="mailto:ruml@ruml-group.cz">ruml@rumlgroup.cz</a>
+				<a href="mailto:ruml@ruml-group.cz">ruml@ruml-group.cz</a>
 			</div>
 		</div>
 	</div>

@@ -50,7 +50,7 @@
 								<a
 									href="https://wwww.ruml-group.cz"
 									target="_blank">
-									RUML s.r.o.
+									RUML GROUP
 								</a>
 							</li>
 							<li>
