@@ -83,6 +83,20 @@
 			margin-bottom: 30px;
 			li {
 				background-color: $color-primary;
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				position: relative;
+				&::before {
+					content: '';
+					display: block;
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background-color: rgba(0, 0, 0, 0.3);
+				}
 				a {
 					padding: em(10) em(20);
 					display: flex;
@@ -96,6 +110,7 @@
 					background-repeat: no-repeat;
 					background-size: cover;
 					background-position: center;
+					position: relative;
 				}
 			}
 		}

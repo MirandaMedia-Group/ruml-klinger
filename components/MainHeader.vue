@@ -42,7 +42,9 @@
 											<NuxtLink
 												:to="`/katalog-produktu/${level1.slug}`"
 												:style="{ backgroundImage: `url(${level1.productCategoriesAfc.menuImage?.sourceUrl})` }">
-												{{ level1.name }}
+												<span>
+													{{ level1.name }}
+												</span>
 											</NuxtLink>
 											<ul class="menu__level-3">
 												<li
@@ -300,6 +302,23 @@
 					background-color: $color-primary;
 					color: $color-white;
 					margin-bottom: 5px;
+					position: relative;
+					background-position: center;
+					background-size: cover;
+					background-repeat: no-repeat;
+					span {
+						position: relative;
+					}
+					&::before {
+						content: '';
+						display: block;
+						width: 100%;
+						height: 100%;
+						position: absolute;
+						top: 0;
+						left: 0;
+						background-color: rgba(0, 0, 0, 0.3);
+					}
 				}
 			}
 			a {

@@ -88,9 +88,35 @@
 				class="narrow"
 				v-if="
 					singleProduct.products.nodes[0].productAcf.tabulkaParametru ||
-					singleProduct.products.nodes[0].productAcf.productParameters?.values
+					singleProduct.products.nodes[0].productAcf.productParameters?.values ||
+					singleProduct.products.nodes[0].productAcf.customTable
 				">
-				<div v-if="singleProduct.products.nodes[0].productAcf.productParameters?.values">
+				<div v-if="singleProduct.products.nodes[0].productAcf.customTable">
+					<h3 v-if="singleProduct.products.nodes[0].productAcf.customTable.heading">
+						{{ singleProduct.products.nodes[0].productAcf.customTable.heading }}
+					</h3>
+					<table>
+						<tbody>
+							<tr>
+								<th
+									v-for="(item, index) in singleProduct.products.nodes[0].productAcf.customTable.table.header"
+									:key="index">
+									{{ item }}
+								</th>
+							</tr>
+							<tr
+								v-for="(tr, index) in singleProduct.products.nodes[0].productAcf.customTable.table.body"
+								:key="index">
+								<td
+									v-for="(td, index) in tr"
+									:key="index">
+									{{ td }}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div v-else-if="singleProduct.products.nodes[0].productAcf.productParameters?.values">
 					<h3 v-if="singleProduct.products.nodes[0].productAcf.productParameters.heading">
 						{{ singleProduct.products.nodes[0].productAcf.productParameters.heading }}
 					</h3>
@@ -212,6 +238,14 @@
 								width
 							}
 							altText
+						}
+						customTable {
+							heading
+							table {
+								body
+								caption
+								header
+							}
 						}
 					}
 				}
@@ -346,31 +380,48 @@
 				padding: em(10);
 				display: flex;
 				align-items: center;
-				gap: 10px;
+				gap: 15px;
 				&:nth-of-type(odd) {
 					background-color: $color-white;
 				}
 				&:nth-of-type(even) {
 					background-color: $color-bg-light;
 				}
+				th {
+					text-align: left;
+				}
+				td,
+				th {
+					flex: 2;
+				}
 				td:first-of-type,
 				th:first-of-type {
 					flex: 4;
 					font-weight: 700;
 				}
-				td:nth-of-type(2),
-				th:nth-of-type(2) {
-					flex: 2;
-				}
-				td:nth-of-type(3),
-				th:nth-of-type(3) {
+				// td:nth-of-type(2),
+				// th:nth-of-type(2) {
+				// 	flex: 2;
+				// }
+				// td:nth-of-type(3),
+				// th:nth-of-type(3) {
+				// 	text-align: right;
+				// }
+				// td:nth-of-type(3),
+				// td:nth-of-type(4),
+				// th:nth-of-type(3),
+				// th:nth-of-type(4) {
+				// 	flex: 1;
+				// }
+				td:nth-last-of-type(2),
+				th:nth-last-of-type(2) {
+					flex: 1;
 					text-align: right;
 				}
-				td:nth-of-type(3),
-				td:nth-of-type(4),
-				th:nth-of-type(3),
-				th:nth-of-type(4) {
+				td:last-of-type,
+				th:last-of-type {
 					flex: 1;
+					text-align: left;
 				}
 			}
 		}
@@ -436,7 +487,8 @@
 			table {
 				tr {
 					flex-wrap: wrap;
-					td:first-of-type {
+					td:first-of-type,
+					th:first-of-type {
 						flex-basis: 100%;
 					}
 				}

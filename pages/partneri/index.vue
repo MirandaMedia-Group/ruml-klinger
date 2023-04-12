@@ -23,7 +23,7 @@
 					v-html="partner.excerpt"></div>
 				<div class="buttons-wrapper align-center justify-start">
 					<NuxtLink
-						:to="`/katalog-produktu/`"
+						:to="`/katalog-produktu/vyrobce/${partner.slug}`"
 						class="btn btn-primary">
 						Zobrazit produkty
 					</NuxtLink>
