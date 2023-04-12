@@ -89,9 +89,9 @@
 				v-if="
 					singleProduct.products.nodes[0].productAcf.tabulkaParametru ||
 					singleProduct.products.nodes[0].productAcf.productParameters?.values ||
-					singleProduct.products.nodes[0].productAcf.customTable
+					singleProduct.products.nodes[0].productAcf.customTable.table
 				">
-				<div v-if="singleProduct.products.nodes[0].productAcf.customTable">
+				<div v-if="singleProduct.products.nodes[0].productAcf.customTable.table">
 					<h3 v-if="singleProduct.products.nodes[0].productAcf.customTable.heading">
 						{{ singleProduct.products.nodes[0].productAcf.customTable.heading }}
 					</h3>
@@ -243,8 +243,8 @@
 							heading
 							table {
 								body
-								caption
 								header
+								headerEnabled
 							}
 						}
 					}
