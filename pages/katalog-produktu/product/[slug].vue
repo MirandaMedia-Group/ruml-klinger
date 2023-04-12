@@ -109,9 +109,8 @@
 								:key="index">
 								<td
 									v-for="(td, index) in tr"
-									:key="index">
-									{{ td }}
-								</td>
+									:key="index"
+									v-html="td"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -344,10 +343,10 @@
 		gap: 0px;
 		line-height: em(28);
 		.product__base-parameters-list-item-name {
-			flex: 1 1 120px;
+			flex: 1 1 150px;
 		}
 		.product__base-parameters-list-item-value {
-			flex: 1 1 400px;
+			flex: 1 1 150px;
 		}
 	}
 
