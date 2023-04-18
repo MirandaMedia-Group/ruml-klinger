@@ -4,7 +4,9 @@
 			<template #main>
 				<div class="">
 					<div class="">
-						<h1>Produkty</h1>
+						<h1>
+							Produkty výrobce <strong>{{ manufacturerDetail.partners.nodes[0].title }}</strong>
+						</h1>
 					</div>
 				</div>
 				<div
@@ -15,7 +17,11 @@
 					</div>
 					<ProductsBlock
 						v-else
-						:data="manufacturerProducts.products.nodes" />
+						:data="
+							manufacturerProducts.products.nodes.filter(
+								(product) => product.productAcf.manufacturer?.[0].slug === router.currentRoute.value.params.slug
+							)
+						" />
 				</div>
 			</template>
 			<template #sidebar>
@@ -29,6 +35,8 @@
 	definePageMeta({
 		layout: false,
 	})
+	const router = useRouter()
+	console.log(router.currentRoute.value.params.slug)
 	const productsAnchor = ref(null)
 	const screenWidth = useState('screenWidth')
 	const manufacturerProductsQuery = gql`
@@ -64,6 +72,20 @@
 		}
 	`
 	const { data: manufacturerProducts, refresh, pending } = await useAsyncQuery(manufacturerProductsQuery)
-	console.log(manufacturerProducts.value)
+
+	const manufaturerDetailQuery = gql`
+		query getManufacturerDetail($slug: String!) {
+			partners(where: { name: $slug }) {
+				nodes {
+					id
+					title
+				}
+			}
+		}
+	`
+	const { data: manufacturerDetail } = await useAsyncQuery(manufaturerDetailQuery, {
+		slug: router.currentRoute.value.params.slug,
+	})
+	console.log(manufacturerDetail.value)
 </script>
 <style lang="scss"></style>
