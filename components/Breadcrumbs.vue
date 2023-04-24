@@ -1,0 +1,67 @@
+<template>
+	<div class="container">
+		<nav class="breadcrumbs">
+			<ul>
+				<li>
+					<NuxtLink to="/">Home</NuxtLink>
+				</li>
+				<li>
+					<NuxtLink to="/produkty">Produkty</NuxtLink>
+				</li>
+				<li
+					v-for="(item, index) in props.sublinks"
+					:key="index">
+					<NuxtLink :to="item.url">{{ item.name }}</NuxtLink>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</template>
+<script setup>
+	const props = defineProps(['sublinks'])
+	console.log(props.sublinks)
+</script>
+<style lang="scss" scoped>
+	.breadcrumbs {
+		padding: 20px 0;
+		margin-bottom: -50px;
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: flex;
+			a,
+			span {
+				line-height: em(22);
+				display: inline-block;
+				text-decoration: none;
+				color: rgba($color-font, 0.6);
+			}
+			li:not(:last-child) {
+				a,
+				span {
+					&::after {
+						content: '/';
+						display: inline-block;
+						font-size: 1rem;
+						line-height: em(22);
+						margin: 0 em(10);
+						color: rgba($color-font, 0.6);
+					}
+				}
+			}
+			a {
+				&:hover,
+				&:focus {
+					color: $color-primary;
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+	@media (max-width: 767px) {
+		.breadcrumbs {
+			display: none;
+		}
+	}
+</style>

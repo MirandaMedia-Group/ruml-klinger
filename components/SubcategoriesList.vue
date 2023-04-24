@@ -24,6 +24,7 @@
 </template>
 <script setup>
 	const router = useRouter()
+	const language = useState('language')
 	const routerSlug = ref(router.currentRoute.value.params.slug)
 	routerSlug.value = router.currentRoute.value.params.slug?.length
 		? router.currentRoute.value.params.slug.filter((slug) => slug !== '')
@@ -31,44 +32,85 @@
 	const slugVariable = ref({
 		slug: routerSlug.value[routerSlug.value.length - 1] ? [routerSlug.value[routerSlug.value.length - 1]] : 0,
 	})
-	const productSubcategoriesQuery = gql`
-		query ${routerSlug.value !== 0 ? '($slug: [String])' : ''} {
-			productCategories${routerSlug.value !== 0 ? '(where: { slug: $slug })' : '(where: {parent: 0})'} {
-				nodes {
-					name
-					slug
-                    productCategoriesAfc {
-                        menuImage {
-                            altText
-                            sourceUrl
-                            mediaDetails {
-                                height
-                                width
-                            }
-                        }
-                    }
-					children {
-						nodes {
-							name
-							slug
-                            productCategoriesAfc {
-                                menuImage {
-                                    altText
-                                    sourceUrl
-                                    mediaDetails {
-                                        height
-                                        width
-                                    }
-                                }
-                            }
+	const productSubcategoriesQuery =
+		routerSlug.value !== 0
+			? gql`
+					query getSubcategoriesEmes($slug: [String], $language: LanguageCodeFilterEnum!) {
+						productCategories(where: { slug: $slug, language: $language }) {
+							nodes {
+								name
+								slug
+								productCategoriesAfc {
+									menuImage {
+										altText
+										sourceUrl
+										mediaDetails {
+											height
+											width
+										}
+									}
+								}
+								children {
+									nodes {
+										name
+										slug
+										productCategoriesAfc {
+											menuImage {
+												altText
+												sourceUrl
+												mediaDetails {
+													height
+													width
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
-				}
-			}
-		}
-	`
+			  `
+			: gql`
+					query getSubcategoriesEmes($language: LanguageCodeFilterEnum!) {
+						productCategories(where: { parent: 0, language: $language }) {
+							nodes {
+								name
+								slug
+								productCategoriesAfc {
+									menuImage {
+										altText
+										sourceUrl
+										mediaDetails {
+											height
+											width
+										}
+									}
+								}
+								children {
+									nodes {
+										name
+										slug
+										productCategoriesAfc {
+											menuImage {
+												altText
+												sourceUrl
+												mediaDetails {
+													height
+													width
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+			  `
 	const subcategoriesData = useState('subcategories', () => null)
-	const { data } = await useAsyncQuery(productSubcategoriesQuery, routerSlug.value !== 0 ? slugVariable.value : {})
+	const { data } = await useAsyncQuery(
+		productSubcategoriesQuery,
+		routerSlug.value !== 0 ? { ...slugVariable.value, language: language.value } : { language: language.value }
+	)
 	subcategoriesData.value = data.value
 </script>
 <style lang="scss" scoped>

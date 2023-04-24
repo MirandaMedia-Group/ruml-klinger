@@ -46,6 +46,20 @@
 	</section>
 </template>
 <script setup>
+	useHead({
+		title: 'Naše služby | RUML Klinger',
+		meta: [
+			{
+				hid: 'description',
+				name: 'description',
+				content: '',
+			},
+		],
+	})
+
+	const route = useRoute()
+	console.log(route.name)
+
 	const servicesQuery = gql`
 		query getAllServices {
 			pages(where: { parent: "cG9zdDo1OTg=", orderby: { field: DATE, order: ASC } }) {

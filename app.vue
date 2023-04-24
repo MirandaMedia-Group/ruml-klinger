@@ -15,6 +15,7 @@
 	const screenWidth = useState('screenWidth', () => {
 		return 1024
 	})
+	const language = useState('language', () => 'CS')
 	onMounted(() => {
 		screenWidth.value = window.innerWidth
 		window.addEventListener('resize', () => {

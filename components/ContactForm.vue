@@ -100,7 +100,7 @@
 
 	const router = useRouter()
 
-	const endpointURL = 'http://wp-miranda-1.axfone.eu/wp-json/contact-form-7/v1/contact-forms/866/feedback'
+	const endpointURL = 'http://ruml-api.mirandamedia.cz/wp-json/contact-form-7/v1/contact-forms/866/feedback'
 	const submitForm = async () => {
 		dataSending.value = true
 		const formData = new FormData()

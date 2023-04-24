@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<Breadcrumbs />
 		<NuxtLayout name="with-sidebar">
 			<template #main>
 				<div class="">

@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<Breadcrumbs :sublinks="breadcrumbsSublinks" />
 		<NuxtLayout name="with-sidebar">
 			<template #main>
 				<div class="category__header">
@@ -156,6 +157,18 @@
 							}
 						}
 					}
+					parent {
+						node {
+							name
+							slug
+							parent {
+								node {
+									name
+									slug
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -163,7 +176,40 @@
 	const categoryInfoData = useState('categoryInfoData', () => null)
 	const { data } = await useAsyncQuery(categoryInfoQuery, slugVariable.value)
 	categoryInfoData.value = data.value
-
+	const breadcrumbsSublinks = ref(
+		categoryInfoData.value.productCategories.nodes[0].parent?.node.parent
+			? [
+					{
+						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}`,
+						name: categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.name,
+					},
+					{
+						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}`,
+						name: categoryInfoData.value.productCategories.nodes[0].parent?.node.name,
+					},
+					{
+						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].slug}`,
+						name: categoryInfoData.value.productCategories.nodes[0].name,
+					},
+			  ]
+			: categoryInfoData.value.productCategories.nodes[0].parent
+			? [
+					{
+						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}`,
+						name: categoryInfoData.value.productCategories.nodes[0].parent?.node.name,
+					},
+					{
+						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].slug}`,
+						name: categoryInfoData.value.productCategories.nodes[0].name,
+					},
+			  ]
+			: [
+					{
+						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].slug}`,
+						name: categoryInfoData.value.productCategories.nodes[0].name,
+					},
+			  ]
+	)
 	const categoryProductsQuery = gql`
 		query getProducts($first: Int, $last: Int, $after: String, $before: String, $slug: [String]) {
 			productCategories(where: { slug: $slug }) {

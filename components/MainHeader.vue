@@ -128,6 +128,7 @@
 <script setup>
 	const showSubmenu = ref(false)
 	const router = useRouter()
+	const language = useState('language')
 
 	router.beforeEach((to, from, next) => {
 		showSubmenu.value = false
@@ -136,8 +137,8 @@
 
 	const navigationVisible = useState('navigationVisible', () => false)
 	const productCategoriesQuery = gql`
-		query getCategories {
-			productCategories(where: { parent: 0 }) {
+		query getCategories($language: LanguageCodeFilterEnum!) {
+			productCategories(where: { parent: 0, language: $language }) {
 				nodes {
 					name
 					slug
@@ -164,7 +165,7 @@
 	`
 	const categoriesData = useState('categories', () => null)
 	if (!categoriesData.value) {
-		const { data } = await useAsyncQuery(productCategoriesQuery)
+		const { data } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
 		categoriesData.value = data.value
 	}
 

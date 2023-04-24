@@ -2,7 +2,7 @@
 	<PageHeader>
 		<h1>Staňte se jedním z nás</h1>
 		<p>Ve firmách RUML Group poskytujeme našim zaměstněncům/kolegům prostor pro jejich maximální uplatnění a rozvoj.</p>
-		<strong>
+		<strong v-if="careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length">
 			Právě máme
 			{{
 				careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
@@ -22,6 +22,7 @@
 					: 'pozic'
 			}}
 		</strong>
+		<strong v-else>Aktuálně nemáme žádné volné pozice</strong>
 	</PageHeader>
 	<section class="container">
 		<div class="career-list">
@@ -37,7 +38,7 @@
 						:height="post.featuredImage.node.mediaDetails.height"
 						loading="lazy"
 						provider="ipx"
-						:img-attrs="{ style: 'display:block;' }" />
+						:img-attrs="{ style: 'display:block; width: 100%; height: 100%; object-fit: cover;' }" />
 				</div>
 				<div class="career__content">
 					<div class="career__company">
@@ -163,6 +164,7 @@
 			img,
 			picture {
 				display: block;
+				height: 100%;
 			}
 		}
 		&__company {
