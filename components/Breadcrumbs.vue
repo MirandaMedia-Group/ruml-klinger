@@ -6,7 +6,7 @@
 					<NuxtLink to="/">Home</NuxtLink>
 				</li>
 				<li>
-					<NuxtLink to="/produkty">Produkty</NuxtLink>
+					<NuxtLink to="/katalog-produktu">Produkty</NuxtLink>
 				</li>
 				<li
 					v-for="(item, index) in props.sublinks"
@@ -19,7 +19,6 @@
 </template>
 <script setup>
 	const props = defineProps(['sublinks'])
-	console.log(props.sublinks)
 </script>
 <style lang="scss" scoped>
 	.breadcrumbs {

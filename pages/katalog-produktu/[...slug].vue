@@ -180,32 +180,32 @@
 		categoryInfoData.value.productCategories.nodes[0].parent?.node.parent
 			? [
 					{
-						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}`,
+						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}`,
 						name: categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.name,
 					},
 					{
-						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}`,
+						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}`,
 						name: categoryInfoData.value.productCategories.nodes[0].parent?.node.name,
 					},
 					{
-						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].slug}`,
+						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}/${categoryInfoData.value.productCategories.nodes[0].slug}`,
 						name: categoryInfoData.value.productCategories.nodes[0].name,
 					},
 			  ]
 			: categoryInfoData.value.productCategories.nodes[0].parent
 			? [
 					{
-						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}`,
+						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}/`,
 						name: categoryInfoData.value.productCategories.nodes[0].parent?.node.name,
 					},
 					{
-						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].slug}`,
+						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}/${categoryInfoData.value.productCategories.nodes[0].slug}`,
 						name: categoryInfoData.value.productCategories.nodes[0].name,
 					},
 			  ]
 			: [
 					{
-						url: `/produkty/${categoryInfoData.value.productCategories.nodes[0].slug}`,
+						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].slug}`,
 						name: categoryInfoData.value.productCategories.nodes[0].name,
 					},
 			  ]
