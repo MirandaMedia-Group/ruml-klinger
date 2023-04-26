@@ -193,10 +193,6 @@
 						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}/${categoryInfoData.value.productCategories.nodes[0].slug}`,
 						name: categoryInfoData.value.productCategories.nodes[0].name,
 					},
-					{
-						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}/${categoryInfoData.value.productCategories.nodes[0].slug}`,
-						name: categoryInfoData.value.productCategories.nodes[0].name,
-					},
 			  ]
 			: categoryInfoData.value.productCategories.nodes[0].parent
 			? [
