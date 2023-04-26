@@ -4,6 +4,7 @@
 			<LoadingCircle />
 		</div>
 		<div v-else>
+			<Breadcrumbs :sublinks="breadcrumbsSublinks" />
 			<section class="product-top">
 				<div class="product__info">
 					<h1>{{ singleProduct.products.nodes[0].title }}</h1>
@@ -183,6 +184,7 @@
 			products(where: { name: $slug }) {
 				nodes {
 					title
+					slug
 					content
 					productAcf {
 						additionalProducts {
@@ -247,6 +249,24 @@
 							}
 						}
 					}
+					productCategories {
+						nodes {
+							name
+							slug
+							parent {
+								node {
+									name
+									slug
+									parent {
+										node {
+											name
+											slug
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -254,6 +274,52 @@
 	const singleProduct = useState('product', () => null)
 	const { data, pending } = await useAsyncQuery(singleProductQuery, variables.value)
 	singleProduct.value = data.value
+	const breadcrumbsSublinks = ref(
+		singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.parent
+			? [
+					{
+						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent.node.parent.node.slug}`,
+						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].parent.node.parent.node.name,
+					},
+					{
+						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent.node.parent.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}`,
+						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.name,
+					},
+					{
+						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent.node.parent.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}`,
+						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].name,
+					},
+					{
+						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent.node.parent.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}/${singleProduct.value.products.nodes[0].slug}`,
+						name: singleProduct.value.products.nodes[0].title,
+					},
+			  ]
+			: singleProduct.value.products.nodes[0].productCategories.nodes[0].parent
+			? [
+					{
+						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}/`,
+						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.name,
+					},
+					{
+						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}`,
+						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].name,
+					},
+					{
+						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}/${singleProduct.value.products.nodes[0].slug}`,
+						name: singleProduct.value.products.nodes[0].title,
+					},
+			  ]
+			: [
+					{
+						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}`,
+						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].name,
+					},
+					{
+						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}/${singleProduct.value.products.nodes[0].slug}`,
+						name: singleProduct.value.products.nodes[0].title,
+					},
+			  ]
+	)
 </script>
 <style lang="scss">
 	.full-width {

@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<Breadcrumbs />
+		<div class="container">
+			<Breadcrumbs />
+		</div>
 		<NuxtLayout name="with-sidebar">
 			<template #main>
 				<div class="">

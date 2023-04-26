@@ -1,21 +1,19 @@
 <template>
-	<div class="container">
-		<nav class="breadcrumbs">
-			<ul>
-				<li>
-					<NuxtLink to="/">Home</NuxtLink>
-				</li>
-				<li>
-					<NuxtLink to="/katalog-produktu">Produkty</NuxtLink>
-				</li>
-				<li
-					v-for="(item, index) in props.sublinks"
-					:key="index">
-					<NuxtLink :to="item.url">{{ item.name }}</NuxtLink>
-				</li>
-			</ul>
-		</nav>
-	</div>
+	<nav class="breadcrumbs">
+		<ul>
+			<li>
+				<NuxtLink to="/">Home</NuxtLink>
+			</li>
+			<li>
+				<NuxtLink to="/katalog-produktu">Produkty</NuxtLink>
+			</li>
+			<li
+				v-for="(item, index) in props.sublinks"
+				:key="index">
+				<NuxtLink :to="item.url">{{ item.name }}</NuxtLink>
+			</li>
+		</ul>
+	</nav>
 </template>
 <script setup>
 	const props = defineProps(['sublinks'])

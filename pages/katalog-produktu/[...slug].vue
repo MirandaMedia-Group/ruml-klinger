@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<Breadcrumbs :sublinks="breadcrumbsSublinks" />
+		<div class="container">
+			<Breadcrumbs :sublinks="breadcrumbsSublinks" />
+		</div>
 		<NuxtLayout name="with-sidebar">
 			<template #main>
 				<div class="category__header">
@@ -186,6 +188,10 @@
 					{
 						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}`,
 						name: categoryInfoData.value.productCategories.nodes[0].parent?.node.name,
+					},
+					{
+						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}/${categoryInfoData.value.productCategories.nodes[0].slug}`,
+						name: categoryInfoData.value.productCategories.nodes[0].name,
 					},
 					{
 						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}/${categoryInfoData.value.productCategories.nodes[0].slug}`,
