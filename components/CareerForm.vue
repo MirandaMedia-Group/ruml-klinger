@@ -4,8 +4,8 @@
 			<h2>Máte zájem u tuto pozici?</h2>
 			<a
 				class="project-mail"
-				href="mailto:ruml@ruml-klinger.cz">
-				ruml@ruml-klinger.cz
+				href="mailto:ruml@ruml-group.cz">
+				ruml@ruml-group.cz
 			</a>
 			<a
 				class="project-phone"
