@@ -40,6 +40,11 @@ export default defineNuxtConfig({
 				httpEndpoint: 'https://ruml-api.mirandamedia.cz/graphql',
 			},
 		},
+		defaultOptions: {
+			query: {
+				fetchPolicy: 'no-cache',
+			},
+		},
 	},
 	runtimeConfig: {
 		public: {
