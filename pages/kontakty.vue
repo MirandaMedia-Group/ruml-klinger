@@ -100,6 +100,14 @@
 					<div class="billing-info__table">
 						<div
 							class="tr"
+							v-if="item.openingHours">
+							<div class="th">Otevřeno:</div>
+							<div class="td">
+								{{ item.openingHours }}
+							</div>
+						</div>
+						<div
+							class="tr"
 							v-if="item.phone">
 							<div class="th">Telefon:</div>
 							<div class="td">
