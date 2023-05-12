@@ -35,7 +35,7 @@
 </template>
 <script setup>
 	const allPartnersQuery = gql`
-		query getPartners {
+		query getPartnersKlinger {
 			partners(where: { orderby: { field: TITLE, order: ASC } }) {
 				nodes {
 					featuredImage {
@@ -55,11 +55,12 @@
 			}
 		}
 	`
-	const allPartners = useState('allPartners', () => null)
-	if (!allPartners.value) {
-		const { data } = await useAsyncQuery(allPartnersQuery)
-		allPartners.value = data.value
-	}
+	// const allPartners = useState('allPartners', () => null)
+	// if (!allPartners.value) {
+	// 	const { data } = await useAsyncQuery(allPartnersQuery)
+	// 	allPartners.value = data.value
+	// }
+	const { data: allPartners } = await useAsyncQuery(allPartnersQuery)
 </script>
 <style lang="scss">
 	.partners-grid {

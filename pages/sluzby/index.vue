@@ -58,10 +58,9 @@
 	})
 
 	const route = useRoute()
-	console.log(route.name)
 
 	const servicesQuery = gql`
-		query getAllServices {
+		query getAllServicesKlinger {
 			pages(where: { parent: "cG9zdDo1OTg=", orderby: { field: DATE, order: ASC } }) {
 				nodes {
 					title
@@ -83,11 +82,12 @@
 			}
 		}
 	`
-	const servicesData = useState('servicesData', () => null)
-	if (!servicesData.value) {
-		const { data } = await useAsyncQuery(servicesQuery)
-		servicesData.value = data.value
-	}
+	// const servicesData = useState('servicesData', () => null)
+	// if (!servicesData.value) {
+	// 	const { data } = await useAsyncQuery(servicesQuery)
+	// 	servicesData.value = data.value
+	// }
+	const { data: servicesData } = await useAsyncQuery(servicesQuery)
 </script>
 <style lang="scss" scoped>
 	.page-image-header {

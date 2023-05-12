@@ -118,14 +118,15 @@
 			}
 		}
 	`
-	const careerList = useState('careerList', () => null)
-	if (!careerList.value) {
-		const { data } = await useAsyncQuery(careerListQuery)
-		careerList.value = data.value
-	}
+	// const careerList = useState('careerList', () => null)
+	// if (!careerList.value) {
+	// 	const { data } = await useAsyncQuery(careerListQuery)
+	// 	careerList.value = data.value
+	// }
+	const { data: careerList } = await useAsyncQuery(careerListQuery)
 
 	const aboutUsBannerQuery = gql`
-		query getOnasBanner {
+		query getOnasBannerKlinger {
 			page(id: "cG9zdDo1OTI=") {
 				title
 				slug
@@ -147,11 +148,12 @@
 			}
 		}
 	`
-	const aboutUsBanner = useState('aboutUsBanner', () => null)
-	if (!aboutUsBanner.value) {
-		const { data } = await useAsyncQuery(aboutUsBannerQuery)
-		aboutUsBanner.value = data.value
-	}
+	// const aboutUsBanner = useState('aboutUsBanner', () => null)
+	// if (!aboutUsBanner.value) {
+	// 	const { data } = await useAsyncQuery(aboutUsBannerQuery)
+	// 	aboutUsBanner.value = data.value
+	// }
+	const { data: aboutUsBanner } = await useAsyncQuery(aboutUsBannerQuery)
 </script>
 
 <style lang="scss" scoped>

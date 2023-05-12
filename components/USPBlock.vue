@@ -15,7 +15,7 @@
 </template>
 <script setup>
 	const uspQuery = gql`
-		query getUSP {
+		query getUSPKlinger {
 			page(id: "cG9zdDo2MDI=") {
 				id
 				slug
@@ -33,9 +33,10 @@
 			}
 		}
 	`
-	const usp = useState('usp', () => null)
-	if (!usp.value) {
-		const { data } = await useAsyncQuery(uspQuery)
-		usp.value = data.value
-	}
+	// const usp = useState('usp', () => null)
+	// if (!usp.value) {
+	// 	const { data } = await useAsyncQuery(uspQuery)
+	// 	usp.value = data.value
+	// }
+	const { data: usp } = await useAsyncQuery(uspQuery)
 </script>

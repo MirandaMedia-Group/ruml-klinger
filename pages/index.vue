@@ -326,11 +326,13 @@
 			}
 		}
 	`
-	const homepageData = useState('homepageData', () => null)
-	if (!homepageData.value) {
-		const { data } = await useAsyncQuery(homepageQuery)
-		homepageData.value = data.value
-	}
+	// const homepageData = useState('homepageData', () => null)
+	// if (!homepageData.value) {
+	// 	const { data } = await useAsyncQuery(homepageQuery)
+	// 	homepageData.value = data.value
+	// }
+	const { data: homepageData } = await useAsyncQuery(homepageQuery)
+
 	const referenceCategoriesQuery = gql`
 		query getReferenceCategories {
 			referenceCategories {
@@ -355,12 +357,14 @@
 			}
 		}
 	`
-	const referenceCategories = useState('referenceCategories', () => null)
-	if (!referenceCategories.value) {
-		const { data } = await useAsyncQuery(referenceCategoriesQuery)
-		referenceCategories.value = data.value
-		activeReferenceBlock.value = data.value.referenceCategories.nodes[0].id
-	}
+	// const referenceCategories = useState('referenceCategories', () => null)
+	// if (!referenceCategories.value) {
+	// 	const { data } = await useAsyncQuery(referenceCategoriesQuery)
+	// 	referenceCategories.value = data.value
+	// 	activeReferenceBlock.value = data.value.referenceCategories.nodes[0].id
+	// }
+	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery)
+	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
 
 	const referencesQuery = gql`
 		query getReferences {
@@ -389,11 +393,12 @@
 			}
 		}
 	`
-	const references = useState('references', () => null)
-	if (!references.value) {
-		const { data } = await useAsyncQuery(referencesQuery)
-		references.value = data.value
-	}
+	// const references = useState('references', () => null)
+	// if (!references.value) {
+	// 	const { data } = await useAsyncQuery(referencesQuery)
+	// 	references.value = data.value
+	// }
+	const { data: references } = await useAsyncQuery(referencesQuery)
 </script>
 <style lang="scss">
 	.categories__switcher {

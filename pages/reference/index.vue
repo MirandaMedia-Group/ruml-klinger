@@ -55,7 +55,7 @@
 </template>
 <script setup>
 	const referenceCategoriesQuery = gql`
-		query getReferenceCategories {
+		query getReferenceCategoriesKlinger {
 			referenceCategories {
 				nodes {
 					id
@@ -78,14 +78,15 @@
 			}
 		}
 	`
-	const referenceCategories = useState('referenceCategories', () => null)
-	if (!referenceCategories.value) {
-		const { data } = await useAsyncQuery(referenceCategoriesQuery)
-		referenceCategories.value = data.value
-	}
+	// const referenceCategories = useState('referenceCategories', () => null)
+	// if (!referenceCategories.value) {
+	// 	const { data } = await useAsyncQuery(referenceCategoriesQuery)
+	// 	referenceCategories.value = data.value
+	// }
+	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery)
 
 	const referencesQuery = gql`
-		query getReferences {
+		query getReferencesKlinger {
 			references(first: 200) {
 				nodes {
 					id
@@ -111,11 +112,12 @@
 			}
 		}
 	`
-	const references = useState('references', () => null)
-	if (!references.value) {
-		const { data } = await useAsyncQuery(referencesQuery)
-		references.value = data.value
-	}
+	// const references = useState('references', () => null)
+	// if (!references.value) {
+	// 	const { data } = await useAsyncQuery(referencesQuery)
+	// 	references.value = data.value
+	// }
+	const { data: references } = await useAsyncQuery(referencesQuery)
 </script>
 <style lang="scss">
 	.reference-category {

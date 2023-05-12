@@ -39,8 +39,8 @@
 			}
 		}
 	`
-	const service = useState('singleService', () => null)
-	const { data } = await useAsyncQuery(serviceQuery, variables.value)
-	service.value = data.value
+	// const service = useState('singleService', () => null)
+	const { data: service } = await useAsyncQuery(serviceQuery, variables.value)
+	// service.value = data.value
 </script>
 <style lang="scss"></style>

@@ -74,9 +74,9 @@
 			}
 		}
 	`
-	const singlePartner = useState('singlePartner', () => null)
-	const { data } = await useAsyncQuery(singlePartnerQuery, variables.value)
-	singlePartner.value = data.value
+	// const singlePartner = useState('singlePartner', () => null)
+	const { data: singlePartner } = await useAsyncQuery(singlePartnerQuery, variables.value)
+	// singlePartner.value = data.value
 </script>
 <style lang="scss">
 	.partner-header {

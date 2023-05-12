@@ -24,7 +24,7 @@
 <script setup>
 	const screenWidth = useState('screenWidth')
 	const homepageQuery = gql`
-		query getBannerTop {
+		query getBannerTopKlinger {
 			page(id: "cG9zdDo1OTI=") {
 				title
 				slug
@@ -60,11 +60,12 @@
 			}
 		}
 	`
-	const hpBannerTop = useState('hpBannerTop', () => null)
-	if (!hpBannerTop.value) {
-		const { data } = await useAsyncQuery(homepageQuery)
-		hpBannerTop.value = data.value
-	}
+	// const hpBannerTop = useState('hpBannerTop', () => null)
+	// if (!hpBannerTop.value) {
+	// 	const { data } = await useAsyncQuery(homepageQuery)
+	// 	hpBannerTop.value = data.value
+	// }
+	const { data: hpBannerTop } = await useAsyncQuery(homepageQuery)
 	// const { data: hpBannerTop } = await useAsyncData('bannerTop', () => useAsyncQuery(homepageQuery))
 </script>
 <style lang="scss" scoped>

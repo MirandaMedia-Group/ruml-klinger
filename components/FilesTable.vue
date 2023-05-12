@@ -9,7 +9,7 @@
 					:href="file.file.mediaItemUrl"
 					target="_blank"
 					download="">
-					{{ file.file.title }}
+					{{ file.name ? file.name : file.file.title }}
 				</a>
 			</div>
 			<div class="file__size">{{ file.file.fileSize / 1000 }} kB</div>

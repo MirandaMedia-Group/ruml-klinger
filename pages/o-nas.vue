@@ -311,14 +311,15 @@
 			}
 		}
 	`
-	const onas = useState('onas', () => null)
-	if (!onas.value) {
-		const { data } = await useAsyncQuery(onasQuery)
-		onas.value = data.value
-	}
+	// const onas = useState('onas', () => null)
+	// if (!onas.value) {
+	// 	const { data } = await useAsyncQuery(onasQuery)
+	// 	onas.value = data.value
+	// }
+	const { data: onas } = await useAsyncQuery(onasQuery)
 
 	const careerBannerQuery = gql`
-		query getCareerBanner {
+		query getCareerBannerKlinger {
 			page(id: "cG9zdDo1OTI=") {
 				title
 				slug
@@ -340,11 +341,12 @@
 			}
 		}
 	`
-	const careerBanner = useState('careerBanner', () => null)
-	if (!careerBanner.value) {
-		const { data } = await useAsyncQuery(careerBannerQuery)
-		careerBanner.value = data.value
-	}
+	// const careerBanner = useState('careerBanner', () => null)
+	// if (!careerBanner.value) {
+	// 	const { data } = await useAsyncQuery(careerBannerQuery)
+	// 	careerBanner.value = data.value
+	// }
+	const { data: careerBanner } = await useAsyncQuery(careerBannerQuery)
 </script>
 <style lang="scss">
 	.usp-wrapper {

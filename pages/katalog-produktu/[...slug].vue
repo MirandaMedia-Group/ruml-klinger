@@ -175,9 +175,9 @@
 			}
 		}
 	`
-	const categoryInfoData = useState('categoryInfoData', () => null)
-	const { data } = await useAsyncQuery(categoryInfoQuery, slugVariable.value)
-	categoryInfoData.value = data.value
+	// const categoryInfoData = useState('categoryInfoData', () => null)
+	const { data: categoryInfoData } = await useAsyncQuery(categoryInfoQuery, slugVariable.value)
+	// categoryInfoData.value = data.value
 	const breadcrumbsSublinks = ref(
 		categoryInfoData.value.productCategories.nodes[0].parent?.node.parent
 			? [

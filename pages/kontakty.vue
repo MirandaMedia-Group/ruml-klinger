@@ -209,7 +209,7 @@
 	const screenWidth = useState('screenWidth')
 	const toggleContacts = (e) => e.target.parentElement.classList.toggle('active')
 	const kontaktyQuery = gql`
-		query getKontakty {
+		query getKontaktyKlinger {
 			page(id: "cG9zdDo2MDQ=") {
 				slug
 				rumlKlingerKontakty {
@@ -277,14 +277,15 @@
 			}
 		}
 	`
-	const kontakty = useState('kontakty', () => null)
-	if (!kontakty.value) {
-		const { data } = await useAsyncQuery(kontaktyQuery)
-		kontakty.value = data.value
-	}
+	// const kontakty = useState('kontakty', () => null)
+	// if (!kontakty.value) {
+	// 	const { data } = await useAsyncQuery(kontaktyQuery)
+	// 	kontakty.value = data.value
+	// }
+	const { data: kontakty } = await useAsyncQuery(kontaktyQuery)
 
 	const certificatesQuery = gql`
-		query getCertificates {
+		query getCertificatesKlinger {
 			page(id: "cG9zdDo2MDI=") {
 				rumlKlingerOnas {
 					firstBlock {
@@ -303,11 +304,12 @@
 			}
 		}
 	`
-	const certificates = useState('certificates', () => null)
-	if (!certificates.value) {
-		const { data } = await useAsyncQuery(certificatesQuery)
-		certificates.value = data.value
-	}
+	// const certificates = useState('certificates', () => null)
+	// if (!certificates.value) {
+	// 	const { data } = await useAsyncQuery(certificatesQuery)
+	// 	certificates.value = data.value
+	// }
+	const { data: certificates } = await useAsyncQuery(certificatesQuery)
 </script>
 <style lang="scss">
 	.billing-info {

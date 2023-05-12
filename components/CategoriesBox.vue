@@ -109,11 +109,12 @@
 			}
 		}
 	`
-	const categoriesData = useState('categories', () => null)
-	if (!categoriesData.value) {
-		const { data } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
-		categoriesData.value = data.value
-	}
+	// const categoriesData = useState('categories', () => null)
+	// if (!categoriesData.value) {
+	// 	const { data } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
+	// 	categoriesData.value = data.value
+	// }
+	const { data: categoriesData } = useAsyncQuery(productCategoriesQuery, { language: language.value })
 	const toggleExpanded = (e) => e.target.closest('.has-children').classList.toggle('expanded')
 	const toggleCategories = (e) => e.target.parentElement.classList.toggle('expanded')
 </script>

@@ -271,9 +271,9 @@
 			}
 		}
 	`
-	const singleProduct = useState('product', () => null)
-	const { data, pending } = await useAsyncQuery(singleProductQuery, variables.value)
-	singleProduct.value = data.value
+	// const singleProduct = useState('product', () => null)
+	const { data: singleProduct, pending } = await useAsyncQuery(singleProductQuery, variables.value)
+	// singleProduct.value = data.value
 	const breadcrumbsSublinks = ref(
 		singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.parent
 			? [

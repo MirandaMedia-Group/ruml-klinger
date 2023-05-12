@@ -106,12 +106,16 @@
 						}
 					}
 			  `
-	const subcategoriesData = useState('subcategories', () => null)
-	const { data } = await useAsyncQuery(
+	// const subcategoriesData = useState('subcategories', () => null)
+	// const { data } = await useAsyncQuery(
+	// 	productSubcategoriesQuery,
+	// 	routerSlug.value !== 0 ? { ...slugVariable.value, language: language.value } : { language: language.value }
+	// )
+	// subcategoriesData.value = data.value
+	const { data: subcategoriesData } = await useAsyncQuery(
 		productSubcategoriesQuery,
 		routerSlug.value !== 0 ? { ...slugVariable.value, language: language.value } : { language: language.value }
 	)
-	subcategoriesData.value = data.value
 </script>
 <style lang="scss" scoped>
 	.subcategories {
