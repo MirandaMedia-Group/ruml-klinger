@@ -37,7 +37,9 @@
 								<div class="container">
 									<ul class="menu__level-2">
 										<li
-											v-for="(level1, index1) in categoriesData.productCategories.nodes"
+											v-for="(level1, index1) in categoriesData.productCategories.nodes.filter((category) =>
+												category.productCategoriesAfc.target?.includes('klinger')
+											)"
 											:key="index1">
 											<NuxtLink
 												:to="`/katalog-produktu/${level1.slug}`"
@@ -48,7 +50,9 @@
 											</NuxtLink>
 											<ul class="menu__level-3">
 												<li
-													v-for="(level2, index2) in level1?.children?.nodes"
+													v-for="(level2, index2) in level1?.children?.nodes.filter((category) =>
+														category.productCategoriesAfc.target?.includes('klinger')
+													)"
 													:key="index2">
 													<NuxtLink :to="`/katalog-produktu/${level1.slug}/${level2.slug}`">{{
 														level2.name
@@ -143,6 +147,7 @@
 					name
 					slug
 					productCategoriesAfc {
+						target
 						menuImage {
 							sourceUrl
 						}
@@ -151,10 +156,16 @@
 						nodes {
 							name
 							slug
+							productCategoriesAfc {
+								target
+							}
 							children {
 								nodes {
 									name
 									slug
+									productCategoriesAfc {
+										target
+									}
 								}
 							}
 						}
@@ -163,11 +174,12 @@
 			}
 		}
 	`
-	const categoriesData = useState('categories', () => null)
-	if (!categoriesData.value) {
-		const { data } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
-		categoriesData.value = data.value
-	}
+	// const categoriesData = useState('categories', () => null)
+	// if (!categoriesData.value) {
+	// 	const { data } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
+	// 	categoriesData.value = data.value
+	// }
+	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
 
 	const toggleSearch = () => {
 		document.body.classList.toggle('search-visible')

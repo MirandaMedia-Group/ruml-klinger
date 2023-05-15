@@ -1,8 +1,10 @@
 <template>
-	<nav v-if="screenWidth > 900">
+	<nav>
 		<ul class="menu__level-1">
 			<li
-				v-for="(level1, index1) in categoriesData.productCategories.nodes"
+				v-for="(level1, index1) in categoriesData.productCategories.nodes.filter((category) =>
+					category.productCategoriesAfc.target?.includes('klinger')
+				)"
 				:class="{ 'has-children': level1?.children.nodes.length, expanded: $route.fullPath.indexOf(level1.slug) >= 0 }"
 				:key="index1">
 				<NuxtLink
@@ -17,14 +19,18 @@
 				</NuxtLink>
 				<ul class="menu__level-2">
 					<li
-						v-for="(level2, index2) in level1?.children?.nodes"
+						v-for="(level2, index2) in level1?.children?.nodes.filter((category) =>
+							category.productCategoriesAfc.target?.includes('klinger')
+						)"
 						:key="index2">
 						<NuxtLink :to="`/katalog-produktu/${level1.slug}/${level2.slug}`">{{ level2.name }}</NuxtLink>
 						<ul
 							v-if="level2?.children?.nodes?.length"
 							class="menu__level-3">
 							<li
-								v-for="(level3, index3) in level2.children.nodes"
+								v-for="(level3, index3) in level2.children.nodes.filter((category) =>
+									category.productCategoriesAfc.target?.includes('klinger')
+								)"
 								:key="index3">
 								<NuxtLink :to="`/katalog-produktu/${level1.slug}/${level2.slug}/${level3.slug}`">{{
 									level3.name
@@ -33,40 +39,6 @@
 						</ul>
 					</li>
 				</ul>
-			</li>
-		</ul>
-	</nav>
-	<nav
-		v-else
-		class="mobile-categories"
-		v-if="
-			(router.currentRoute.value.params?.slug &&
-				categoriesData.productCategories.nodes.filter(
-					(node) => node.slug === router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
-				)[0]?.children.nodes?.length) ||
-			!router.currentRoute.value.params?.slug
-		">
-		<button @click.prevent="toggleCategories">Kategorie</button>
-		<ul
-			v-if="
-				router.currentRoute.value.params?.slug &&
-				categoriesData.productCategories.nodes.filter(
-					(node) => node.slug === router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
-				)[0]?.children.nodes?.length
-			">
-			<li
-				v-for="(item, index) in categoriesData.productCategories.nodes.filter(
-					(node) => node.slug === router.currentRoute.value.params.slug[router.currentRoute.value.params.slug.length - 1]
-				)[0]?.children.nodes"
-				:key="index">
-				<nuxt-link :to="`${router.currentRoute.value.fullPath}/${item.slug}`">{{ item.name }}</nuxt-link>
-			</li>
-		</ul>
-		<ul v-else-if="!router.currentRoute.value.params?.slug">
-			<li
-				v-for="(item, index) in categoriesData.productCategories.nodes"
-				:key="index">
-				<nuxt-link :to="`/katalog-produktu/${item.slug}`">{{ item.name }}</nuxt-link>
 			</li>
 		</ul>
 	</nav>
@@ -83,6 +55,7 @@
 					name
 					slug
 					productCategoriesAfc {
+						target
 						menuImage {
 							sourceUrl
 						}
@@ -91,14 +64,23 @@
 						nodes {
 							name
 							slug
+							productCategoriesAfc {
+								target
+							}
 							children {
 								nodes {
 									name
 									slug
+									productCategoriesAfc {
+										target
+									}
 									children {
 										nodes {
 											name
 											slug
+											productCategoriesAfc {
+												target
+											}
 										}
 									}
 								}
@@ -114,7 +96,7 @@
 	// 	const { data } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
 	// 	categoriesData.value = data.value
 	// }
-	const { data: categoriesData } = useAsyncQuery(productCategoriesQuery, { language: language.value })
+	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
 	const toggleExpanded = (e) => e.target.closest('.has-children').classList.toggle('expanded')
 	const toggleCategories = (e) => e.target.parentElement.classList.toggle('expanded')
 </script>

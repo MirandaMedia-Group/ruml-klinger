@@ -4,7 +4,9 @@
 		v-if="subcategoriesData">
 		<ul v-if="subcategoriesData.productCategories.nodes.length == 1">
 			<li
-				v-for="(item, index) in subcategoriesData.productCategories.nodes[0].children.nodes"
+				v-for="(item, index) in subcategoriesData.productCategories.nodes[0].children.nodes.filter((category) =>
+					category.productCategoriesAfc.target?.includes('klinger')
+				)"
 				:key="index"
 				:style="{ backgroundImage: item.menuImage?.sourceUrl }">
 				<NuxtLink :to="`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`">{{ item.name }}</NuxtLink>
@@ -14,7 +16,9 @@
 			v-else
 			class="subcategories">
 			<li
-				v-for="(item, index) in subcategoriesData.productCategories.nodes"
+				v-for="(item, index) in subcategoriesData.productCategories.nodes.filter((category) =>
+					category.productCategoriesAfc.target?.includes('klinger')
+				)"
 				:key="index"
 				:style="{ backgroundImage: `url(${item.productCategoriesAfc.menuImage?.sourceUrl})` }">
 				<NuxtLink :to="`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`">{{ item.name }}</NuxtLink>
@@ -35,12 +39,13 @@
 	const productSubcategoriesQuery =
 		routerSlug.value !== 0
 			? gql`
-					query getSubcategoriesEmes($slug: [String], $language: LanguageCodeFilterEnum!) {
+					query getSubcategoriesKlinger($slug: [String], $language: LanguageCodeFilterEnum!) {
 						productCategories(where: { slug: $slug, language: $language }) {
 							nodes {
 								name
 								slug
 								productCategoriesAfc {
+									target
 									menuImage {
 										altText
 										sourceUrl
@@ -55,6 +60,7 @@
 										name
 										slug
 										productCategoriesAfc {
+											target
 											menuImage {
 												altText
 												sourceUrl
@@ -71,12 +77,13 @@
 					}
 			  `
 			: gql`
-					query getSubcategoriesEmes($language: LanguageCodeFilterEnum!) {
+					query getSubcategoriesKlinger($language: LanguageCodeFilterEnum!) {
 						productCategories(where: { parent: 0, language: $language }) {
 							nodes {
 								name
 								slug
 								productCategoriesAfc {
+									target
 									menuImage {
 										altText
 										sourceUrl
@@ -91,6 +98,7 @@
 										name
 										slug
 										productCategoriesAfc {
+											target
 											menuImage {
 												altText
 												sourceUrl

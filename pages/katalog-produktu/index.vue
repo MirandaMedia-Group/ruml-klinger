@@ -11,12 +11,7 @@
 						<h1>Produkty</h1>
 					</div>
 				</div>
-				<div v-if="screenWidth <= 900">
-					<CategoriesBox />
-				</div>
-				<div v-else>
-					<SubcategoriesList />
-				</div>
+				<SubcategoriesList />
 				<div
 					id="products"
 					ref="productsAnchor">

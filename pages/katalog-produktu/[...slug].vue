@@ -23,12 +23,7 @@
 						<p>{{ categoryInfoData.productCategories.nodes[0].description }}</p>
 					</div>
 				</div>
-				<div v-if="screenWidth <= 900">
-					<CategoriesBox />
-				</div>
-				<div v-else>
-					<SubcategoriesList />
-				</div>
+				<SubcategoriesList />
 				<div
 					id="products"
 					ref="productsAnchor">

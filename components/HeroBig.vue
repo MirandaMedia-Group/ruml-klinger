@@ -119,7 +119,6 @@
 		'heroType',
 		'video',
 	])
-	console.log(props)
 </script>
 <style lang="scss" scoped>
 	.hero {
