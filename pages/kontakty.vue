@@ -111,7 +111,7 @@
 							v-if="item.phone">
 							<div class="th">Telefon:</div>
 							<div class="td">
-								<a :href="`tel:00${item.phone}`">+420 {{ item.phone }}</a>
+								<a :href="`tel:${item.phone.replaceAll(' ', '')}`">{{ item.phone }}</a>
 							</div>
 						</div>
 						<div
@@ -197,7 +197,11 @@
 					</div>
 					<div class="person__name">{{ person.name }}</div>
 					<div class="person__position">{{ person.position }}</div>
-					<a :href="`tel:00${person.phone}`">{{ person.phone }}</a>
+					<a
+						v-if="person.phone"
+						:href="`tel:${person.phone.replaceAll(' ', '')}`">
+						{{ person.phone }}
+					</a>
 					<a :href="`mailto:${person.email}`">{{ person.email }}</a>
 				</div>
 			</div>

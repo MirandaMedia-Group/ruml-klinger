@@ -439,17 +439,17 @@
 			}
 		}
 	}
-	@media (min-width: 1150px) {
+	@media (min-width: 1250px) {
 		.hamburger {
 			display: none;
 		}
 	}
-	@media (max-width: 1350px) {
+	@media (max-width: 1450px) {
 		.contact-mail {
 			display: none;
 		}
 	}
-	@media (max-width: 1149px) {
+	@media (max-width: 1249px) {
 		header {
 			position: relative;
 			padding: 20px 0;
