@@ -290,7 +290,7 @@
 						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].name,
 					},
 					{
-						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent.node.parent.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}/${singleProduct.value.products.nodes[0].slug}`,
+						url: `/katalog-produktu/product/${singleProduct.value.products.nodes[0].slug}`,
 						name: singleProduct.value.products.nodes[0].title,
 					},
 			  ]
@@ -305,7 +305,7 @@
 						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].name,
 					},
 					{
-						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}/${singleProduct.value.products.nodes[0].slug}`,
+						url: `/katalog-produktu/product/${singleProduct.value.products.nodes[0].slug}`,
 						name: singleProduct.value.products.nodes[0].title,
 					},
 			  ]
@@ -315,7 +315,7 @@
 						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].name,
 					},
 					{
-						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}/${singleProduct.value.products.nodes[0].slug}`,
+						url: `/katalog-produktu/product/${singleProduct.value.products.nodes[0].slug}`,
 						name: singleProduct.value.products.nodes[0].title,
 					},
 			  ]
