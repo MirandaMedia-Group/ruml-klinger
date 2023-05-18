@@ -142,7 +142,7 @@
 	const navigationVisible = useState('navigationVisible', () => false)
 	const productCategoriesQuery = gql`
 		query getCategories($language: LanguageCodeFilterEnum!) {
-			productCategories(where: { parent: 0, language: $language }) {
+			productCategories(first: 100, where: { parent: 0, language: $language }) {
 				nodes {
 					name
 					slug
@@ -180,7 +180,7 @@
 	// 	categoriesData.value = data.value
 	// }
 	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
-
+	console.log(categoriesData.value)
 	const toggleSearch = () => {
 		document.body.classList.toggle('search-visible')
 	}

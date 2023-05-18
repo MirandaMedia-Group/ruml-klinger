@@ -50,7 +50,7 @@
 	const language = useState('language')
 	const productCategoriesQuery = gql`
 		query getCategories($language: LanguageCodeFilterEnum!) {
-			productCategories(where: { parent: 0, language: $language }) {
+			productCategories(first: 100, where: { parent: 0, language: $language }) {
 				nodes {
 					name
 					slug

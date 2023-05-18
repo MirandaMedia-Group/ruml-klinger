@@ -40,7 +40,7 @@
 		routerSlug.value !== 0
 			? gql`
 					query getSubcategoriesKlinger($slug: [String], $language: LanguageCodeFilterEnum!) {
-						productCategories(where: { slug: $slug, language: $language }) {
+						productCategories(first: 100, where: { slug: $slug, language: $language }) {
 							nodes {
 								name
 								slug
@@ -78,7 +78,7 @@
 			  `
 			: gql`
 					query getSubcategoriesKlinger($language: LanguageCodeFilterEnum!) {
-						productCategories(where: { parent: 0, language: $language }) {
+						productCategories(first: 100, where: { parent: 0, language: $language }) {
 							nodes {
 								name
 								slug
