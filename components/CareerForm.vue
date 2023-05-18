@@ -21,12 +21,17 @@
 		<div
 			v-else-if="dataSent"
 			class="form-sent">
-			Úspěšně odesláno
+			{{ dataSent }}
 		</div>
 		<div
 			v-else-if="dataError"
 			class="form-error">
-			Něco se pokazilo
+			{{ dataError }}
+			<div
+				v-for="(item, index) in dataErrorFields"
+				:key="index">
+				{{ item.message }}
+			</div>
 		</div>
 		<form
 			v-else
@@ -95,6 +100,7 @@
 	const dataSending = ref(false)
 	const dataSent = ref(false)
 	const dataError = ref(false)
+	const dataErrorFields = ref(false)
 
 	const router = useRouter()
 
@@ -102,7 +108,7 @@
 	const submitForm = async () => {
 		dataSending.value = true
 		const formData = new FormData()
-		if (formFile.value.files.length) formData.append('file', formFile.value.files[0])
+		if (formFile.value.files.length) formData.append('cv', formFile.value.files[0])
 		formData.append('fullName', formValues.fullName)
 		formData.append('email', formValues.email)
 		formData.append('phone', formValues.phone)
@@ -117,14 +123,16 @@
 			})
 			if (response.status === 'mail_sent') {
 				dataSending.value = false
-				dataSent.value = true
+				dataSent.value = response.message
 			} else {
 				dataSending.value = false
-				dataError.value = true
+				dataError.value = response.message
+				dataErrorFields.value = response.invalid_fields
 			}
 		} catch (e) {
+			console.error(e)
 			dataSending.value = false
-			dataError.value = true
+			dataError.value = 'Něco se pokazilo, zkuste to prosím znovu.'
 		}
 	}
 </script>
