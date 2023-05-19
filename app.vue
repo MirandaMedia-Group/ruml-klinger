@@ -11,6 +11,7 @@
 		htmlAttrs: {
 			lang: 'cs',
 		},
+		title: 'RUML s.r.o.',
 	})
 	const screenWidth = useState('screenWidth', () => {
 		return 1024
