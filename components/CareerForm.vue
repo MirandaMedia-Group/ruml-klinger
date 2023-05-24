@@ -4,13 +4,13 @@
 			<h2>Máte zájem u tuto pozici?</h2>
 			<a
 				class="project-mail"
-				href="mailto:ruml@ruml-group.cz">
-				ruml@ruml-group.cz
+				href="mailto:david@ruml-group.cz">
+				david@ruml-group.cz
 			</a>
 			<a
 				class="project-phone"
-				href="tel:00420777546564">
-				+420 777 546 564
+				href="tel:00420777345205">
+				+420 777 345 205
 			</a>
 		</div>
 		<div
