@@ -180,7 +180,6 @@
 	// 	categoriesData.value = data.value
 	// }
 	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
-	console.log(categoriesData.value)
 	const toggleSearch = () => {
 		document.body.classList.toggle('search-visible')
 	}

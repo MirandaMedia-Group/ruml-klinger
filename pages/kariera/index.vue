@@ -23,6 +23,14 @@
 			}}
 		</strong>
 		<strong v-else>Aktuálně nemáme žádné volné pozice</strong>
+		<p style="margin-top: 20px">
+			Podívejte se na nabídku našich ostatních společností
+			<a
+				href="https://www.ruml-group.cz/kariera"
+				target="_blank">
+				zde.
+			</a>
+		</p>
 	</PageHeader>
 	<section class="container">
 		<div class="career-list">

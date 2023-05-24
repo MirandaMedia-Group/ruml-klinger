@@ -48,7 +48,7 @@
 						</svg>
 						<div>
 							<span>Centrála</span>
-							<a href="tel:00733439135">+420 733 439 135</a>
+							<a :href="`tel:${props.phone.replaceAll(' ', '')}`">{{ props.phone }}</a>
 						</div>
 					</div>
 					<div class="mail">
@@ -74,7 +74,7 @@
 
 						<div>
 							<span>Centrála</span>
-							<a href="mailto:ruml@ruml-group.cz">ruml@ruml-group.cz</a>
+							<a :href="`mailto:${props.email}`">{{ props.email }}</a>
 						</div>
 					</div>
 				</div>
@@ -107,6 +107,8 @@
 </template>
 <script setup>
 	const props = defineProps([
+		'email',
+		'phone',
 		'title',
 		'perex',
 		'btnPrimary',

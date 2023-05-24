@@ -29,7 +29,11 @@
 						<div class="td">{{ kontakty.page.rumlKlingerKontakty.billingAddress.datovaSchranka }}</div>
 					</div>
 					<div class="tr">
-						<a :href="kontakty.page.rumlKlingerKontakty.billingAddress.obchodniRejstrik">Výpis z obchodního rejstříku</a>
+						<a
+							:href="kontakty.page.rumlKlingerKontakty.billingAddress.obchodniRejstrik"
+							target="_blank">
+							Výpis z obchodního rejstříku
+						</a>
 					</div>
 				</div>
 			</div>

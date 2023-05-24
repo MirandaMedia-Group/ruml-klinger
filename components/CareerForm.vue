@@ -36,7 +36,7 @@
 		<form
 			v-else
 			@submit.prevent="submitForm">
-			<h3>Vyplňte prosím formlář <small>a my se vám ozveme</small></h3>
+			<h3>Vyplňte prosím formulář <small>a my se vám ozveme</small></h3>
 			<div class="form-group">
 				<label for="fullName">Jméno a příjmení</label>
 				<input
