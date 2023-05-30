@@ -9,7 +9,7 @@
 		"start": "node .output/server/index.mjs"
 	},
 	"devDependencies": {
-		"@nuxt/image-edge": "^1.0.0-27840416.dc1ed65",
+		"@nuxt/image-edge": "1.0.0-28059208.2abef1b",
 		"@nuxtjs/apollo": "^5.0.0-alpha.5",
 		"nuxt": "^3.5.1",
 		"sass": "^1.57.1",
