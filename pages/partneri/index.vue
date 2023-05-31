@@ -34,9 +34,10 @@
 	</section>
 </template>
 <script setup>
+	const language = useState('language')
 	const allPartnersQuery = gql`
-		query getPartnersKlinger {
-			partners(where: { orderby: { field: TITLE, order: ASC } }) {
+		query getPartnersKlinger($language: LanguageCodeFilterEnum) {
+			partners(where: { orderby: { field: TITLE, order: ASC }, language: $language }) {
 				nodes {
 					featuredImage {
 						node {
@@ -60,7 +61,7 @@
 	// 	const { data } = await useAsyncQuery(allPartnersQuery)
 	// 	allPartners.value = data.value
 	// }
-	const { data: allPartners } = await useAsyncQuery(allPartnersQuery)
+	const { data: allPartners } = await useAsyncQuery(allPartnersQuery, { language: language.value })
 </script>
 <style lang="scss">
 	.partners-grid {
