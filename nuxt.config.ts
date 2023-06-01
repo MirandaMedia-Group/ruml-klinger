@@ -14,6 +14,7 @@ export default defineNuxtConfig({
 		'/kariera/**': { isr: 3600 },
 		'/katalog-produktu': { isr: 3600 },
 		'/katalog-produktu/**': { isr: 3600 },
+		'/cs': { redirect: '/' },
 	},
 	vite: {
 		css: {
