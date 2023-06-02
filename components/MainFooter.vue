@@ -48,7 +48,7 @@
 						<ul>
 							<li>
 								<a
-									href="https://wwww.ruml-group.cz"
+									href="https://www.ruml-group.cz"
 									target="_blank">
 									RUML GROUP
 								</a>
