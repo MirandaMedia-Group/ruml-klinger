@@ -17,6 +17,12 @@
 			lang: 'cs',
 		},
 		title: 'RUML s.r.o.',
+		meta: [
+			{
+				name: 'google-site-verification',
+				content: '751U2lbOwvrVU2Mi-WwfobyR-PXTfeaqxqGhVeXLdMs',
+			},
+		],
 	})
 	const screenWidth = useState('screenWidth', () => {
 		return 1024
@@ -63,6 +69,7 @@
 		font-family: 'Montserrat', sans-serif;
 		font-size: clamp(14px, 1rem, 18px);
 		background-color: $color-bg-light;
+		font-synthesis: none;
 	}
 	p {
 		line-height: em(28);
