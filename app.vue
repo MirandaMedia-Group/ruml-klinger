@@ -1,5 +1,8 @@
 <template>
 	<LazyNuxtLoadingIndicator color="#d70c38" />
+	<CookieControl
+		class="no-margin"
+		locale="cs" />
 	<MainHeader />
 	<NuxtLayout>
 		<NuxtPage />
@@ -7,6 +10,8 @@
 	<MainFooter />
 </template>
 <script setup>
+	const { cookiesEnabled, cookiesEnabledIds, isConsentGiven, isModalActive, moduleOptions } = useCookieControl()
+	const gtm = useGtm()
 	useHead({
 		htmlAttrs: {
 			lang: 'cs',
@@ -36,6 +41,18 @@
 		navigationVisible.value = false
 		next()
 	})
+	watch(
+		() => cookiesEnabledIds.value,
+		(current, previous) => {
+			if (!previous?.includes('google-analytics') && current?.includes('google-analytics')) {
+				gtm.enable()
+			}
+			if (previous?.includes('google-analytics') && !current?.includes('google-analytics')) {
+				gtm.enable(false)
+			}
+		},
+		{ deep: true }
+	)
 </script>
 <style lang="scss">
 	html {
@@ -114,7 +131,7 @@
 		font-size: rem(32);
 		line-height: em(42, 32);
 	}
-	section,
+	section:not(.cookieControl),
 	.wp-block-columns,
 	.wp-block-group,
 	.wp-block-embed {
@@ -426,7 +443,7 @@
 		}
 	}
 	@media (max-width: 767px) {
-		section,
+		section:not(.cookieControl),
 		.wp-block-columns,
 		.wp-block-group,
 		.wp-block-embed {

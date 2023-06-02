@@ -29,7 +29,7 @@ export default defineNuxtConfig({
 		},
 	},
 	css: ['@/assets/normalize.css', '@/assets/global.css'],
-	modules: ['@nuxt/image-edge', '@nuxtjs/apollo'],
+	modules: ['@nuxt/image-edge', '@nuxtjs/apollo', '@zadigetvoltaire/nuxt-gtm', '@dargmuesli/nuxt-cookie-control', 'nuxt-simple-sitemap'],
 	image: {
 		provider: 'netlify',
 		domains: ['cdn.myshoptet.com', 'pet-center-stage.axfone.eu', 'pet-center-prod.axfone.eu'],
@@ -50,6 +50,79 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		public: {
 			googleMapsAPI: process.env.GOOGLE_MAPS_API,
+			siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.ruml-klinger.cz',
 		},
+	},
+	gtm: {
+		id: 'GTM-PVPZKVF',
+		defer: false, // Script can be set to `defer` to speed up page load at the cost of less accurate results (in case visitor leaves before script is loaded, which is unlikely but possible). Defaults to false, so the script is loaded `async` by default
+		compatibility: false, // Will add `async` and `defer` to the script tag to not block requests for old browsers that do not support `async`
+		// nonce: '2726c7f26c', // Will add `nonce` to the script tag
+		enabled: false, // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
+		debug: true, // Whether or not display console logs debugs (optional)
+		loadScript: true, // Whether or not to load the GTM Script (Helpful if you are including GTM manually, but need the dataLayer functionality in your components) (optional)
+		enableRouterSync: true, // Pass the router instance of your app to automatically sync with router (optional)
+		trackOnNextTick: false, // Whether or not call trackView in Vue.nextTick
+	},
+	cookieControl: {
+		barPosition: 'bottom-full',
+		closeModalOnClickOutside: true,
+		colors: {
+			barBackground: '#fff',
+			barButtonBackground: '#232f5d',
+			barButtonColor: '#fff',
+			barButtonHoverBackground: '#213eab',
+			barTextColor: '#232f5d',
+			checkboxActiveBackground: '#232f5d',
+			checkboxActiveCircleBackground: '#fff',
+			checkboxDisabledBackground: '#ddd',
+			checkboxDisabledCircleBackground: '#fff',
+			checkboxInactiveBackground: '#000',
+			checkboxInactiveCircleBackground: '#fff',
+			controlButtonBackground: '#232f5d',
+			controlButtonHoverBackground: '#213eab',
+			controlButtonIconColor: '#fff',
+			controlButtonIconHoverColor: '#fff',
+			focusRingColor: '#808080',
+			modalBackground: '#fff',
+			modalButtonBackground: '#232f5d',
+			modalButtonColor: '#fff',
+			modalButtonHoverBackground: '#213eab',
+			modalButtonHoverColor: '#fff',
+			modalOverlay: '#000',
+			modalOverlayOpacity: 0.8,
+			modalTextColor: '#000',
+			modalUnsavedColor: '#fff',
+		},
+		cookies: {
+			necessary: [
+				{
+					description: {
+						cs: 'Tento web používá cookies, které jsou nezbytné pro jeho správné fungování.',
+					},
+					id: 'necessary',
+					name: {
+						cs: 'Nezbytné',
+					},
+				},
+			],
+			optional: [
+				{
+					description: {
+						cs: 'Používáme Google Analytics k měření návštěvnosti webu.',
+					},
+					id: 'google-analytics',
+					name: {
+						cs: 'Google Analytics',
+					},
+					src: 'https://www.googletagmanager.com/gtag/js?id=GTM-PVPZKVF',
+					targetCookieIds: ['cookie_control_consent', 'cookie_control_enabled_cookies'],
+				},
+			],
+		},
+		cookieExpiryOffsetMs: 1000 * 60 * 60 * 24 * 30,
+		cookieNameIsConsentGiven: 'ncc_c',
+		cookieNameCookiesEnabledIds: 'ncc_e',
+		locales: ['cs'],
 	},
 })
