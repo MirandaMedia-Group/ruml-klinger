@@ -1,8 +1,6 @@
 <template>
 	<LazyNuxtLoadingIndicator color="#d70c38" />
-	<CookieControl
-		class="no-margin"
-		locale="cs" />
+	<CookieControl class="no-margin" locale="cs" />
 	<MainHeader />
 	<NuxtLayout>
 		<NuxtPage />
@@ -47,18 +45,18 @@
 		navigationVisible.value = false
 		next()
 	})
-	watch(
-		() => cookiesEnabledIds.value,
-		(current, previous) => {
-			if (!previous?.includes('google-analytics') && current?.includes('google-analytics')) {
-				gtm.enable()
-			}
-			if (previous?.includes('google-analytics') && !current?.includes('google-analytics')) {
-				gtm.enable(false)
-			}
-		},
-		{ deep: true }
-	)
+	// watch(
+	// 	() => cookiesEnabledIds.value,
+	// 	(current, previous) => {
+	// 		if (!previous?.includes('google-analytics') && current?.includes('google-analytics')) {
+	// 			gtm.enable()
+	// 		}
+	// 		if (previous?.includes('google-analytics') && !current?.includes('google-analytics')) {
+	// 			gtm.enable(false)
+	// 		}
+	// 	},
+	// 	{ deep: true }
+	// )
 </script>
 <style lang="scss">
 	html {
