@@ -11,9 +11,7 @@
 		<AnchorsBlock>
 			<nav>
 				<ul>
-					<li
-						v-for="(category, index) in referenceCategories.referenceCategories.nodes"
-						:key="index">
+					<li v-for="(category, index) in sortByOrder(referenceCategories.referenceCategories.nodes)" :key="index">
 						<a :href="`#${category.slug}`">{{ category.name }}</a>
 					</li>
 				</ul>
@@ -21,7 +19,7 @@
 		</AnchorsBlock>
 		<div
 			class="reference-category"
-			v-for="(category, index) in referenceCategories.referenceCategories.nodes"
+			v-for="(category, index) in sortByOrder(referenceCategories.referenceCategories.nodes)"
 			:id="category.slug"
 			:key="index">
 			<div class="reference-category__header">
@@ -34,29 +32,33 @@
 					provider="ipx" />
 				<h2>{{ category.name }}</h2>
 			</div>
-			<ReferencesList
-				:references="references.references.nodes"
-				:category="category" />
-			<div
-				v-if="category.referenceCategoryAcf.technologies"
-				class="technologies center">
+			<ReferencesList :references="references.references.nodes" :category="category" />
+			<div v-if="category.referenceCategoryAcf.technologies" class="technologies center">
 				<h3>Použité technologie</h3>
 				<div v-html="category.referenceCategoryAcf.technologies"></div>
 				<div class="buttons-wrapper">
-					<NuxtLink
-						:to="`/kontakty#formular`"
-						class="btn btn-tertiary">
-						Chci poptat vaše služby
-					</NuxtLink>
+					<NuxtLink :to="`/kontakty#formular`" class="btn btn-tertiary"> Chci poptat vaše služby </NuxtLink>
 				</div>
 			</div>
 		</div>
 	</section>
 </template>
 <script setup>
+	const sortByOrder = (object) => {
+		const help = object.slice(0)
+		help.sort((a, b) => {
+			return a.referenceCategoryAcf.order === null
+				? 1000
+				: a.referenceCategoryAcf.order - b.referenceCategoryAcf.order === null
+				? 1001
+				: b.referenceCategoryAcf.order
+		})
+		return help
+	}
+	const language = useState('language')
 	const referenceCategoriesQuery = gql`
-		query getReferenceCategoriesKlinger {
-			referenceCategories {
+		query getReferenceCategoriesKlinger($language: LanguageCodeFilterEnum!) {
+			referenceCategories(where: { language: $language }) {
 				nodes {
 					id
 					name
@@ -64,6 +66,7 @@
 					uri
 					slug
 					referenceCategoryAcf {
+						order
 						image {
 							sourceUrl
 							altText
@@ -83,11 +86,11 @@
 	// 	const { data } = await useAsyncQuery(referenceCategoriesQuery)
 	// 	referenceCategories.value = data.value
 	// }
-	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery)
+	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery, { language: language.value })
 
 	const referencesQuery = gql`
-		query getReferencesKlinger {
-			references(first: 200) {
+		query getReferencesKlinger($language: LanguageCodeFilterEnum!) {
+			references(first: 200, where: { language: $language }) {
 				nodes {
 					id
 					title
@@ -117,7 +120,7 @@
 	// 	const { data } = await useAsyncQuery(referencesQuery)
 	// 	references.value = data.value
 	// }
-	const { data: references } = await useAsyncQuery(referencesQuery)
+	const { data: references } = await useAsyncQuery(referencesQuery, { language: language.value })
 </script>
 <style lang="scss">
 	.reference-category {

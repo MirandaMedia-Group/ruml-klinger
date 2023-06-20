@@ -1,14 +1,7 @@
 <template>
-	<HeroBig
-		v-bind="onas.page.rumlKlingerOnas.hero"
-		:white="true" />
-	<TextImageBlock
-		:data="onas.page.rumlKlingerOnas.firstBlock"
-		:has-background="true"
-		:divider="true" />
-	<section
-		id="usp"
-		class="container">
+	<HeroBig v-bind="onas.page.rumlKlingerOnas.hero" :white="true" />
+	<TextImageBlock :data="onas.page.rumlKlingerOnas.firstBlock" :has-background="true" :divider="true" />
+	<section id="usp" class="container">
 		<USPBlock />
 	</section>
 	<section id="historie">
@@ -16,19 +9,10 @@
 			<div class="timeline__columns">
 				<div class="timeline__info">
 					<h2>{{ onas.page.rumlKlingerOnas.timeline.titulek }}</h2>
-					<div
-						class="timeline__description"
-						v-html="onas.page.rumlKlingerOnas.timeline.perex"></div>
+					<div class="timeline__description" v-html="onas.page.rumlKlingerOnas.timeline.perex"></div>
 					<div class="timeline__controls">
-						<div
-							ref="swiperPrev"
-							class="arrow-prev">
-							<svg
-								width="19"
-								height="15"
-								viewBox="0 0 19 15"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg">
+						<div ref="swiperPrev" class="arrow-prev">
+							<svg width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path
 									d="M1.5 7.5L17.5 7.5M17.5 7.5L11 14M17.5 7.5L11 0.999999"
 									stroke="white"
@@ -37,15 +21,8 @@
 									stroke-linejoin="round" />
 							</svg>
 						</div>
-						<div
-							ref="swiperNext"
-							class="arrow-next">
-							<svg
-								width="19"
-								height="15"
-								viewBox="0 0 19 15"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg">
+						<div ref="swiperNext" class="arrow-next">
+							<svg width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path
 									d="M1.5 7.5L17.5 7.5M17.5 7.5L11 14M17.5 7.5L11 0.999999"
 									stroke="white"
@@ -99,13 +76,8 @@
 		<div class="narrow center">
 			<h2>Vedení společnosti</h2>
 		</div>
-		<div
-			class="owners"
-			v-if="screenWidth > 767">
-			<div
-				v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person"
-				:key="index"
-				class="owner">
+		<div class="owners" v-if="screenWidth > 767">
+			<div v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person" :key="index" class="owner">
 				<div class="owner__image">
 					<NuxtPicture
 						:src="owner.image.sourceUrl"
@@ -124,16 +96,9 @@
 				</div>
 			</div>
 		</div>
-		<div
-			v-else
-			class="owners-mobile">
-			<div
-				v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person"
-				:key="index"
-				class="owner-mobile">
-				<div
-					class="owner-mobile__heading"
-					@click.prevent="toggleOwner">
+		<div v-else class="owners-mobile">
+			<div v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person" :key="index" class="owner-mobile">
+				<div class="owner-mobile__heading" @click.prevent="toggleOwner">
 					<div class="owner-mobile__image">
 						<NuxtPicture
 							:src="owner.image.sourceUrl"
@@ -154,17 +119,12 @@
 			</div>
 		</div>
 	</section>
-	<section
-		class="container"
-		id="nase-spolocnosti">
+	<section class="container" id="nase-spolocnosti">
 		<div class="narrow center">
 			<h2>Naše společnosti</h2>
 		</div>
 		<div class="companies">
-			<div
-				class="company"
-				v-for="(company, index) in onas.page.rumlKlingerOnas.ourCompanies.company"
-				:key="index">
+			<div class="company" v-for="(company, index) in onas.page.rumlKlingerOnas.ourCompanies.company" :key="index">
 				<div class="company__image">
 					<NuxtPicture
 						:src="company.image.sourceUrl"
@@ -186,12 +146,7 @@
 				<div class="company__info">
 					<h3 class="company__title">{{ company.title }}</h3>
 					<div class="company__perex">{{ company.perex }}</div>
-					<a
-						class="btn btn-primary"
-						:href="company.url"
-						target="_blank">
-						Přejít na web
-					</a>
+					<a class="btn btn-primary" :href="company.url" target="_blank"> Přejít na web </a>
 				</div>
 			</div>
 		</div>
@@ -590,7 +545,7 @@
 			gap: 10px;
 		}
 		&__text {
-			max-height: 500px;
+			// max-height: 500px;
 			transition: all 0.15s ease-in-out;
 			overflow: hidden;
 			background-color: rgba($color-primary, 0.1);

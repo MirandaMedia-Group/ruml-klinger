@@ -39,10 +39,7 @@
 			<p>{{ homepageData.page.rumlKlingerHomepage.servicesBlock.perex }}</p>
 		</div>
 		<div class="services-wrap">
-			<div
-				class="service"
-				v-for="(item, index) in homepageData.pages.nodes"
-				:key="index">
+			<div class="service" v-for="(item, index) in homepageData.pages.nodes" :key="index">
 				<div class="service__image">
 					<NuxtPicture
 						:src="item.featuredImage?.node.sourceUrl"
@@ -55,11 +52,7 @@
 				<div class="service__content">
 					<h3>{{ item.title }}</h3>
 					<p class="service__description">{{ item.rumlKlingerSluzby.shortDescription }}</p>
-					<NuxtLink
-						:to="`/sluzby/${item.slug}`"
-						class="btn btn-primary">
-						Zobrazit službu
-					</NuxtLink>
+					<NuxtLink :to="`/sluzby/${item.slug}`" class="btn btn-primary"> Zobrazit službu </NuxtLink>
 				</div>
 			</div>
 		</div>
@@ -73,10 +66,7 @@
 		<div class="container center">
 			<h2>Partneři</h2>
 			<div class="partners-list">
-				<div
-					class="partner"
-					v-for="(item, index) in homepageData.partners.nodes"
-					:key="index">
+				<div class="partner" v-for="(item, index) in homepageData.partners.nodes" :key="index">
 					<NuxtPicture
 						:src="item.featuredImage.node.sourceUrl"
 						:alt="item.featuredImage.node.altText"
@@ -104,7 +94,7 @@
 					<ul>
 						<li
 							class="references__category--item"
-							v-for="(item, index) in referenceCategories.referenceCategories.nodes"
+							v-for="(item, index) in sortByOrder(referenceCategories.referenceCategories.nodes)"
 							:class="{ active: item.id === activeReferenceBlock }"
 							:key="index">
 							<button @click.prevent="activeReferenceBlock = item.id">
@@ -115,30 +105,24 @@
 				</nav>
 			</div>
 			<div
-				v-for="item in referenceCategories.referenceCategories.nodes"
+				v-for="item in sortByOrder(referenceCategories.referenceCategories.nodes)"
 				:key="item.id"
 				:class="{ active: item.id === activeReferenceBlock }"
 				class="references__block">
-				<ReferencesList
-					:references="references.references.nodes"
-					:limit="6"
-					:category="item" />
+				<ReferencesList :references="references.references.nodes" :limit="6" :category="item" />
 			</div>
 		</div>
 		<div v-else>
 			<div
 				class="mobile-references__wrapper"
-				v-for="(item, index) in referenceCategories.referenceCategories.nodes"
+				v-for="(item, index) in sortByOrder(referenceCategories.referenceCategories.nodes)"
 				:class="{ active: item.id === activeReferenceBlock }"
 				:key="index">
 				<button @click.prevent="activeReferenceBlock = item.id">
 					{{ item.name }}
 				</button>
 				<div class="mobile-references__block">
-					<ReferencesList
-						:references="references.references.nodes"
-						:limit="6"
-						:category="item" />
+					<ReferencesList :references="references.references.nodes" :limit="6" :category="item" />
 				</div>
 			</div>
 		</div>
@@ -165,9 +149,21 @@
 		],
 	})
 	const screenWidth = useState('screenWidth')
+	const sortByOrder = (object) => {
+		const help = object.slice(0)
+		help.sort((a, b) => {
+			return a.referenceCategoryAcf.order === null
+				? 1000
+				: a.referenceCategoryAcf.order - b.referenceCategoryAcf.order === null
+				? 1001
+				: b.referenceCategoryAcf.order
+		})
+		return help
+	}
 
 	// STATES
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
+	const language = useState('language')
 
 	const homepageQuery = gql`
 		query getHomepageKlinger {
@@ -334,8 +330,8 @@
 	const { data: homepageData } = await useAsyncQuery(homepageQuery)
 
 	const referenceCategoriesQuery = gql`
-		query getReferenceCategories {
-			referenceCategories {
+		query getReferenceCategoriesKlinger($language: LanguageCodeFilterEnum!) {
+			referenceCategories(where: { language: $language }) {
 				nodes {
 					id
 					name
@@ -343,6 +339,7 @@
 					uri
 					slug
 					referenceCategoryAcf {
+						order
 						image {
 							sourceUrl
 							altText
@@ -363,12 +360,12 @@
 	// 	referenceCategories.value = data.value
 	// 	activeReferenceBlock.value = data.value.referenceCategories.nodes[0].id
 	// }
-	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery)
+	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery, { language: language.value })
 	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
 
 	const referencesQuery = gql`
-		query getReferences {
-			references(first: 200) {
+		query getReferences($language: LanguageCodeFilterEnum!) {
+			references(first: 200, where: { language: $language }) {
 				nodes {
 					id
 					title
@@ -398,7 +395,7 @@
 	// 	const { data } = await useAsyncQuery(referencesQuery)
 	// 	references.value = data.value
 	// }
-	const { data: references } = await useAsyncQuery(referencesQuery)
+	const { data: references } = await useAsyncQuery(referencesQuery, { language: language.value })
 </script>
 <style lang="scss">
 	.categories__switcher {

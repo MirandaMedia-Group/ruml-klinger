@@ -1,23 +1,23 @@
 <template>
-	<div
-		class="subcategories"
-		v-if="subcategoriesData">
+	<div class="subcategories" v-if="subcategoriesData">
 		<ul v-if="subcategoriesData.productCategories.nodes.length == 1">
 			<li
-				v-for="(item, index) in subcategoriesData.productCategories.nodes[0].children.nodes.filter((category) =>
-					category.productCategoriesAfc.target?.includes('klinger')
+				v-for="(item, index) in sortByOrder(
+					subcategoriesData.productCategories.nodes[0].children.nodes.filter((category) =>
+						category.productCategoriesAfc.target?.includes('klinger')
+					)
 				)"
 				:key="index"
 				:style="{ backgroundImage: item.menuImage?.sourceUrl }">
 				<NuxtLink :to="`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`">{{ item.name }}</NuxtLink>
 			</li>
 		</ul>
-		<ul
-			v-else
-			class="subcategories">
+		<ul v-else class="subcategories">
 			<li
-				v-for="(item, index) in subcategoriesData.productCategories.nodes.filter((category) =>
-					category.productCategoriesAfc.target?.includes('klinger')
+				v-for="(item, index) in sortByOrder(
+					subcategoriesData.productCategories.nodes.filter((category) =>
+						category.productCategoriesAfc.target?.includes('klinger')
+					)
 				)"
 				:key="index"
 				:style="{ backgroundImage: `url(${item.productCategoriesAfc.menuImage?.sourceUrl})` }">
@@ -36,6 +36,17 @@
 	const slugVariable = ref({
 		slug: routerSlug.value[routerSlug.value.length - 1] ? [routerSlug.value[routerSlug.value.length - 1]] : 0,
 	})
+	const sortByOrder = (object) => {
+		const help = object.slice(0)
+		help.sort((a, b) => {
+			return a.productCategoriesAfc.order === null
+				? 1000
+				: a.productCategoriesAfc.order - b.productCategoriesAfc.order === null
+				? 1001
+				: b.productCategoriesAfc.order
+		})
+		return help
+	}
 	const productSubcategoriesQuery =
 		routerSlug.value !== 0
 			? gql`
@@ -45,6 +56,7 @@
 								name
 								slug
 								productCategoriesAfc {
+									order
 									target
 									menuImage {
 										altText
@@ -60,6 +72,7 @@
 										name
 										slug
 										productCategoriesAfc {
+											order
 											target
 											menuImage {
 												altText
@@ -83,6 +96,7 @@
 								name
 								slug
 								productCategoriesAfc {
+									order
 									target
 									menuImage {
 										altText
@@ -98,6 +112,7 @@
 										name
 										slug
 										productCategoriesAfc {
+											order
 											target
 											menuImage {
 												altText

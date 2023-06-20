@@ -23,47 +23,34 @@
 			</div>
 		</section>
 		<div v-else>
-			<section
-				v-if="searchServices.pages.nodes.length"
-				class="container">
+			<section v-if="searchServices.pages.nodes.length" class="container">
 				<div class="narrow center">
 					<h2>Služby</h2>
 				</div>
 				<ul class="search-results">
-					<li
-						v-for="(item, index) in searchServices.pages.nodes"
-						:key="index">
+					<li v-for="(item, index) in searchServices.pages.nodes" :key="index">
 						<NuxtLink :to="`/${item.parent.node.slug}/${item.slug}`"> {{ item.title }}</NuxtLink>
 					</li>
 				</ul>
 			</section>
-			<section
-				v-if="searchCategories.productCategories.nodes.length"
-				class="container">
+			<section v-if="searchCategories.productCategories.nodes.length" class="container">
 				<div class="narrow center">
 					<h2>Kategorie</h2>
 				</div>
 				<ul class="search-results">
-					<li
-						v-for="(item, index) in searchCategories.productCategories.nodes"
-						:key="index">
+					<li v-for="(item, index) in searchCategories.productCategories.nodes" :key="index">
 						<NuxtLink :to="`/katalog-produktu/${item.parent ? item.parent.node.slug + '/' : ''}${item.slug}`">{{
 							item.name
 						}}</NuxtLink>
 					</li>
 				</ul>
 			</section>
-			<section
-				v-if="searchPartners.partners.nodes.length"
-				class="container">
+			<section v-if="searchPartners.partners.nodes.length" class="container">
 				<div class="narrow center">
 					<h2>Partneři</h2>
 				</div>
 				<div class="partners-grid">
-					<div
-						class="partner"
-						v-for="(partner, index) in searchPartners.partners.nodes"
-						:key="index">
+					<div class="partner" v-for="(partner, index) in searchPartners.partners.nodes" :key="index">
 						<div class="partner__image">
 							<NuxtPicture
 								:src="partner.featuredImage.node.sourceUrl"
@@ -74,23 +61,15 @@
 								provider="ipx" />
 						</div>
 						<h2 class="partner__title">{{ partner.title }}</h2>
-						<div
-							class="partner__excerpt"
-							v-html="partner.excerpt"></div>
+						<div class="partner__excerpt" v-html="partner.excerpt"></div>
 						<div class="buttons-wrapper align-center justify-start">
-							<NuxtLink
-								:to="`/katalog-produktu/`"
-								class="btn btn-primary">
-								Zobrazit produkty
-							</NuxtLink>
+							<NuxtLink :to="`/katalog-produktu/`" class="btn btn-primary"> Zobrazit produkty </NuxtLink>
 							<NuxtLink :to="`/partneri/${partner.slug}`">Více o partnerovi</NuxtLink>
 						</div>
 					</div>
 				</div>
 			</section>
-			<section
-				v-if="searchProducts.products.nodes?.length"
-				class="container">
+			<section v-if="searchProducts.products.nodes?.length" class="container">
 				<div class="narrow center">
 					<h2>Produkty</h2>
 				</div>
@@ -101,8 +80,10 @@
 </template>
 <script setup>
 	const router = useRouter()
+	const language = useState('language')
 	const variables = ref({
 		search: router.currentRoute.value.query.search,
+		language: language.value,
 	})
 	watch(router.currentRoute, (route) => {
 		variables.value.search = route.query.search
@@ -113,11 +94,12 @@
 	})
 
 	const searchProductsQuery = gql`
-		query searchProducts($search: String!) {
-			products(where: { search: $search }) {
+		query searchProducts($search: String!, $language: LanguageCodeFilterEnum!) {
+			products(where: { search: $search, language: $language }) {
 				nodes {
 					slug
 					title
+					excerpt
 					productAcf {
 						shortDescription
 						gallery {
@@ -139,8 +121,8 @@
 	} = await useAsyncQuery(searchProductsQuery, variables.value)
 
 	const searchServicesQuery = gql`
-		query searchServices($search: String!) {
-			pages(where: { search: $search, parent: "cG9zdDo1OTg=" }) {
+		query searchServices($search: String!, $language: LanguageCodeFilterEnum!) {
+			pages(where: { search: $search, parent: "cG9zdDo1OTg=", language: $language }) {
 				nodes {
 					slug
 					title
@@ -160,8 +142,8 @@
 	} = await useAsyncQuery(searchServicesQuery, variables.value)
 
 	const searchPartnersQuery = gql`
-		query searchPartners($search: String!) {
-			partners(where: { search: $search }) {
+		query searchPartners($search: String!, $language: LanguageCodeFilterEnum!) {
+			partners(where: { search: $search, language: $language }) {
 				nodes {
 					featuredImage {
 						node {
@@ -187,8 +169,8 @@
 	} = await useAsyncQuery(searchPartnersQuery, variables.value)
 
 	const productCategoriesQuery = gql`
-		query searchCategories($search: String!) {
-			productCategories(where: { search: $search }) {
+		query searchCategories($search: String!, $language: LanguageCodeFilterEnum!) {
+			productCategories(where: { search: $search, language: $language }) {
 				nodes {
 					name
 					slug

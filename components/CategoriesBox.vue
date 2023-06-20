@@ -2,8 +2,8 @@
 	<nav>
 		<ul class="menu__level-1">
 			<li
-				v-for="(level1, index1) in categoriesData.productCategories.nodes.filter((category) =>
-					category.productCategoriesAfc.target?.includes('klinger')
+				v-for="(level1, index1) in sortByOrder(
+					categoriesData.productCategories.nodes.filter((category) => category.productCategoriesAfc.target?.includes('klinger'))
 				)"
 				:class="{ 'has-children': level1?.children.nodes.length, expanded: $route.fullPath.indexOf(level1.slug) >= 0 }"
 				:key="index1">
@@ -11,25 +11,19 @@
 					:to="`/katalog-produktu/${level1.slug}`"
 					:class="{ 'router-link-active': $route.fullPath.indexOf(level1.slug) >= 0 }">
 					{{ level1.name }}
-					<span
-						v-if="level1?.children.nodes.length"
-						class="expand"
-						@click.prevent="toggleExpanded">
-					</span>
+					<span v-if="level1?.children.nodes.length" class="expand" @click.prevent="toggleExpanded"> </span>
 				</NuxtLink>
 				<ul class="menu__level-2">
 					<li
-						v-for="(level2, index2) in level1?.children?.nodes.filter((category) =>
-							category.productCategoriesAfc.target?.includes('klinger')
+						v-for="(level2, index2) in sortByOrder(
+							level1?.children?.nodes.filter((category) => category.productCategoriesAfc.target?.includes('klinger'))
 						)"
 						:key="index2">
 						<NuxtLink :to="`/katalog-produktu/${level1.slug}/${level2.slug}`">{{ level2.name }}</NuxtLink>
-						<ul
-							v-if="level2?.children?.nodes?.length"
-							class="menu__level-3">
+						<ul v-if="level2?.children?.nodes?.length" class="menu__level-3">
 							<li
-								v-for="(level3, index3) in level2.children.nodes.filter((category) =>
-									category.productCategoriesAfc.target?.includes('klinger')
+								v-for="(level3, index3) in sortByOrder(
+									level2.children.nodes.filter((category) => category.productCategoriesAfc.target?.includes('klinger'))
 								)"
 								:key="index3">
 								<NuxtLink :to="`/katalog-produktu/${level1.slug}/${level2.slug}/${level3.slug}`">{{
@@ -48,6 +42,17 @@
 	const screenWidth = useState('screenWidth')
 	const router = useRouter()
 	const language = useState('language')
+	const sortByOrder = (object) => {
+		const help = object.slice(0)
+		help.sort((a, b) => {
+			return a.productCategoriesAfc.order === null
+				? 1000
+				: a.productCategoriesAfc.order - b.productCategoriesAfc.order === null
+				? 1001
+				: b.productCategoriesAfc.order
+		})
+		return help
+	}
 	const productCategoriesQuery = gql`
 		query getCategories($language: LanguageCodeFilterEnum!) {
 			productCategories(first: 100, where: { parent: 0, language: $language }) {
@@ -56,6 +61,7 @@
 					slug
 					productCategoriesAfc {
 						target
+						order
 						menuImage {
 							sourceUrl
 						}
@@ -73,6 +79,7 @@
 									slug
 									productCategoriesAfc {
 										target
+										order
 									}
 									children {
 										nodes {
@@ -80,6 +87,7 @@
 											slug
 											productCategoriesAfc {
 												target
+												order
 											}
 										}
 									}

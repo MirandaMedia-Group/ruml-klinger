@@ -1,10 +1,5 @@
 <template>
-	<HeroBig
-		v-bind="kontakty.page.rumlKlingerKontakty.hero"
-		:white="true"
-		:center="true"
-		:contactBox="true"
-		:nowrap="true" />
+	<HeroBig v-bind="kontakty.page.rumlKlingerKontakty.hero" :white="true" :center="true" :contactBox="true" :nowrap="true" />
 	<section class="container overflow-hidden">
 		<div class="billing-info">
 			<div class="column">
@@ -20,18 +15,14 @@
 					</div>
 					<div class="tr">
 						<div class="th">Sídlo</div>
-						<div
-							class="td"
-							v-html="kontakty.page.rumlKlingerKontakty.billingAddress.address"></div>
+						<div class="td" v-html="kontakty.page.rumlKlingerKontakty.billingAddress.address"></div>
 					</div>
 					<div class="tr">
 						<div class="th">Datová schránka</div>
 						<div class="td">{{ kontakty.page.rumlKlingerKontakty.billingAddress.datovaSchranka }}</div>
 					</div>
 					<div class="tr">
-						<a
-							:href="kontakty.page.rumlKlingerKontakty.billingAddress.obchodniRejstrik"
-							target="_blank">
+						<a :href="kontakty.page.rumlKlingerKontakty.billingAddress.obchodniRejstrik" target="_blank">
 							Výpis z obchodního rejstříku
 						</a>
 					</div>
@@ -39,28 +30,20 @@
 			</div>
 			<div class="column">
 				<h2>Bankovní spojení</h2>
-				<div
-					v-for="(item, index) in kontakty.page.rumlKlingerKontakty.spojeni"
-					:key="index">
+				<div v-for="(item, index) in kontakty.page.rumlKlingerKontakty.spojeni" :key="index">
 					<div class="billing-info__table">
 						<div class="tr">
 							<strong>{{ item.title }}</strong>
 						</div>
-						<div
-							v-if="item.accountNumber"
-							class="tr">
+						<div v-if="item.accountNumber" class="tr">
 							<div class="th">Číslo účtu:</div>
 							<div class="td">{{ item.accountNumber }}</div>
 						</div>
-						<div
-							v-if="item.iban"
-							class="tr">
+						<div v-if="item.iban" class="tr">
 							<div class="th">IBAN:</div>
 							<div class="td">{{ item.iban }}</div>
 						</div>
-						<div
-							v-if="item.swift"
-							class="tr">
+						<div v-if="item.swift" class="tr">
 							<div class="th">SWIFT:</div>
 							<div class="td">{{ item.swift }}</div>
 						</div>
@@ -68,9 +51,7 @@
 				</div>
 			</div>
 			<div class="column">
-				<div
-					v-if="certificates.page.rumlKlingerOnas.firstBlock.certificates"
-					class="certificates">
+				<div v-if="certificates.page.rumlKlingerOnas.firstBlock.certificates" class="certificates">
 					<h2>Certifikáty</h2>
 					<FilesTable :data="certificates.page.rumlKlingerOnas.firstBlock.certificates" />
 				</div>
@@ -79,13 +60,8 @@
 	</section>
 	<section class="container">
 		<div class="pobocky">
-			<div
-				v-for="(item, index) in kontakty.page.rumlKlingerKontakty.pobocky"
-				:key="index"
-				class="pobocka">
-				<div
-					v-if="item.image"
-					class="pobocka__image">
+			<div v-for="(item, index) in kontakty.page.rumlKlingerKontakty.pobocky" :key="index" class="pobocka">
+				<div v-if="item.image" class="pobocka__image">
 					<NuxtPicture
 						:src="item.image.sourceUrl"
 						:alt="item.image.altText"
@@ -97,46 +73,33 @@
 				</div>
 				<div class="pobocka__content">
 					<h2 class="pobocka__title">{{ item.title }}</h2>
-					<div
-						v-if="item.address"
-						class="pobocka__address"
-						v-html="item.address"></div>
+					<div v-if="item.address" class="pobocka__address" v-html="item.address"></div>
 					<div class="billing-info__table">
-						<div
-							class="tr"
-							v-if="item.openingHours">
+						<div class="tr" v-if="item.openingHours">
 							<div class="th">Otevřeno:</div>
 							<div class="td">
 								{{ item.openingHours }}
 							</div>
 						</div>
-						<div
-							class="tr"
-							v-if="item.phone">
+						<div class="tr" v-if="item.phone">
 							<div class="th">Telefon:</div>
 							<div class="td">
 								<a :href="`tel:${item.phone.replaceAll(' ', '')}`">{{ item.phone }}</a>
 							</div>
 						</div>
-						<div
-							class="tr"
-							v-if="item.email">
+						<div class="tr" v-if="item.email">
 							<div class="th">Email:</div>
 							<div class="td">
 								<a :href="`mailto:${item.email}`">{{ item.email }}</a>
 							</div>
 						</div>
-						<div
-							class="tr"
-							v-if="item.gpsLat && item.gpsLng">
+						<div class="tr" v-if="item.gpsLat && item.gpsLng">
 							<div class="th">GPS:</div>
 							<div class="td">{{ item.gpsLat }}N, {{ item.gpsLng }}E</div>
 						</div>
 					</div>
 				</div>
-				<div
-					v-if="item.gpsLat && item.gpsLng"
-					class="pobocka__map">
+				<div v-if="item.gpsLat && item.gpsLng" class="pobocka__map">
 					<iframe
 						width="100%"
 						height="305"
@@ -149,19 +112,11 @@
 			</div>
 		</div>
 	</section>
-	<section class="container">
-		<h2
-			v-if="screenWidth > 767"
-			class="center">
-			Kontakty na naše specialisty
-		</h2>
-		<AnchorsBlock
-			v-if="screenWidth > 767"
-			:style="{ marginTop: `${screenWidth > 767 ? 100 : 50}px` }">
+	<section id="nasi-specialiste" class="container">
+		<h2 v-if="screenWidth > 767" class="center">Kontakty na naše specialisty</h2>
+		<AnchorsBlock v-if="screenWidth > 767" :style="{ marginTop: `${screenWidth > 767 ? 100 : 50}px` }">
 			<ul>
-				<li
-					v-for="(item, index) in kontakty.page.rumlKlingerKontakty.contactGroup"
-					:key="index">
+				<li v-for="(item, index) in kontakty.page.rumlKlingerKontakty.contactGroup" :key="index">
 					<a :href="`#${slugify(item.groupTitle)}`">{{ item.groupTitle }}</a>
 				</li>
 			</ul>
@@ -172,16 +127,11 @@
 			:id="slugify(item.groupTitle)"
 			class="contacts__block center"
 			:class="{ divider: index !== kontakty.page.rumlKlingerKontakty.contactGroup.length - 1 }">
-			<h3
-				class="contacts__title"
-				@click.prevent="toggleContacts">
+			<h3 class="contacts__title" @click.prevent="toggleContacts">
 				{{ item.groupTitle }}
 			</h3>
 			<div class="contacts__group">
-				<div
-					v-for="(person, index) in item.person"
-					:key="index"
-					class="person">
+				<div v-for="(person, index) in item.person" :key="index" class="person">
 					<div class="person__image">
 						<NuxtPicture
 							v-if="person.image"
@@ -191,19 +141,11 @@
 							:height="person.image.mediaDetails.height"
 							loading="lazy"
 							provider="ipx" />
-						<NuxtPicture
-							v-else
-							src="/kontaktni_osoby/placeholder.jpg"
-							width="150"
-							height="150"
-							loading="lazy"
-							alt="" />
+						<NuxtPicture v-else src="/kontaktni_osoby/placeholder.jpg" width="150" height="150" loading="lazy" alt="" />
 					</div>
 					<div class="person__name">{{ person.name }}</div>
 					<div class="person__position">{{ person.position }}</div>
-					<a
-						v-if="person.phone"
-						:href="`tel:${person.phone.replaceAll(' ', '')}`">
+					<a v-if="person.phone" :href="`tel:${person.phone.replaceAll(' ', '')}`">
 						{{ person.phone }}
 					</a>
 					<a :href="`mailto:${person.email}`">{{ person.email }}</a>
