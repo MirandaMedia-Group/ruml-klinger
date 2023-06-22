@@ -45,11 +45,10 @@
 	const sortByOrder = (object) => {
 		const help = object.slice(0)
 		help.sort((a, b) => {
-			return a.productCategoriesAfc.order === null
-				? 1000
-				: a.productCategoriesAfc.order - b.productCategoriesAfc.order === null
-				? 1001
-				: b.productCategoriesAfc.order
+			return (
+				(a.productCategoriesAfc.order === null ? 1000 : a.productCategoriesAfc.order) -
+				(b.productCategoriesAfc.order === null ? 1001 : b.productCategoriesAfc.order)
+			)
 		})
 		return help
 	}
@@ -72,6 +71,7 @@
 							slug
 							productCategoriesAfc {
 								target
+								order
 							}
 							children {
 								nodes {

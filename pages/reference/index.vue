@@ -47,11 +47,10 @@
 	const sortByOrder = (object) => {
 		const help = object.slice(0)
 		help.sort((a, b) => {
-			return a.referenceCategoryAcf.order === null
-				? 1000
-				: a.referenceCategoryAcf.order - b.referenceCategoryAcf.order === null
-				? 1001
-				: b.referenceCategoryAcf.order
+			return (
+				(a.referenceCategoryAcf.order === null ? 1000 : a.referenceCategoryAcf.order) -
+				(b.referenceCategoryAcf.order === null ? 1001 : b.referenceCategoryAcf.order)
+			)
 		})
 		return help
 	}
