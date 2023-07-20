@@ -1,6 +1,6 @@
 <template>
 	<LazyNuxtLoadingIndicator color="#d70c38" />
-	<CookieControl class="no-margin" locale="cs" />
+	<CookieControl class="no-margin" :locale="locale" />
 	<MainHeader />
 	<NuxtLayout>
 		<NuxtPage />
