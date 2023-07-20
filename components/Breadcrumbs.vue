@@ -8,7 +8,7 @@
 				<NuxtLink :to="localePath('/katalog-produktu')">{{ $t('products') }}</NuxtLink>
 			</li>
 			<li v-for="(item, index) in props.sublinks" :key="index">
-				<NuxtLink :to="localePath('item.url')">{{ item.name }}</NuxtLink>
+				<NuxtLink :to="localePath(item.url)">{{ item.name }}</NuxtLink>
 			</li>
 		</ul>
 	</nav>

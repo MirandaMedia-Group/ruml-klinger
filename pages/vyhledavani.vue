@@ -29,7 +29,7 @@
 				</div>
 				<ul class="search-results">
 					<li v-for="(item, index) in searchServices.pages.nodes" :key="index">
-						<NuxtLink :to="localePath(`/`) + '/' + item.parent.node.slug + `/` + item.slug"> {{ item.title }}</NuxtLink>
+						<NuxtLink :to="localePath(`/${item.parent.node.slug}`) + `/` + item.slug"> {{ item.title }}</NuxtLink>
 					</li>
 				</ul>
 			</section>

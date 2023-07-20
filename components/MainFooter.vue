@@ -54,7 +54,7 @@
 					</nav>
 				</div>
 				<div class="footer-block">
-					<h3 @click.prevent="toggleMenu">{{ $t('contacts') }}<span class="trigger"></span></h3>
+					<h3 @click.prevent="toggleMenu">{{ $t('contact') }}<span class="trigger"></span></h3>
 					<div>
 						<p>
 							Nad Doly 1625/3 <br />
