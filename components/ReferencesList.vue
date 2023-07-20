@@ -1,7 +1,5 @@
 <template>
-	<div
-		class="references__list"
-		:class="{ limit: props.limit }">
+	<div class="references__list" :class="{ limit: props.limit }">
 		<div
 			class="reference"
 			v-for="(reference, index) in props.references.filter(

@@ -1,11 +1,7 @@
 <template>
 	<PageHeader>
-		<h1>Reference</h1>
-		<p>
-			<b>Zaměřujeme se na dodávku kvalitních průmyslových výrobků a technologií od renomovaných výrobců.</b> Našim zákazníkům dodáváme
-			i služby spojené s plánováním, dodávkou a montáží. Provádíme energetické audity průmyslových rozvodů včetně návrhu a provedení
-			jejich zaizolování. Provádíme monitoring odvaděčů kondenzátu.
-		</p>
+		<h1>{{ $t('referencesPage.title') }}</h1>
+		<p v-html="$t('referencesPage.perex')"></p>
 	</PageHeader>
 	<section class="container">
 		<AnchorsBlock>
@@ -34,16 +30,20 @@
 			</div>
 			<ReferencesList :references="references.references.nodes" :category="category" />
 			<div v-if="category.referenceCategoryAcf.technologies" class="technologies center">
-				<h3>Použité technologie</h3>
+				<h3>{{ $t('referencesPage.usedTechnologies') }}</h3>
 				<div v-html="category.referenceCategoryAcf.technologies"></div>
 				<div class="buttons-wrapper">
-					<NuxtLink :to="`/kontakty#formular`" class="btn btn-tertiary"> Chci poptat vaše služby </NuxtLink>
+					<NuxtLink :to="localePath(`/kontakty`) + `#formular`" class="btn btn-tertiary">{{
+						$t('referencesPage.servicesInquiry')
+					}}</NuxtLink>
 				</div>
 			</div>
 		</div>
 	</section>
 </template>
 <script setup>
+	const { locale, t } = useI18n()
+	const localePath = useLocalePath()
 	const sortByOrder = (object) => {
 		const help = object.slice(0)
 		help.sort((a, b) => {
@@ -80,12 +80,7 @@
 			}
 		}
 	`
-	// const referenceCategories = useState('referenceCategories', () => null)
-	// if (!referenceCategories.value) {
-	// 	const { data } = await useAsyncQuery(referenceCategoriesQuery)
-	// 	referenceCategories.value = data.value
-	// }
-	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery, { language: language.value })
+	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery, { language: locale.value.toUpperCase() })
 
 	const referencesQuery = gql`
 		query getReferencesKlinger($language: LanguageCodeFilterEnum!) {
@@ -114,12 +109,7 @@
 			}
 		}
 	`
-	// const references = useState('references', () => null)
-	// if (!references.value) {
-	// 	const { data } = await useAsyncQuery(referencesQuery)
-	// 	references.value = data.value
-	// }
-	const { data: references } = await useAsyncQuery(referencesQuery, { language: language.value })
+	const { data: references } = await useAsyncQuery(referencesQuery, { language: locale.value.toUpperCase() })
 </script>
 <style lang="scss">
 	.reference-category {

@@ -1,35 +1,31 @@
 <template>
 	<PageHeader>
-		<h1>Staňte se jedním z nás</h1>
-		<p>Ve firmách RUML Group poskytujeme našim zaměstněncům/kolegům prostor pro jejich maximální uplatnění a rozvoj.</p>
+		<h1>{{ $t('careerPage.title') }}</h1>
+		<p>{{ $t('careerPage.perex') }}</p>
 		<strong v-if="careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length">
-			Právě máme
+			{{ $t('careerPage.stillGot') }}
 			{{
 				careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
-					? 'volnou'
+					? $t('careerPage.positionPrefix1')
 					: careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 &&
 					  careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
-					? 'volné'
-					: 'volných'
+					? $t('careerPage.positionPrefix2')
+					: $t('careerPage.positionPrefix3')
 			}}
 			{{ careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length }}
 			{{
 				careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length === 1
-					? 'pozici'
+					? $t('careerPage.positionCount1')
 					: careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length >= 2 &&
 					  careerList.careers.nodes.filter((post) => post.careerAcf.company === 'klinger').length <= 4
-					? 'pozice'
-					: 'pozic'
+					? $t('careerPage.positionCount2')
+					: $t('careerPage.positionCount3')
 			}}
 		</strong>
-		<strong v-else>Aktuálně nemáme žádné volné pozice</strong>
+		<strong v-else>{{ $t('careerPage.positionCount0') }}</strong>
 		<p style="margin-top: 20px">
-			Podívejte se na nabídku našich ostatních společností
-			<a
-				href="https://www.ruml-group.cz/kariera"
-				target="_blank">
-				zde.
-			</a>
+			{{ $t('careerPage.otherCompanies') }}
+			<a href="https://www.ruml-group.cz/kariera" target="_blank">{{ $t('careerPage.here') }}</a>
 		</p>
 	</PageHeader>
 	<section class="container">
@@ -61,15 +57,10 @@
 					<div class="career__website">
 						{{ companyURLs[post.careerAcf.company] }}
 					</div>
-					<div
-						class="career__excerpt"
-						v-html="post.excerpt"></div>
-
-					<NuxtLink
-						:to="`/kariera/${post.slug}`"
-						class="btn btn-primary">
-						Zobrazit pozici
-					</NuxtLink>
+					<div class="career__excerpt" v-html="post.excerpt"></div>
+					<NuxtLink :to="localePath(`/kariera/${post.slug}`)" class="btn btn-primary">{{
+						$t('careerPage.showPosition')
+					}}</NuxtLink>
 				</div>
 			</div>
 		</div>
@@ -77,7 +68,7 @@
 	<TextImageBlock
 		:data="aboutUsBanner.page.rumlKlingerHomepage.aboutUs"
 		:hasBackground="true"
-		:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
+		:btn="{ text: $t('moreAboutCompany'), url: localePath('/o-nas') }"
 		:alignCenter="true" />
 	<section class="container">
 		<USPBlock />
@@ -101,10 +92,27 @@
 		tesneni: 'www.ruml-tesneni.cz',
 		group: 'www.ruml-group.cz',
 	})
+	const { locale, t } = useI18n()
+	const localeIDs = {
+		homepage: {
+			cs: 'cG9zdDo1OTI=',
+			en: 'cG9zdDozODM3',
+		},
+	}
+	useHead({
+		title: t('seo.career.title'),
+		meta: [
+			{
+				hid: 'description',
+				name: 'description',
+				content: t('seo.career.description'),
+			},
+		],
+	})
 
 	const careerListQuery = gql`
-		query getCareerList {
-			careers {
+		query getCareerList($language: LanguageCodeFilterEnum!) {
+			careers(where: { language: $language }) {
 				nodes {
 					excerpt
 					featuredImage {
@@ -126,16 +134,11 @@
 			}
 		}
 	`
-	// const careerList = useState('careerList', () => null)
-	// if (!careerList.value) {
-	// 	const { data } = await useAsyncQuery(careerListQuery)
-	// 	careerList.value = data.value
-	// }
-	const { data: careerList } = await useAsyncQuery(careerListQuery)
+	const { data: careerList } = await useAsyncQuery(careerListQuery, { language: locale.value.toUpperCase() })
 
 	const aboutUsBannerQuery = gql`
-		query getOnasBannerKlinger {
-			page(id: "cG9zdDo1OTI=") {
+		query getOnasBannerKlinger($localeID: ID!) {
+			page(id: $localeID) {
 				title
 				slug
 				rumlKlingerHomepage {
@@ -156,12 +159,7 @@
 			}
 		}
 	`
-	// const aboutUsBanner = useState('aboutUsBanner', () => null)
-	// if (!aboutUsBanner.value) {
-	// 	const { data } = await useAsyncQuery(aboutUsBannerQuery)
-	// 	aboutUsBanner.value = data.value
-	// }
-	const { data: aboutUsBanner } = await useAsyncQuery(aboutUsBannerQuery)
+	const { data: aboutUsBanner } = await useAsyncQuery(aboutUsBannerQuery, { localeID: localeIDs.homepage[locale.value] })
 </script>
 
 <style lang="scss" scoped>

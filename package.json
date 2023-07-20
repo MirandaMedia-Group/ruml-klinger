@@ -12,6 +12,7 @@
 		"@dargmuesli/nuxt-cookie-control": "^5.9.3",
 		"@nuxt/image-edge": "1.0.0-28059208.2abef1b",
 		"@nuxtjs/apollo": "^5.0.0-alpha.5",
+		"@nuxtjs/i18n": "next",
 		"@zadigetvoltaire/nuxt-gtm": "^0.0.13",
 		"nuxt": "^3.5.1",
 		"nuxt-simple-sitemap": "^2.6.1",
@@ -21,5 +22,6 @@
 	"dependencies": {
 		"swiper": "^9.0.3"
 	},
-	"packageManager": "yarn@3.5.1"
+	"packageManager": "yarn@3.5.1",
+	"type": "module"
 }

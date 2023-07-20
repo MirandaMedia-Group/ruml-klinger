@@ -4,19 +4,23 @@
 		<div v-html="usp.page.rumlKlingerOnas.secondBlock.perex"></div>
 	</div>
 	<div class="usp-wrapper">
-		<div
-			v-for="(usp, index) in usp.page.rumlKlingerOnas.secondBlock.usp"
-			:key="index"
-			class="usp">
+		<div v-for="(usp, index) in usp.page.rumlKlingerOnas.secondBlock.usp" :key="index" class="usp">
 			<strong>{{ usp.value }}</strong>
 			<span>{{ usp.text }}</span>
 		</div>
 	</div>
 </template>
 <script setup>
+	const { locale, t } = useI18n()
+	const localeIDs = {
+		aboutus: {
+			cs: 'cG9zdDo2MDI=',
+			en: 'cG9zdDozODQy',
+		},
+	}
 	const uspQuery = gql`
-		query getUSPKlinger {
-			page(id: "cG9zdDo2MDI=") {
+		query getUSPKlinger($localeID: ID!) {
+			page(id: $localeID) {
 				id
 				slug
 				title
@@ -33,10 +37,5 @@
 			}
 		}
 	`
-	// const usp = useState('usp', () => null)
-	// if (!usp.value) {
-	// 	const { data } = await useAsyncQuery(uspQuery)
-	// 	usp.value = data.value
-	// }
-	const { data: usp } = await useAsyncQuery(uspQuery)
+	const { data: usp } = await useAsyncQuery(uspQuery, { localeID: localeIDs.aboutus[locale.value] })
 </script>

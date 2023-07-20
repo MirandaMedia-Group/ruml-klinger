@@ -12,9 +12,7 @@
 					<div class="product__base-parameters">
 						<h2>{{ singleProduct.products.nodes[0].productAcf.baseParameters.heading }}</h2>
 						<div class="product__base-parameters-list">
-							<div
-								v-for="(item, index) in singleProduct.products.nodes[0].productAcf.baseParameters.values"
-								:key="index">
+							<div v-for="(item, index) in singleProduct.products.nodes[0].productAcf.baseParameters.values" :key="index">
 								<div class="product__base-parameters-list-item">
 									<div class="product__base-parameters-list-item-name">
 										<b>{{ item.name }}:</b>
@@ -29,15 +27,8 @@
 				</div>
 				<div class="product__gallery">
 					<div class="swiper-container">
-						<Swiper
-							:slides-per-view="1.1"
-							:space-between="20"
-							:modules="modules"
-							navigation
-							pagination>
-							<SwiperSlide
-								v-for="(item, index) in singleProduct.products.nodes[0].productAcf.gallery"
-								:key="index">
+						<Swiper :slides-per-view="1.1" :space-between="20" :modules="modules" navigation pagination>
+							<SwiperSlide v-for="(item, index) in singleProduct.products.nodes[0].productAcf.gallery" :key="index">
 								<NuxtPicture
 									:src="item.sourceUrl"
 									:alt="item.altText"
@@ -55,34 +46,29 @@
 					<nav>
 						<ul>
 							<li v-if="singleProduct.products.nodes[0].content">
-								<a href="#description">Detailní info</a>
+								<a href="#description">{{ $t('productDetail.detailInfo') }}</a>
 							</li>
 							<li v-if="singleProduct.products.nodes[0].productAcf.tabulkaParametru">
-								<a href="#parameters">Typické hodnoty</a>
+								<a href="#parameters">{{ $t('productDetail.typicalValues') }}</a>
 							</li>
 							<li v-if="singleProduct.products.nodes[0].productAcf.productFiles?.length">
-								<a href="#product-files">Dokumenty ke stažení</a>
+								<a href="#product-files">{{ $t('productDetail.fileDownloads') }}</a>
 							</li>
 							<li v-if="singleProduct.products.nodes[0].productAcf.productVideos">
-								<a href="#product-videos">Video představení</a>
+								<a href="#product-videos">{{ $t('productDetail.videoShowreel') }}</a>
 							</li>
 							<li v-if="singleProduct.products.nodes[0].productAcf.additionalProducts?.length">
-								<a href="#additional-products">Podobné produkty</a>
+								<a href="#additional-products">{{ $t('productDetail.relatedProducts') }}</a>
 							</li>
 							<li>
-								<a href="#formular">Poptávkový formulář</a>
+								<a href="#formular">{{ $t('productDetail.inquiryForm') }}</a>
 							</li>
 						</ul>
 					</nav>
 				</AnchorsBlock>
 			</section>
-			<section
-				id="description"
-				class="divider"
-				v-if="singleProduct.products.nodes[0].content">
-				<div
-					class="product__content"
-					v-html="singleProduct.products.nodes[0].content"></div>
+			<section id="description" class="divider" v-if="singleProduct.products.nodes[0].content">
+				<div class="product__content" v-html="singleProduct.products.nodes[0].content"></div>
 			</section>
 			<section
 				id="parameters"
@@ -105,13 +91,8 @@
 									{{ item }}
 								</th>
 							</tr>
-							<tr
-								v-for="(tr, index) in singleProduct.products.nodes[0].productAcf.customTable.table.body"
-								:key="index">
-								<td
-									v-for="(td, index) in tr"
-									:key="index"
-									v-html="td"></td>
+							<tr v-for="(tr, index) in singleProduct.products.nodes[0].productAcf.customTable.table.body" :key="index">
+								<td v-for="(td, index) in tr" :key="index" v-html="td"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -122,9 +103,7 @@
 					</h3>
 					<table>
 						<tbody>
-							<tr
-								v-for="(item, index) in singleProduct.products.nodes[0].productAcf.productParameters.values"
-								:key="index">
+							<tr v-for="(item, index) in singleProduct.products.nodes[0].productAcf.productParameters.values" :key="index">
 								<td>{{ item.label }}</td>
 								<td>{{ item.name }}</td>
 								<td>{{ item.unit }}</td>
@@ -138,21 +117,13 @@
 					class="product__parameters"
 					v-html="singleProduct.products.nodes[0].productAcf.tabulkaParametru"></div>
 			</section>
-			<section
-				id="product-videos"
-				class="full-width"
-				v-if="singleProduct.products.nodes[0].productAcf.productVideos?.length">
+			<section id="product-videos" class="full-width" v-if="singleProduct.products.nodes[0].productAcf.productVideos?.length">
 				<div class="container">
-					<VideoCarousel
-						:data="singleProduct.products.nodes[0].productAcf.productVideos"
-						:white="true" />
+					<VideoCarousel :data="singleProduct.products.nodes[0].productAcf.productVideos" :white="true" />
 				</div>
 			</section>
-			<section
-				id="product-files"
-				class="narrow"
-				v-if="singleProduct.products.nodes[0].productAcf.productFiles?.length">
-				<h2>Dokumenty ke stažení</h2>
+			<section id="product-files" class="narrow" v-if="singleProduct.products.nodes[0].productAcf.productFiles?.length">
+				<h2>{{ $t('productDetail.fileDownloads') }}</h2>
 				<FilesTable :data="singleProduct.products.nodes[0].productAcf.productFiles" />
 			</section>
 			<section
@@ -160,7 +131,7 @@
 				class="divider top"
 				v-if="singleProduct.products.nodes[0].productAcf.additionalProducts?.length">
 				<div class="center">
-					<h2>Podobné produkty</h2>
+					<h2>{{ $t('productDetail.relatedProducts') }}</h2>
 				</div>
 				<div class="products-grid">
 					<ProductsBlock :data="singleProduct.products.nodes[0].productAcf.additionalProducts" />

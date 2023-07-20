@@ -2,7 +2,7 @@
 	<header :class="{ 'show-submenu': showSubmenu }">
 		<div class="container">
 			<div class="site-logo">
-				<nuxt-link to="/">
+				<nuxt-link :to="localePath('/')">
 					<NuxtImg src="/site-logo.png" width="184" height="55" alt="RUML Klinger s.r.o." />
 				</nuxt-link>
 			</div>
@@ -17,7 +17,7 @@
 				<nav id="navigation" :class="{ visible: navigationVisible }">
 					<ul>
 						<li class="has-submenu" @mouseenter="showSubmenu = true" @mouseleave="showSubmenu = false">
-							<nuxt-link to="/katalog-produktu">Produkty <span class="arrow"></span></nuxt-link>
+							<nuxt-link :to="localePath('/katalog-produktu')">{{ $t('products') }}<span class="arrow"></span></nuxt-link>
 							<div class="megamenu">
 								<div class="container">
 									<ul class="menu__level-2">
@@ -29,7 +29,7 @@
 											)"
 											:key="index1">
 											<NuxtLink
-												:to="`/katalog-produktu/${level1.slug}`"
+												:to="localePath(`/katalog-produktu/${level1.slug}`)"
 												:style="{ backgroundImage: `url(${level1.productCategoriesAfc.menuImage?.sourceUrl})` }">
 												<span>
 													{{ level1.name }}
@@ -43,7 +43,7 @@
 														)
 													)"
 													:key="index2">
-													<NuxtLink :to="`/katalog-produktu/${level1.slug}/${level2.slug}`">{{
+													<NuxtLink :to="localePath(`/katalog-produktu/${level1.slug}/${level2.slug}`)">{{
 														level2.name
 													}}</NuxtLink>
 												</li>
@@ -54,22 +54,22 @@
 							</div>
 						</li>
 						<li>
-							<nuxt-link to="/sluzby">Služby</nuxt-link>
+							<nuxt-link :to="localePath('/sluzby')">{{ $t('services') }}</nuxt-link>
 						</li>
 						<li>
-							<nuxt-link to="/o-nas">O nás</nuxt-link>
+							<nuxt-link :to="localePath('/o-nas')">{{ $t('about') }}</nuxt-link>
 						</li>
 						<li>
-							<nuxt-link to="/reference">Reference</nuxt-link>
+							<nuxt-link :to="localePath('/reference')">{{ $t('references') }}</nuxt-link>
 						</li>
 						<li>
-							<nuxt-link to="/partneri">Partneři</nuxt-link>
+							<nuxt-link :to="localePath('/partneri')">{{ $t('partners') }}</nuxt-link>
 						</li>
 						<li>
-							<nuxt-link to="/kariera">Kariéra</nuxt-link>
+							<nuxt-link :to="localePath('/kariera')">{{ $t('career') }}</nuxt-link>
 						</li>
 						<li>
-							<nuxt-link to="/kontakty">Kontakty</nuxt-link>
+							<nuxt-link :to="localePath('/kontakty')">{{ $t('contact') }}</nuxt-link>
 						</li>
 					</ul>
 				</nav>
@@ -95,15 +95,27 @@
 						</form>
 					</div>
 				</div>
-				<div class="language">CZ</div>
+				<!-- <nav class="language">
+					<ul>
+						<li v-for="(locale, index) in availableLocales" :key="index">
+							<nuxt-link :to="switchLocalePath(locale.code)">{{ locale.name }}</nuxt-link>
+						</li>
+					</ul>
+				</nav> -->
 			</div>
 		</div>
 	</header>
 </template>
 <script setup>
+	import { useLocalePath, useSwitchLocalePath } from '#imports'
+	const localePath = useLocalePath()
 	const showSubmenu = ref(false)
 	const router = useRouter()
 	const language = useState('language')
+	const { locale, locales, t } = useI18n()
+	const availableLocales = computed(() => {
+		return locales.value.filter((i) => i.code !== locale.value)
+	})
 
 	router.beforeEach((to, from, next) => {
 		showSubmenu.value = false
@@ -159,12 +171,7 @@
 			}
 		}
 	`
-	// const categoriesData = useState('categories', () => null)
-	// if (!categoriesData.value) {
-	// 	const { data } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
-	// 	categoriesData.value = data.value
-	// }
-	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery, { language: language.value })
+	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery, { language: locale.value.toUpperCase() })
 	const toggleSearch = () => {
 		document.body.classList.toggle('search-visible')
 	}
@@ -173,7 +180,7 @@
 		e.preventDefault()
 		if (searchField.value) {
 			document.body.classList.remove('search-visible')
-			navigateTo(`/vyhledavani?search=${searchField.value}`)
+			navigateTo(localePath('/vyhledavani') + `?search=${searchField.value}`)
 		}
 	}
 </script>
@@ -420,6 +427,17 @@
 				background-color: $color-primary;
 				padding: 0 10px;
 				border-radius: 0 4px 4px 0;
+			}
+		}
+	}
+	nav.language {
+		ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			a {
+				text-decoration: none;
+				color: $color-primary;
 			}
 		}
 	}

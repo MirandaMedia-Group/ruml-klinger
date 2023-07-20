@@ -8,11 +8,6 @@
 	</div>
 </template>
 <script setup>
-	useHead({
-		bodyAttrs: {
-			class: 'wp-content',
-		},
-	})
 	const router = useRouter()
 	const variables = ref({ name: router.currentRoute.value.params.slug })
 	const serviceQuery = gql`
@@ -39,8 +34,19 @@
 			}
 		}
 	`
-	// const service = useState('singleService', () => null)
 	const { data: service } = await useAsyncQuery(serviceQuery, variables.value)
-	// service.value = data.value
+	useHead({
+		bodyAttrs: {
+			class: 'wp-content',
+		},
+		title: 'RUML Klinger s.r.o - ' + service.value.pages.nodes[0].title,
+		meta: [
+			{
+				hid: 'description',
+				name: 'description',
+				content: service.value.pages.nodes[0].rumlKlingerSluzby.shortDescription,
+			},
+		],
+	})
 </script>
 <style lang="scss"></style>

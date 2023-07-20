@@ -1,13 +1,6 @@
 <template>
-	<NuxtLink
-		v-if="props.type === 'internal'"
-		:to="props.href"
-		class="btn btn-secondary">
-		<svg
-			width="19"
-			height="15"
-			viewBox="0 0 19 15"
-			xmlns="http://www.w3.org/2000/svg">
+	<NuxtLink v-if="props.type === 'internal'" :to="props.href" class="btn btn-secondary">
+		<svg width="19" height="15" viewBox="0 0 19 15" xmlns="http://www.w3.org/2000/svg">
 			<path
 				d="M1.5 7.5L17.5 7.5M17.5 7.5L11 14M17.5 7.5L11 0.999999"
 				stroke-width="2"
@@ -16,15 +9,8 @@
 		</svg>
 		<slot></slot>
 	</NuxtLink>
-	<a
-		v-else
-		class="btn btn-secondary"
-		:href="props.href">
-		<svg
-			width="19"
-			height="15"
-			viewBox="0 0 19 15"
-			xmlns="http://www.w3.org/2000/svg">
+	<a v-else class="btn btn-secondary" :href="props.href">
+		<svg width="19" height="15" viewBox="0 0 19 15" xmlns="http://www.w3.org/2000/svg">
 			<path
 				d="M1.5 7.5L17.5 7.5M17.5 7.5L11 14M17.5 7.5L11 0.999999"
 				stroke-width="2"

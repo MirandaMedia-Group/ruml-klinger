@@ -1,24 +1,12 @@
 <template>
 	<section :class="{ 'has-background': props.hasBackground }">
-		<div
-			class="container"
-			:class="{ divider: props.divider }">
-			<div
-				class="columns col-2"
-				:class="{ reverse: props.reverse, 'align-center': props.alignCenter }">
+		<div class="container" :class="{ divider: props.divider }">
+			<div class="columns col-2" :class="{ reverse: props.reverse, 'align-center': props.alignCenter }">
 				<div class="column about-us__text">
 					<h2>{{ props.data.title }}</h2>
-					<div
-						v-if="props.data.perex"
-						class="about-us__perex"
-						v-html="props.data.perex"></div>
-					<div
-						v-if="props.data.text"
-						class="about-us__description"
-						v-html="props.data.text"></div>
-					<BtnSecondary
-						v-if="props.btn"
-						:href="props.btn.url">
+					<div v-if="props.data.perex" class="about-us__perex" v-html="props.data.perex"></div>
+					<div v-if="props.data.text" class="about-us__description" v-html="props.data.text"></div>
+					<BtnSecondary v-if="props.btn" :href="props.btn.url">
 						{{ props.btn.text }}
 					</BtnSecondary>
 				</div>
@@ -32,10 +20,8 @@
 							loading="lazy"
 							provider="ipx" />
 					</div>
-					<div
-						v-if="props.data.certificates"
-						class="certificates">
-						<h3>Certifikáty</h3>
+					<div v-if="props.data.certificates" class="certificates">
+						<h3>{{ $t('aboutusPage.downloadCertificates') }}</h3>
 						<FilesTable :data="props.data.certificates" />
 					</div>
 				</div>

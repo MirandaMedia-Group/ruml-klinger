@@ -74,7 +74,7 @@
 	</section>
 	<section class="container">
 		<div class="narrow center">
-			<h2>Vedení společnosti</h2>
+			<h2>{{ $t('aboutusPage.ownersTitle') }}</h2>
 		</div>
 		<div class="owners" v-if="screenWidth > 767">
 			<div v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person" :key="index" class="owner">
@@ -121,7 +121,7 @@
 	</section>
 	<section class="container" id="nase-spolocnosti">
 		<div class="narrow center">
-			<h2>Naše společnosti</h2>
+			<h2>{{ $t('ourCompanies') }}</h2>
 		</div>
 		<div class="companies">
 			<div class="company" v-for="(company, index) in onas.page.rumlKlingerOnas.ourCompanies.company" :key="index">
@@ -146,7 +146,7 @@
 				<div class="company__info">
 					<h3 class="company__title">{{ company.title }}</h3>
 					<div class="company__perex">{{ company.perex }}</div>
-					<a class="btn btn-primary" :href="company.url" target="_blank"> Přejít na web </a>
+					<a class="btn btn-primary" :href="company.url" target="_blank">{{ $t('aboutusPage.goToWeb') }}</a>
 				</div>
 			</div>
 		</div>
@@ -155,7 +155,7 @@
 		:data="careerBanner.page.rumlKlingerHomepage.career"
 		:align-center="true"
 		:reverse="true"
-		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }" />
+		:btn="{ text: $t('showAllPositions'), url: localePath('/kariera') }" />
 </template>
 <script setup>
 	import { Navigation } from 'swiper'
@@ -166,9 +166,31 @@
 	const swiperNext = ref(null)
 	const screenWidth = useState('screenWidth')
 	const toggleOwner = (event) => event.target.classList.toggle('active')
+	const { locale, t } = useI18n()
+	const localePath = useLocalePath()
+	const localeIDs = {
+		aboutus: {
+			cs: 'cG9zdDo2MDI=',
+			en: 'cG9zdDozODQy',
+		},
+		homepage: {
+			cs: 'cG9zdDo1OTI=',
+			en: 'cG9zdDozODM3',
+		},
+	}
+	useHead({
+		title: t('seo.aboutus.title'),
+		meta: [
+			{
+				hid: 'description',
+				name: 'description',
+				content: t('seo.aboutus.description'),
+			},
+		],
+	})
 	const onasQuery = gql`
-		query getOnasKlinger {
-			page(id: "cG9zdDo2MDI=") {
+		query getOnasKlinger($localeID: ID!) {
+			page(id: $localeID) {
 				id
 				slug
 				title
@@ -266,16 +288,11 @@
 			}
 		}
 	`
-	// const onas = useState('onas', () => null)
-	// if (!onas.value) {
-	// 	const { data } = await useAsyncQuery(onasQuery)
-	// 	onas.value = data.value
-	// }
-	const { data: onas } = await useAsyncQuery(onasQuery)
+	const { data: onas } = await useAsyncQuery(onasQuery, { localeID: localeIDs.aboutus[locale.value] })
 
 	const careerBannerQuery = gql`
-		query getCareerBannerKlinger {
-			page(id: "cG9zdDo1OTI=") {
+		query getCareerBannerKlinger($localeID: ID!) {
+			page(id: $localeID) {
 				title
 				slug
 				rumlKlingerHomepage {
@@ -296,12 +313,7 @@
 			}
 		}
 	`
-	// const careerBanner = useState('careerBanner', () => null)
-	// if (!careerBanner.value) {
-	// 	const { data } = await useAsyncQuery(careerBannerQuery)
-	// 	careerBanner.value = data.value
-	// }
-	const { data: careerBanner } = await useAsyncQuery(careerBannerQuery)
+	const { data: careerBanner } = await useAsyncQuery(careerBannerQuery, { localeID: localeIDs.homepage[locale.value] })
 </script>
 <style lang="scss">
 	.usp-wrapper {

@@ -23,10 +23,13 @@
 						<p>{{ categoryInfoData.productCategories.nodes[0].description }}</p>
 					</div>
 				</div>
-				<SubcategoriesList />
-				<div
-					id="products"
-					ref="productsAnchor">
+				<div v-if="screenWidth <= 900">
+					<CategoriesBox />
+				</div>
+				<div v-else>
+					<SubcategoriesList />
+				</div>
+				<div id="products" ref="productsAnchor">
 					<div v-if="pending">
 						<LoadingCircle />
 					</div>
@@ -68,6 +71,7 @@
 	</div>
 </template>
 <script setup>
+	const { locale } = useI18n()
 	definePageMeta({
 		layout: false,
 	})
@@ -170,9 +174,7 @@
 			}
 		}
 	`
-	// const categoryInfoData = useState('categoryInfoData', () => null)
 	const { data: categoryInfoData } = await useAsyncQuery(categoryInfoQuery, slugVariable.value)
-	// categoryInfoData.value = data.value
 	const breadcrumbsSublinks = ref(
 		categoryInfoData.value.productCategories.nodes[0].parent?.node.parent
 			? [

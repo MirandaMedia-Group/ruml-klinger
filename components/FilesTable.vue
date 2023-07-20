@@ -1,23 +1,14 @@
 <template>
 	<div class="product-files__table">
-		<div
-			v-for="(file, index) in data"
-			class="single-file"
-			:key="index">
+		<div v-for="(file, index) in data.filter((item) => item.file !== null)" class="single-file" :key="index">
 			<div class="file__name">
-				<a
-					:href="file.file.mediaItemUrl"
-					target="_blank"
-					download="">
+				<a :href="file.file.mediaItemUrl" target="_blank" download="">
 					{{ file.name ? file.name : file.file.title }}
 				</a>
 			</div>
 			<div class="file__size">{{ file.file.fileSize / 1000 }} kB</div>
 			<div class="file__type">
-				<a
-					:href="file.file.mediaItemUrl"
-					target="_blank"
-					download="">
+				<a :href="file.file.mediaItemUrl" target="_blank" download="">
 					<svg
 						v-if="file.file.mimeType === 'application/pdf'"
 						width="32"

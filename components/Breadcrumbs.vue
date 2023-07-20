@@ -2,20 +2,19 @@
 	<nav class="breadcrumbs">
 		<ul>
 			<li>
-				<NuxtLink to="/">Home</NuxtLink>
+				<NuxtLink :to="localePath('/')">Home</NuxtLink>
 			</li>
 			<li>
-				<NuxtLink to="/katalog-produktu">Produkty</NuxtLink>
+				<NuxtLink :to="localePath('/katalog-produktu')">{{ $t('products') }}</NuxtLink>
 			</li>
-			<li
-				v-for="(item, index) in props.sublinks"
-				:key="index">
-				<NuxtLink :to="item.url">{{ item.name }}</NuxtLink>
+			<li v-for="(item, index) in props.sublinks" :key="index">
+				<NuxtLink :to="localePath('item.url')">{{ item.name }}</NuxtLink>
 			</li>
 		</ul>
 	</nav>
 </template>
 <script setup>
+	const localePath = useLocalePath()
 	const props = defineProps(['sublinks'])
 </script>
 <style lang="scss" scoped>

@@ -10,10 +10,7 @@
 			<div class="banner__content">
 				<h3>{{ hpBannerTop.page.rumlKlingerHomepage.bannerTop.title }}</h3>
 				<p>{{ hpBannerTop.page.rumlKlingerHomepage.bannerTop.perex }}</p>
-				<a
-					class="btn btn-primary"
-					:href="hpBannerTop.page.rumlKlingerHomepage.bannerTop.btn.file.mediaItemUrl"
-					target="_blank">
+				<a class="btn btn-primary" :href="hpBannerTop.page.rumlKlingerHomepage.bannerTop.btn.file.mediaItemUrl" target="_blank">
 					{{ hpBannerTop.page.rumlKlingerHomepage.bannerTop.btn.text }}
 					({{ (hpBannerTop.page.rumlKlingerHomepage.bannerTop.btn.file.fileSize / 1000 / 1000).toFixed(2) }} MB)
 				</a>
@@ -22,10 +19,17 @@
 	</div>
 </template>
 <script setup>
+	const { locale, t } = useI18n()
+	const localeIDs = {
+		homepage: {
+			cs: 'cG9zdDo1OTI=',
+			en: 'cG9zdDozODM3',
+		},
+	}
 	const screenWidth = useState('screenWidth')
 	const homepageQuery = gql`
-		query getBannerTopKlinger {
-			page(id: "cG9zdDo1OTI=") {
+		query getBannerTopKlinger($localeID: ID!) {
+			page(id: $localeID) {
 				title
 				slug
 				rumlKlingerHomepage {
@@ -60,13 +64,7 @@
 			}
 		}
 	`
-	// const hpBannerTop = useState('hpBannerTop', () => null)
-	// if (!hpBannerTop.value) {
-	// 	const { data } = await useAsyncQuery(homepageQuery)
-	// 	hpBannerTop.value = data.value
-	// }
-	const { data: hpBannerTop } = await useAsyncQuery(homepageQuery)
-	// const { data: hpBannerTop } = await useAsyncData('bannerTop', () => useAsyncQuery(homepageQuery))
+	const { data: hpBannerTop } = await useAsyncQuery(homepageQuery, { localeID: localeIDs.homepage[locale.value] })
 </script>
 <style lang="scss" scoped>
 	.banner {

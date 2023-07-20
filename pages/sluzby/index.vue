@@ -1,21 +1,15 @@
 <template>
-	<section
-		class="page-image-header"
-		:style="`background-image: url('/sluzby-bg.jpg')`">
+	<section class="page-image-header" :style="`background-image: url('/sluzby-bg.jpg')`">
 		<div class="container page-image-header__content center">
-			<h1>Služby</h1>
+			<h1>{{ $t('servicesPage.title') }}</h1>
 			<p>
-				Využijte našich zkušeností z nejrůznějších průmyslových provozů pro zvýšení spolehlivosti, účinnosti nebo i životnosti
-				vašich zařízení.
+				{{ $t('servicesPage.perex') }}
 			</p>
 		</div>
 	</section>
 	<section class="services-page">
 		<div class="container">
-			<div
-				v-for="(service, index) in servicesData.pages.nodes"
-				:key="index"
-				class="service columns col-2">
+			<div v-for="(service, index) in servicesData.pages.nodes" :key="index" class="service columns col-2">
 				<div class="service__image column">
 					<NuxtPicture
 						:src="service.featuredImage.node.sourceUrl"
@@ -30,12 +24,8 @@
 					<h2 class="service__title">{{ service.title }}</h2>
 					<p class="service__description">{{ service.rumlKlingerSluzby.shortDescription }}</p>
 					<div class="buttons-wrapper justify-start">
-						<a
-							class="btn btn-primary"
-							href="mailto:ruml@ruml-group.cz">
-							ruml@ruml-group.cz
-						</a>
-						<BtnSecondary :href="`/sluzby/${service.slug}`">Detail služby</BtnSecondary>
+						<a class="btn btn-primary" href="mailto:ruml@ruml-group.cz"> ruml@ruml-group.cz </a>
+						<BtnSecondary :href="localePath(`/sluzby/${service.slug}`)">{{ $t('serviceDetail') }}</BtnSecondary>
 					</div>
 				</div>
 			</div>
@@ -46,22 +36,30 @@
 	</section>
 </template>
 <script setup>
+	const { locale, t } = useI18n()
+	const localePath = useLocalePath()
 	useHead({
-		title: 'Naše služby | RUML Klinger',
+		title: t('seo.services.title'),
 		meta: [
 			{
 				hid: 'description',
 				name: 'description',
-				content: '',
+				content: t('seo.services.description'),
 			},
 		],
 	})
+	const localeIDs = {
+		services: {
+			cs: 'cG9zdDo1OTg=',
+			en: 'cG9zdDozODQ3',
+		},
+	}
 
 	const route = useRoute()
 
 	const servicesQuery = gql`
-		query getAllServicesKlinger {
-			pages(where: { parent: "cG9zdDo1OTg=", orderby: { field: DATE, order: ASC } }) {
+		query getAllServicesKlinger($localeID: ID!) {
+			pages(where: { parent: $localeID, orderby: { field: DATE, order: ASC } }) {
 				nodes {
 					title
 					slug
@@ -82,12 +80,7 @@
 			}
 		}
 	`
-	// const servicesData = useState('servicesData', () => null)
-	// if (!servicesData.value) {
-	// 	const { data } = await useAsyncQuery(servicesQuery)
-	// 	servicesData.value = data.value
-	// }
-	const { data: servicesData } = await useAsyncQuery(servicesQuery)
+	const { data: servicesData } = await useAsyncQuery(servicesQuery, { localeID: localeIDs.services[locale.value] })
 </script>
 <style lang="scss" scoped>
 	.page-image-header {

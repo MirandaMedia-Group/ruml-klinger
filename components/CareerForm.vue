@@ -1,79 +1,42 @@
 <template>
 	<div class="form-wrapper">
 		<div class="form-header">
-			<h2>Máte zájem u tuto pozici?</h2>
-			<a
-				class="project-mail"
-				href="mailto:david@ruml-group.cz">
-				david@ruml-group.cz
-			</a>
-			<a
-				class="project-phone"
-				href="tel:00420777345205">
-				+420 777 345 205
-			</a>
+			<h2>{{ $t('contactForm.interestInPosition') }}</h2>
+			<a class="project-mail" href="mailto:david@ruml-group.cz"> david@ruml-group.cz </a>
+			<a class="project-phone" href="tel:00420777345205"> +420 777 345 205 </a>
 		</div>
-		<div
-			v-if="dataSending"
-			class="form-sending">
-			Odesílám...
-		</div>
-		<div
-			v-else-if="dataSent"
-			class="form-sent">
+		<div v-if="dataSending" class="form-sending">{{ $t('contactForm.sending') }}</div>
+		<div v-else-if="dataSent" class="form-sent">
 			{{ dataSent }}
 		</div>
-		<div
-			v-else-if="dataError"
-			class="form-error">
+		<div v-else-if="dataError" class="form-error">
 			{{ dataError }}
-			<div
-				v-for="(item, index) in dataErrorFields"
-				:key="index">
+			<div v-for="(item, index) in dataErrorFields" :key="index">
 				{{ item.message }}
 			</div>
 		</div>
-		<form
-			v-else
-			@submit.prevent="submitForm">
-			<h3>Vyplňte prosím formulář <small>a my se vám ozveme</small></h3>
+		<form v-else @submit.prevent="submitForm">
+			<h3>
+				{{ $t('contactForm.fullfilForm') }} <small>{{ $t('contactForm.fullfilFormSmall') }}</small>
+			</h3>
 			<div class="form-group">
-				<label for="fullName">Jméno a příjmení</label>
-				<input
-					type="text"
-					id="fullName"
-					name="fullName"
-					v-model="formValues.fullName"
-					placeholder="Pavel Novotný" />
+				<label for="fullName">{{ $t('contactForm.fullName') }}</label>
+				<input type="text" id="fullName" name="fullName" v-model="formValues.fullName" placeholder="Pavel Novotný" />
 			</div>
 			<div class="form-group">
-				<label for="phone">Telefon</label>
-				<input
-					type="text"
-					id="phone"
-					name="phone"
-					v-model="formValues.phone"
-					placeholder="724 666 555" />
+				<label for="phone">{{ $t('contactForm.phone') }}</label>
+				<input type="text" id="phone" name="phone" v-model="formValues.phone" placeholder="724 666 555" />
 			</div>
 			<div class="form-group">
-				<label for="email">Email</label>
-				<input
-					type="email"
-					id="email"
-					name="email"
-					v-model="formValues.email"
-					placeholder="pavel.novotny83@sez|" />
+				<label for="email">{{ $t('contactForm.email') }}</label>
+				<input type="email" id="email" name="email" v-model="formValues.email" placeholder="pavel.novotny83@sez|" />
 			</div>
 			<div class="form-group">
-				<label for="file">Vaše CV</label>
-				<input
-					type="file"
-					id="file"
-					name="file"
-					ref="formFile" />
+				<label for="file">{{ $t('contactForm.yourCV') }}</label>
+				<input type="file" id="file" name="file" ref="formFile" />
 			</div>
 			<div class="form-group">
-				<label for="message">Zpráva</label>
+				<label for="message">{{ $t('contactForm.message') }}</label>
 				<textarea
 					id="message"
 					name="message"
@@ -81,11 +44,7 @@
 					rows="5"
 					placeholder="Sem napište doplňující informace"></textarea>
 			</div>
-			<button
-				class="btn btn-tertiary"
-				type="submit">
-				Odeslat
-			</button>
+			<button class="btn btn-tertiary" type="submit">{{ $t('contactForm.send') }}</button>
 		</form>
 	</div>
 </template>

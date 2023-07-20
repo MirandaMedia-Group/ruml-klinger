@@ -2,9 +2,9 @@
 	<footer>
 		<div class="footer-top">
 			<div class="container">
-				<h2>Kontaktujte nás</h2>
+				<h2>{{ $t('contactUs') }}</h2>
 				<a class="project-mail" href="mailto:ruml@ruml-group.cz"> ruml@ruml-group.cz </a>
-				<NuxtLink class="btn btn-primary" to="/kontakty#nasi-specialiste"> Naši specialisté </NuxtLink>
+				<NuxtLink class="btn btn-primary" :to="localePath('/kontakty') + '#nasi-specialiste'">{{ $t('ourSpecialists') }}</NuxtLink>
 			</div>
 		</div>
 		<div class="footer-middle">
@@ -14,28 +14,25 @@
 					<nav>
 						<ul>
 							<li>
-								<nuxt-link to="/o-nas#nase-spolecnosti">Naše společnosti</nuxt-link>
+								<nuxt-link :to="localePath('/o-nas') + '#nase-spolecnosti'">{{ $t('ourCompanies') }}</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link to="/o-nas">O nás</nuxt-link>
-							</li>
-							<!-- <li>
-								<nuxt-link to="/financni-vysledky">Finanční výsledky</nuxt-link>
-							</li> -->
-							<li>
-								<nuxt-link to="/o-nas#historie">Historie</nuxt-link>
+								<nuxt-link :to="localePath('/o-nas')">{{ $t('about') }}</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link to="/kontakty">Kontakty</nuxt-link>
+								<nuxt-link :to="localePath('/o-nas#historie')">{{ $t('history') }}</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link to="/kariera">Kariéra</nuxt-link>
+								<nuxt-link :to="localePath('/kontakty')">{{ $t('contact') }}</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('/kariera')">{{ $t('career') }}</nuxt-link>
 							</li>
 						</ul>
 					</nav>
 				</div>
 				<div class="footer-block">
-					<h3 @click.prevent="toggleMenu">Společnosti<span class="trigger"></span></h3>
+					<h3 @click.prevent="toggleMenu">{{ $t('companies') }}<span class="trigger"></span></h3>
 					<nav>
 						<ul>
 							<li>
@@ -57,7 +54,7 @@
 					</nav>
 				</div>
 				<div class="footer-block">
-					<h3 @click.prevent="toggleMenu">Kontakty<span class="trigger"></span></h3>
+					<h3 @click.prevent="toggleMenu">{{ $t('contacts') }}<span class="trigger"></span></h3>
 					<div>
 						<p>
 							Nad Doly 1625/3 <br />
@@ -66,11 +63,11 @@
 							Česká republika
 						</p>
 						<p>
-							<a href="https://goo.gl/maps/FiEKdmbvxHKZXB7k9" target="_blank"> Zobrazit na mapě </a>
+							<a href="https://goo.gl/maps/FiEKdmbvxHKZXB7k9" target="_blank">{{ $t('viewOnMap') }}</a>
 						</p>
 						<p>
-							<b>IČ:</b> 480 286 14 <br />
-							<b>DIČ:</b> CZ480 286 14
+							<b>{{ $t('contactsPage.vat') }}:</b> 480 286 14 <br />
+							<b>{{ $t('contactsPage.vatId') }}:</b> CZ480 286 14
 						</p>
 					</div>
 				</div>
@@ -96,7 +93,7 @@
 				<div class="copyright">
 					Copyright © {{ actualYear }}
 					<a href="https://www.ruml-group.cz" target="_blank"> Ruml-group.cz </a>
-					| Všechna práva vyhrazena.
+					| {{ $t('allRightsReserved') }}.
 				</div>
 				<div class="signature">
 					<svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -111,6 +108,7 @@
 	</footer>
 </template>
 <script setup>
+	const localePath = useLocalePath()
 	const actualYear = computed(() => new Date().getFullYear())
 	const toggleMenu = (e) => {
 		e.target.classList.toggle('active')

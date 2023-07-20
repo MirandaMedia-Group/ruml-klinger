@@ -13,7 +13,7 @@
 			<NuxtLink
 				v-for="category in homepageData.page.rumlKlingerHomepage.categoriesBlock.categories"
 				:key="category.title"
-				:to="category.url"
+				:to="localePath(category.url)"
 				class="category">
 				<div class="category__image">
 					<NuxtPicture
@@ -52,7 +52,7 @@
 				<div class="service__content">
 					<h3>{{ item.title }}</h3>
 					<p class="service__description">{{ item.rumlKlingerSluzby.shortDescription }}</p>
-					<NuxtLink :to="`/sluzby/${item.slug}`" class="btn btn-primary"> Zobrazit službu </NuxtLink>
+					<NuxtLink :to="localePath(`/sluzby/${item.slug}`)" class="btn btn-primary">{{ $t('showService') }}</NuxtLink>
 				</div>
 			</div>
 		</div>
@@ -64,7 +64,7 @@
 
 	<section class="partners">
 		<div class="container center">
-			<h2>Partneři</h2>
+			<h2>{{ $t('partners') }}</h2>
 			<div class="partners-list">
 				<div class="partner" v-for="(item, index) in homepageData.partners.nodes" :key="index">
 					<NuxtPicture
@@ -76,17 +76,17 @@
 						provider="ipx" />
 				</div>
 			</div>
-			<BtnSecondary href="/partneri"> Další partneři </BtnSecondary>
+			<BtnSecondary :href="localePath('/partneri')">{{ $t('allPartners') }}</BtnSecondary>
 		</div>
 	</section>
 	<TextImageBlock
 		:data="homepageData.page.rumlKlingerHomepage.aboutUs"
 		:hasBackground="true"
-		:btn="{ text: 'Více o společnosti', url: '/o-nas' }"
+		:btn="{ text: $t('moreAboutCompany'), url: localePath('/o-nas') }"
 		:alignCenter="true" />
 	<section class="references container">
 		<div class="narrow center">
-			<h2>Reference</h2>
+			<h2>{{ $t('references') }}</h2>
 		</div>
 		<div v-if="screenWidth > 900">
 			<div class="references__categories">
@@ -127,24 +127,26 @@
 			</div>
 		</div>
 		<div class="buttons-wrapper buttons-center">
-			<BtnSecondary href="/reference">Všechny reference</BtnSecondary>
+			<BtnSecondary :href="localePath('/reference')">{{ $t('allReferences') }}</BtnSecondary>
 		</div>
 	</section>
 	<TextImageBlock
 		:data="homepageData.page.rumlKlingerHomepage.career"
 		:reverse="true"
-		:btn="{ text: 'Zobrazit pozice', url: '/kariera' }"
+		:btn="{ text: $t('showAllPositions'), url: localePath('/kariera') }"
 		:alignCenter="true" />
 </template>
 
 <script setup>
+	const { locale, t } = useI18n()
+	const localePath = useLocalePath()
 	useHead({
-		title: 'RUML Klinger - Domovská stránka',
+		title: t('seo.homepage.title'),
 		meta: [
 			{
 				hid: 'description',
 				name: 'description',
-				content: 'Domovská stránka společnosti RUML Klinger',
+				content: t('seo.homepage.description'),
 			},
 		],
 	})
@@ -163,10 +165,20 @@
 	// STATES
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
 	const language = useState('language')
+	const localeIDs = {
+		homepage: {
+			cs: 'cG9zdDo1OTI=',
+			en: 'cG9zdDozODM3',
+		},
+		services: {
+			cs: 'cG9zdDo1OTg=',
+			en: 'cG9zdDozODQ3',
+		},
+	}
 
 	const homepageQuery = gql`
-		query getHomepageKlinger {
-			page(id: "cG9zdDo1OTI=") {
+		query getHomepageKlinger($localeID: ID!, $parentID: ID!, $language: LanguageCodeFilterEnum!) {
+			page(id: $localeID) {
 				title
 				slug
 				rumlKlingerHomepage {
@@ -284,7 +296,7 @@
 					}
 				}
 			}
-			pages(where: { parent: "cG9zdDo1OTg=", orderby: { field: DATE, order: ASC } }, first: 2) {
+			pages(where: { parent: $parentID, orderby: { field: DATE, order: ASC } }, first: 2) {
 				nodes {
 					title
 					slug
@@ -303,7 +315,7 @@
 					}
 				}
 			}
-			partners(first: 5) {
+			partners(first: 5, where: { language: $language }) {
 				nodes {
 					id
 					title
@@ -321,12 +333,11 @@
 			}
 		}
 	`
-	// const homepageData = useState('homepageData', () => null)
-	// if (!homepageData.value) {
-	// 	const { data } = await useAsyncQuery(homepageQuery)
-	// 	homepageData.value = data.value
-	// }
-	const { data: homepageData } = await useAsyncQuery(homepageQuery)
+	const { data: homepageData } = await useAsyncQuery(homepageQuery, {
+		localeID: localeIDs.homepage[locale.value],
+		parentID: localeIDs.services[locale.value],
+		language: locale.value.toUpperCase(),
+	})
 
 	const referenceCategoriesQuery = gql`
 		query getReferenceCategoriesKlinger($language: LanguageCodeFilterEnum!) {
@@ -353,13 +364,7 @@
 			}
 		}
 	`
-	// const referenceCategories = useState('referenceCategories', () => null)
-	// if (!referenceCategories.value) {
-	// 	const { data } = await useAsyncQuery(referenceCategoriesQuery)
-	// 	referenceCategories.value = data.value
-	// 	activeReferenceBlock.value = data.value.referenceCategories.nodes[0].id
-	// }
-	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery, { language: language.value })
+	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery, { language: locale.value.toUpperCase() })
 	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
 
 	const referencesQuery = gql`
@@ -389,12 +394,7 @@
 			}
 		}
 	`
-	// const references = useState('references', () => null)
-	// if (!references.value) {
-	// 	const { data } = await useAsyncQuery(referencesQuery)
-	// 	references.value = data.value
-	// }
-	const { data: references } = await useAsyncQuery(referencesQuery, { language: language.value })
+	const { data: references } = await useAsyncQuery(referencesQuery, { language: locale.value.toUpperCase() })
 </script>
 <style lang="scss">
 	.categories__switcher {

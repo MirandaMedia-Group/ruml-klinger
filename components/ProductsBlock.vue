@@ -1,15 +1,10 @@
 <template>
 	<div class="products-block">
-		<div
-			v-if="props.banner"
-			class="category-banner">
+		<div v-if="props.banner" class="category-banner">
 			<div class="category-banner__content">
 				<h3>{{ props.banner.title }}</h3>
 				<div v-html="props.banner.excerpt"></div>
-				<a
-					v-if="props.banner.link"
-					:href="props.banner.link"
-					class="button">
+				<a v-if="props.banner.link" :href="localePath(props.banner.link)" class="button">
 					{{ props.banner.linkText }}
 				</a>
 			</div>
@@ -24,26 +19,20 @@
 					:img-attrs="{ style: 'display:block; width: 100%; height: 100%; object-fit: cover;' }" />
 				<NuxtLink
 					v-if="!props.banner.categoryBanners.btnUrl.includes('https')"
-					:to="props.banner.categoryBanners.btnUrl"
+					:to="localePath(props.banner.categoryBanners.btnUrl)"
 					class="category-banner__button btn btn-primary">
 					{{ props.banner.categoryBanners.btnText }}
 				</NuxtLink>
-				<a
-					v-else
-					:to="props.banner.categoryBanners.btnUrl"
-					class="category-banner__button btn btn-primary"
-					target="_blank">
+				<a v-else :to="props.banner.categoryBanners.btnUrl" class="category-banner__button btn btn-primary" target="_blank">
 					{{ props.banner.categoryBanners.btnText }}
 				</a>
 			</div>
 		</div>
-		<SingleProduct
-			v-for="(item, index) in props.data"
-			:key="index"
-			v-bind="item" />
+		<SingleProduct v-for="(item, index) in props.data" :key="index" v-bind="item" />
 	</div>
 </template>
 <script setup>
+	const localePath = useLocalePath()
 	const props = defineProps(['data', 'banner'])
 </script>
 <style lang="scss" scoped>

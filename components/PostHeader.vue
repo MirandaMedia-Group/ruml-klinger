@@ -2,9 +2,7 @@
 	<section class="detail-header">
 		<div class="container">
 			<div class="detail-header__columns">
-				<div
-					v-if="props.image"
-					class="column detail-header__image">
+				<div v-if="props.image" class="column detail-header__image">
 					<NuxtPicture
 						:src="props.image.sourceUrl"
 						:alt="props.image.altText"
@@ -14,17 +12,11 @@
 						provider="ipx" />
 				</div>
 				<div class="column detail-header__info">
-					<div
-						v-if="props.company"
-						class="detail-header__company">
-						<NuxtPicture
-							:src="companyLogos[props.logo]"
-							:alt="props.logo" />
+					<div v-if="props.company" class="detail-header__company">
+						<NuxtPicture :src="companyLogos[props.logo]" :alt="props.logo" />
 					</div>
 					<h1>{{ props.title }}</h1>
-					<div
-						class="detail-header__excerpt"
-						v-html="props.excerpt"></div>
+					<div class="detail-header__excerpt" v-html="props.excerpt"></div>
 				</div>
 			</div>
 		</div>

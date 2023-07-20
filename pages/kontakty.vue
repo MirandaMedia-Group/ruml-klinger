@@ -3,40 +3,40 @@
 	<section class="container overflow-hidden">
 		<div class="billing-info">
 			<div class="column">
-				<h2>Identifikační údaje</h2>
+				<h2>{{ $t('contactsPage.identificationData') }}</h2>
 				<div class="billing-info__table">
 					<div class="tr">
-						<div class="th">IČO</div>
+						<div class="th">{{ $t('contactsPage.vat') }}</div>
 						<div class="td">{{ kontakty.page.rumlKlingerKontakty.billingAddress.ico }}</div>
 					</div>
 					<div class="tr">
-						<div class="th">DIČ</div>
+						<div class="th">{{ $t('contactsPage.vatId') }}</div>
 						<div class="td">{{ kontakty.page.rumlKlingerKontakty.billingAddress.dic }}</div>
 					</div>
 					<div class="tr">
-						<div class="th">Sídlo</div>
+						<div class="th">{{ $t('contactsPage.headquarters') }}</div>
 						<div class="td" v-html="kontakty.page.rumlKlingerKontakty.billingAddress.address"></div>
 					</div>
 					<div class="tr">
-						<div class="th">Datová schránka</div>
+						<div class="th">{{ $t('contactsPage.dataBox') }}</div>
 						<div class="td">{{ kontakty.page.rumlKlingerKontakty.billingAddress.datovaSchranka }}</div>
 					</div>
 					<div class="tr">
 						<a :href="kontakty.page.rumlKlingerKontakty.billingAddress.obchodniRejstrik" target="_blank">
-							Výpis z obchodního rejstříku
+							{{ $t('contactsPage.commercialRegister') }}
 						</a>
 					</div>
 				</div>
 			</div>
 			<div class="column">
-				<h2>Bankovní spojení</h2>
+				<h2>{{ $t('contactsPage.bankConnection') }}</h2>
 				<div v-for="(item, index) in kontakty.page.rumlKlingerKontakty.spojeni" :key="index">
 					<div class="billing-info__table">
 						<div class="tr">
 							<strong>{{ item.title }}</strong>
 						</div>
 						<div v-if="item.accountNumber" class="tr">
-							<div class="th">Číslo účtu:</div>
+							<div class="th">{{ $t('contactsPage.accountNo') }}</div>
 							<div class="td">{{ item.accountNumber }}</div>
 						</div>
 						<div v-if="item.iban" class="tr">
@@ -52,7 +52,7 @@
 			</div>
 			<div class="column">
 				<div v-if="certificates.page.rumlKlingerOnas.firstBlock.certificates" class="certificates">
-					<h2>Certifikáty</h2>
+					<h2>{{ $t('certificates') }}</h2>
 					<FilesTable :data="certificates.page.rumlKlingerOnas.firstBlock.certificates" />
 				</div>
 			</div>
@@ -76,19 +76,19 @@
 					<div v-if="item.address" class="pobocka__address" v-html="item.address"></div>
 					<div class="billing-info__table">
 						<div class="tr" v-if="item.openingHours">
-							<div class="th">Otevřeno:</div>
+							<div class="th">{{ $t('contactsPage.open') }}:</div>
 							<div class="td">
 								{{ item.openingHours }}
 							</div>
 						</div>
 						<div class="tr" v-if="item.phone">
-							<div class="th">Telefon:</div>
+							<div class="th">{{ $t('contactsPage.phone') }}:</div>
 							<div class="td">
 								<a :href="`tel:${item.phone.replaceAll(' ', '')}`">{{ item.phone }}</a>
 							</div>
 						</div>
 						<div class="tr" v-if="item.email">
-							<div class="th">Email:</div>
+							<div class="th">{{ $t('contactsPage.email') }}:</div>
 							<div class="td">
 								<a :href="`mailto:${item.email}`">{{ item.email }}</a>
 							</div>
@@ -113,7 +113,7 @@
 		</div>
 	</section>
 	<section id="nasi-specialiste" class="container">
-		<h2 v-if="screenWidth > 767" class="center">Kontakty na naše specialisty</h2>
+		<h2 v-if="screenWidth > 767" class="center">{{ $t('contactsPage.specialistsTitle') }}</h2>
 		<AnchorsBlock v-if="screenWidth > 767" :style="{ marginTop: `${screenWidth > 767 ? 100 : 50}px` }">
 			<ul>
 				<li v-for="(item, index) in kontakty.page.rumlKlingerKontakty.contactGroup" :key="index">
@@ -166,9 +166,31 @@
 			.replace(/^-+|-+$/g, '')
 	const screenWidth = useState('screenWidth')
 	const toggleContacts = (e) => e.target.parentElement.classList.toggle('active')
+	const { locale, t } = useI18n()
+	const localePath = useLocalePath()
+	useHead({
+		title: t('seo.contacts.title'),
+		meta: [
+			{
+				hid: 'description',
+				name: 'description',
+				content: t('seo.contacts.description'),
+			},
+		],
+	})
+	const localeIDs = {
+		contacts: {
+			cs: 'cG9zdDo2MDQ=',
+			en: 'cG9zdDozODQw',
+		},
+		aboutus: {
+			cs: 'cG9zdDo2MDI=',
+			en: 'cG9zdDozODQy',
+		},
+	}
 	const kontaktyQuery = gql`
-		query getKontaktyKlinger {
-			page(id: "cG9zdDo2MDQ=") {
+		query getKontaktyKlinger($localeID: ID!) {
+			page(id: $localeID) {
 				slug
 				rumlKlingerKontakty {
 					hero {
@@ -235,16 +257,11 @@
 			}
 		}
 	`
-	// const kontakty = useState('kontakty', () => null)
-	// if (!kontakty.value) {
-	// 	const { data } = await useAsyncQuery(kontaktyQuery)
-	// 	kontakty.value = data.value
-	// }
-	const { data: kontakty } = await useAsyncQuery(kontaktyQuery)
+	const { data: kontakty } = await useAsyncQuery(kontaktyQuery, { localeID: localeIDs.contacts[locale.value] })
 
 	const certificatesQuery = gql`
-		query getCertificatesKlinger {
-			page(id: "cG9zdDo2MDI=") {
+		query getCertificatesKlinger($localeID: ID!) {
+			page(id: $localeID) {
 				rumlKlingerOnas {
 					firstBlock {
 						certificates {
@@ -262,12 +279,7 @@
 			}
 		}
 	`
-	// const certificates = useState('certificates', () => null)
-	// if (!certificates.value) {
-	// 	const { data } = await useAsyncQuery(certificatesQuery)
-	// 	certificates.value = data.value
-	// }
-	const { data: certificates } = await useAsyncQuery(certificatesQuery)
+	const { data: certificates } = await useAsyncQuery(certificatesQuery, { localeID: localeIDs.aboutus[locale.value] })
 </script>
 <style lang="scss">
 	.billing-info {

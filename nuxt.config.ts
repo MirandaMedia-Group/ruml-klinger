@@ -29,10 +29,17 @@ export default defineNuxtConfig({
 		},
 	},
 	css: ['@/assets/normalize.css', '@/assets/global.css'],
-	modules: ['@nuxt/image-edge', '@nuxtjs/apollo', '@zadigetvoltaire/nuxt-gtm', '@dargmuesli/nuxt-cookie-control', 'nuxt-simple-sitemap'],
+	modules: [
+		'@nuxt/image-edge',
+		'@nuxtjs/apollo',
+		'@zadigetvoltaire/nuxt-gtm',
+		'@dargmuesli/nuxt-cookie-control',
+		'nuxt-simple-sitemap',
+		'@nuxtjs/i18n',
+	],
 	image: {
 		provider: 'netlify',
-		domains: ['cdn.myshoptet.com', 'pet-center-stage.axfone.eu', 'pet-center-prod.axfone.eu'],
+		domains: [],
 		ipx: {},
 	},
 	apollo: {
@@ -99,10 +106,12 @@ export default defineNuxtConfig({
 				{
 					description: {
 						cs: 'Tento web používá cookies, které jsou nezbytné pro jeho správné fungování.',
+						en: 'This website uses cookies that are necessary for its proper functioning.',
 					},
 					id: 'necessary',
 					name: {
 						cs: 'Nezbytné',
+						en: 'Necessary',
 					},
 				},
 			],
@@ -110,10 +119,12 @@ export default defineNuxtConfig({
 				{
 					description: {
 						cs: 'Používáme Google Analytics k měření návštěvnosti webu.',
+						en: 'We use Google Analytics to measure website traffic.',
 					},
 					id: 'google-analytics',
 					name: {
 						cs: 'Google Analytics',
+						en: 'Google Analytics',
 					},
 					src: 'https://www.googletagmanager.com/gtag/js?id=GTM-PVPZKVF',
 					targetCookieIds: ['cookie_control_consent', 'cookie_control_enabled_cookies'],
@@ -123,6 +134,23 @@ export default defineNuxtConfig({
 		cookieExpiryOffsetMs: 1000 * 60 * 60 * 24 * 30,
 		cookieNameIsConsentGiven: 'ncc_c',
 		cookieNameCookiesEnabledIds: 'ncc_e',
-		locales: ['cs'],
+		locales: ['cs', 'en'],
+	},
+	i18n: {
+		locales: [
+			{
+				code: 'cs',
+				iso: 'cs-CZ',
+				name: 'CZ',
+			},
+			{
+				code: 'en',
+				iso: 'en-US',
+				name: 'EN',
+			},
+		],
+		baseUrl: 'https://www.ruml-klinger.cz',
+		defaultLocale: 'cs',
+		vueI18n: './i18n.config.ts',
 	},
 })

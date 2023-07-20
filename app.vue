@@ -8,11 +8,19 @@
 	<MainFooter />
 </template>
 <script setup>
+	import { useLocaleHead } from '#imports'
 	const { cookiesEnabled, cookiesEnabledIds, isConsentGiven, isModalActive, moduleOptions } = useCookieControl()
 	const gtm = useGtm()
+	const { locale } = useI18n()
+	const head = useLocaleHead({
+		addDirAttribute: true,
+		identifierAttribute: 'id',
+		addSeoAttributes: true,
+	})
 	useHead({
 		htmlAttrs: {
-			lang: 'cs',
+			lang: head.value.htmlAttrs.lang,
+			dir: head.value.htmlAttrs.dir,
 		},
 		title: 'RUML s.r.o.',
 		meta: [

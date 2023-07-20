@@ -9,7 +9,7 @@
 				)"
 				:key="index"
 				:style="{ backgroundImage: item.menuImage?.sourceUrl }">
-				<NuxtLink :to="`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`">{{ item.name }}</NuxtLink>
+				<NuxtLink :to="localePath(`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`)">{{ item.name }}</NuxtLink>
 			</li>
 		</ul>
 		<ul v-else class="subcategories">
@@ -21,21 +21,16 @@
 				)"
 				:key="index"
 				:style="{ backgroundImage: `url(${item.productCategoriesAfc.menuImage?.sourceUrl})` }">
-				<NuxtLink :to="`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`">{{ item.name }}</NuxtLink>
+				<NuxtLink :to="localePath(`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`)">{{ item.name }}</NuxtLink>
 			</li>
 		</ul>
 	</div>
 </template>
 <script setup>
+	const localePath = useLocalePath()
+	const { locale } = useI18n()
 	const router = useRouter()
 	const language = useState('language')
-	const routerSlug = ref(router.currentRoute.value.params.slug)
-	routerSlug.value = router.currentRoute.value.params.slug?.length
-		? router.currentRoute.value.params.slug.filter((slug) => slug !== '')
-		: 0
-	const slugVariable = ref({
-		slug: routerSlug.value[routerSlug.value.length - 1] ? [routerSlug.value[routerSlug.value.length - 1]] : 0,
-	})
 	const sortByOrder = (object) => {
 		const help = object.slice(0)
 		help.sort((a, b) => {
@@ -46,6 +41,13 @@
 		})
 		return help
 	}
+	const routerSlug = ref(router.currentRoute.value.params.slug)
+	routerSlug.value = router.currentRoute.value.params.slug?.length
+		? router.currentRoute.value.params.slug.filter((slug) => slug !== '')
+		: 0
+	const slugVariable = ref({
+		slug: routerSlug.value[routerSlug.value.length - 1] ? [routerSlug.value[routerSlug.value.length - 1]] : 0,
+	})
 	const productSubcategoriesQuery =
 		routerSlug.value !== 0
 			? gql`
@@ -128,15 +130,9 @@
 						}
 					}
 			  `
-	// const subcategoriesData = useState('subcategories', () => null)
-	// const { data } = await useAsyncQuery(
-	// 	productSubcategoriesQuery,
-	// 	routerSlug.value !== 0 ? { ...slugVariable.value, language: language.value } : { language: language.value }
-	// )
-	// subcategoriesData.value = data.value
 	const { data: subcategoriesData } = await useAsyncQuery(
 		productSubcategoriesQuery,
-		routerSlug.value !== 0 ? { ...slugVariable.value, language: language.value } : { language: language.value }
+		routerSlug.value !== 0 ? { ...slugVariable.value, language: locale.value.toUpperCase() } : { language: locale.value.toUpperCase() }
 	)
 </script>
 <style lang="scss" scoped>

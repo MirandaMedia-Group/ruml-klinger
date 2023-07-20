@@ -19,11 +19,6 @@
 	</div>
 </template>
 <script setup>
-	useHead({
-		bodyAttrs: {
-			class: 'wp-content',
-		},
-	})
 	definePageMeta({
 		layout: false,
 	})
@@ -59,4 +54,17 @@
 		}
 	`
 	const { data: careerDetail, pending } = await useAsyncQuery(careerDetailQuery, variables.value)
+	useHead({
+		bodyAttrs: {
+			class: 'wp-content',
+		},
+		title: 'RUML Klinger s.r.o. - ' + careerDetail.value.careers.nodes[0].title,
+		meta: [
+			{
+				hid: 'description',
+				name: 'description',
+				content: careerDetail.value.careers.nodes[0].excerpt,
+			},
+		],
+	})
 </script>

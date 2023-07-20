@@ -1,13 +1,10 @@
 <template>
 	<PageHeader>
-		<h1>Partneři</h1>
+		<h1>{{ $t('partners') }}</h1>
 	</PageHeader>
 	<section class="container">
 		<div class="partners-grid">
-			<div
-				class="partner"
-				v-for="(partner, index) in allPartners.partners.nodes"
-				:key="index">
+			<div class="partner" v-for="(partner, index) in allPartners.partners.nodes" :key="index">
 				<div class="partner__image">
 					<NuxtPicture
 						:src="partner.featuredImage.node.sourceUrl"
@@ -18,22 +15,20 @@
 						provider="ipx" />
 				</div>
 				<h2 class="partner__title">{{ partner.title }}</h2>
-				<div
-					class="partner__excerpt"
-					v-html="partner.excerpt"></div>
+				<div class="partner__excerpt" v-html="partner.excerpt"></div>
 				<div class="buttons-wrapper align-center justify-start">
-					<NuxtLink
-						:to="`/katalog-produktu/vyrobce/${partner.slug}`"
-						class="btn btn-primary">
-						Zobrazit produkty
+					<NuxtLink :to="localePath(`/katalog-produktu/vyrobce/${partner.slug}`)" class="btn btn-primary">
+						{{ $t('showProducts') }}
 					</NuxtLink>
-					<NuxtLink :to="`/partneri/${partner.slug}`">Více o partnerovi</NuxtLink>
+					<NuxtLink :to="localePath(`/partneri/${partner.slug}`)">{{ $t('moreAboutPartner') }}</NuxtLink>
 				</div>
 			</div>
 		</div>
 	</section>
 </template>
 <script setup>
+	const localePath = useLocalePath()
+	const { locale, t } = useI18n()
 	const language = useState('language')
 	const allPartnersQuery = gql`
 		query getPartnersKlinger($language: LanguageCodeFilterEnum) {
@@ -56,12 +51,7 @@
 			}
 		}
 	`
-	// const allPartners = useState('allPartners', () => null)
-	// if (!allPartners.value) {
-	// 	const { data } = await useAsyncQuery(allPartnersQuery)
-	// 	allPartners.value = data.value
-	// }
-	const { data: allPartners } = await useAsyncQuery(allPartnersQuery, { language: language.value })
+	const { data: allPartners } = await useAsyncQuery(allPartnersQuery, { language: locale.value.toUpperCase() })
 </script>
 <style lang="scss">
 	.partners-grid {

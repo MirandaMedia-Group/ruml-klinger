@@ -5,13 +5,11 @@
 				<div class="">
 					<div class="">
 						<h1>
-							Produkty výrobce <strong>{{ manufacturerDetail.partners.nodes[0].title }}</strong>
+							{{ $t('manufacturerProducts') }} <strong>{{ manufacturerDetail.partners.nodes[0].title }}</strong>
 						</h1>
 					</div>
 				</div>
-				<div
-					id="products"
-					ref="productsAnchor">
+				<div id="products" ref="productsAnchor">
 					<div v-if="pending">
 						<LoadingCircle />
 					</div>
@@ -36,7 +34,6 @@
 		layout: false,
 	})
 	const router = useRouter()
-	console.log(router.currentRoute.value.params.slug)
 	const productsAnchor = ref(null)
 	const screenWidth = useState('screenWidth')
 	const manufacturerProductsQuery = gql`
@@ -86,6 +83,5 @@
 	const { data: manufacturerDetail } = await useAsyncQuery(manufaturerDetailQuery, {
 		slug: router.currentRoute.value.params.slug,
 	})
-	console.log(manufacturerDetail.value)
 </script>
 <style lang="scss"></style>

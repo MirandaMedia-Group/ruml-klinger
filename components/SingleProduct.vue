@@ -1,6 +1,6 @@
 <template>
 	<div class="product">
-		<NuxtLink :to="`/katalog-produktu/product/${props.slug}`">
+		<NuxtLink :to="localePath(`/katalog-produktu/product/${props.slug}`)">
 			<div class="product__image">
 				<NuxtPicture
 					v-if="props.productAcf?.gallery?.[0]?.sourceUrl"
@@ -17,12 +17,7 @@
 				<div v-html="props.excerpt"></div>
 				<div class="button-detail">
 					<span>Detail</span>
-					<svg
-						width="19"
-						height="15"
-						viewBox="0 0 19 15"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg">
+					<svg width="19" height="15" viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path
 							d="M1.5 7.5L17.5 7.5M17.5 7.5L11 14M17.5 7.5L11 0.999999"
 							stroke="#D70C38"
@@ -36,6 +31,7 @@
 	</div>
 </template>
 <script setup>
+	const localePath = useLocalePath()
 	const props = defineProps(['slug', 'title', 'excerpt', 'productAcf'])
 </script>
 <style lang="scss" scoped>

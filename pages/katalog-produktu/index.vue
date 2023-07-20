@@ -8,7 +8,7 @@
 				<div class="">
 					<!-- <div class="category__image"></div> -->
 					<div class="">
-						<h1>Produkty</h1>
+						<h1>{{ $t('products') }}</h1>
 					</div>
 				</div>
 				<SubcategoriesList />
