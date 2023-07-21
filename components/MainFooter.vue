@@ -60,7 +60,7 @@
 							Nad Doly 1625/3 <br />
 							Praha 4 - Modřany <br />
 							PSČ 143 00 <br />
-							Česká republika
+							{{ $t('czechRepublic') }}
 						</p>
 						<p>
 							<a href="https://goo.gl/maps/FiEKdmbvxHKZXB7k9" target="_blank">{{ $t('viewOnMap') }}</a>
