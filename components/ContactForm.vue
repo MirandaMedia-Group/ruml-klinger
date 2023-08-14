@@ -75,6 +75,7 @@
 				method: 'POST',
 				body: formData,
 			})
+			console.log(response)
 			if (response.status === 'mail_sent') {
 				dataSending.value = false
 				dataSent.value = true
@@ -83,6 +84,7 @@
 				dataError.value = true
 			}
 		} catch (e) {
+			console.log(e)
 			dataSending.value = false
 			dataError.value = true
 		}

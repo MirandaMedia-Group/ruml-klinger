@@ -42,6 +42,7 @@
 				nodes {
 					slug
 					title
+					excerpt
 					productAcf {
 						shortDescription
 						gallery {
