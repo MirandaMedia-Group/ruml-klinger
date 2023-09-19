@@ -95,13 +95,14 @@
 						</form>
 					</div>
 				</div>
-				<!-- <nav class="language">
+				<span class="separator">|</span>
+				<nav class="language">
 					<ul>
 						<li v-for="(locale, index) in availableLocales" :key="index">
 							<nuxt-link :to="switchLocalePath(locale.code)">{{ locale.name }}</nuxt-link>
 						</li>
 					</ul>
-				</nav> -->
+				</nav>
 			</div>
 		</div>
 	</header>
