@@ -95,7 +95,6 @@
 						</form>
 					</div>
 				</div>
-				<span class="separator">|</span>
 				<nav class="language">
 					<ul>
 						<li v-for="(locale, index) in availableLocales" :key="index">
