@@ -173,6 +173,7 @@ export default defineI18nConfig(() => ({
 				perex: 'Využijte našich zkušeností z nejrůznějších průmyslových provozů pro zvýšení spolehlivosti, účinnosti nebo i životnosti vašich zařízení.',
 			},
 			manufacturerProducts: 'Produkty výrobce',
+			discoverAll: 'Prohlédnout vše',
 		},
 		en: {
 			seo: {
@@ -344,6 +345,7 @@ export default defineI18nConfig(() => ({
 				perex: 'Take advantage of our experience from various industrial operations to increase the reliability, efficiency or even the life of your equipment.',
 			},
 			manufacturerProducts: 'Products of manufacturer',
+			discoverAll: 'Discover all',
 		},
 	},
 }))

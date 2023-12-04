@@ -151,11 +151,56 @@
 			</div>
 		</div>
 	</section>
-	<TextImageBlock
-		:data="careerBanner.page.rumlKlingerHomepage.career"
-		:align-center="true"
-		:reverse="true"
-		:btn="{ text: $t('showAllPositions'), url: localePath('/kariera') }" />
+	<section>
+		<TextImageBlock
+			:data="careerBanner.page.rumlKlingerHomepage.career"
+			:align-center="true"
+			:reverse="true"
+			:btn="{ text: $t('showAllPositions'), url: localePath('/kariera') }" />
+	</section>
+	<section>
+		<div class="container divider top">
+			<div class="companies">
+				<div class="company">
+					<div class="company__image">
+						<NuxtPicture
+							v-if="pfData.page?.featuredImage"
+							:src="pfData.page?.featuredImage?.node?.sourceUrl"
+							:alt="pfData.page.featuredImage.node.altText"
+							:width="pfData.page.featuredImage.node.mediaDetails.width"
+							:height="pfData.page.featuredImage.node.mediaDetails.height"
+							loading="lazy"
+							provider="ipx" />
+					</div>
+					<div class="company__info">
+						<h3 class="company__title">{{ pfData.page.title }}</h3>
+						<div v-if="pfData.page.pfCustom.description" class="company__perex" v-html="pfData.page.pfCustom.description"></div>
+						<nuxt-link :to="localePath('/pf')" class="btn btn-primary">{{ $t('discoverAll') }}</nuxt-link>
+					</div>
+				</div>
+				<div class="company">
+					<div class="company__image">
+						<NuxtPicture
+							v-if="calendarData.page?.featuredImage"
+							:src="calendarData.page?.featuredImage?.node?.sourceUrl"
+							:alt="calendarData.page.featuredImage.node.altText"
+							:width="calendarData.page.featuredImage.node.mediaDetails.width"
+							:height="calendarData.page.featuredImage.node.mediaDetails.height"
+							loading="lazy"
+							provider="ipx" />
+					</div>
+					<div class="company__info">
+						<h3 class="company__title">{{ calendarData.page.title }}</h3>
+						<div
+							v-if="calendarData.page.pfCustom.description"
+							class="company__perex"
+							v-html="calendarData.page.pfCustom.description"></div>
+						<nuxt-link :to="localePath('/kalendare')" class="btn btn-primary">{{ $t('discoverAll') }}</nuxt-link>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 </template>
 <script setup>
 	import { Navigation } from 'swiper'
@@ -176,6 +221,14 @@
 		homepage: {
 			cs: 'cG9zdDo1OTI=',
 			en: 'cG9zdDozODM3',
+		},
+		pf: {
+			cs: 'cG9zdDo0MzEw',
+			en: 'cG9zdDo0MzEy',
+		},
+		kalendar: {
+			cs: 'cG9zdDo0MzE0',
+			en: 'cG9zdDo0MzE2',
 		},
 	}
 	useHead({
@@ -314,6 +367,53 @@
 		}
 	`
 	const { data: careerBanner } = await useAsyncQuery(careerBannerQuery, { localeID: localeIDs.homepage[locale.value] })
+
+	const pfQuery = gql`
+		query getKlingerPF($localeID: ID!) {
+			page(id: $localeID) {
+				title
+				slug
+				content
+				featuredImage {
+					node {
+						altText
+						sourceUrl
+						mediaDetails {
+							height
+							width
+						}
+					}
+				}
+				pfCustom {
+					description
+				}
+			}
+		}
+	`
+	const { data: pfData } = await useAsyncQuery(pfQuery, { localeID: localeIDs.pf[locale.value] })
+	const calendarQuery = gql`
+		query getKlingerCalendar($localeID: ID!) {
+			page(id: $localeID) {
+				title
+				slug
+				content
+				featuredImage {
+					node {
+						altText
+						sourceUrl
+						mediaDetails {
+							height
+							width
+						}
+					}
+				}
+				pfCustom {
+					description
+				}
+			}
+		}
+	`
+	const { data: calendarData } = await useAsyncQuery(calendarQuery, { localeID: localeIDs.kalendar[locale.value] })
 </script>
 <style lang="scss">
 	.usp-wrapper {

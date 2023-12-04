@@ -266,9 +266,15 @@
 			position: absolute;
 			bottom: 0;
 			display: block;
-			width: 100%;
+			// width: 100%;
+			left: 2rem;
+			right: 2rem;
 			height: 1px;
 			background-color: $color-inactive;
+			@media (max-width: 767px) {
+				left: 20px;
+				right: 20px;
+			}
 		}
 		&::after {
 			padding: 8px;
