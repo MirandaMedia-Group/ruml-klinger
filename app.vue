@@ -1,4 +1,7 @@
 <template>
+	<ClientOnly>
+		<SiteMessage />
+	</ClientOnly>
 	<LazyNuxtLoadingIndicator color="#d70c38" />
 	<CookieControl class="no-margin" :locale="locale" />
 	<MainHeader />
