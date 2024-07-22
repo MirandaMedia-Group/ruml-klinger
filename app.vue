@@ -56,18 +56,18 @@
 		navigationVisible.value = false
 		next()
 	})
-	// watch(
-	// 	() => cookiesEnabledIds.value,
-	// 	(current, previous) => {
-	// 		if (!previous?.includes('google-analytics') && current?.includes('google-analytics')) {
-	// 			gtm.enable()
-	// 		}
-	// 		if (previous?.includes('google-analytics') && !current?.includes('google-analytics')) {
-	// 			gtm.enable(false)
-	// 		}
-	// 	},
-	// 	{ deep: true }
-	// )
+	watch(
+		() => cookiesEnabledIds.value,
+		(current, previous) => {
+			if (!previous?.includes('google-analytics') && current?.includes('google-analytics')) {
+				gtm.enable(true)
+			}
+			if (previous?.includes('google-analytics') && !current?.includes('google-analytics')) {
+				gtm.enable(false)
+			}
+		},
+		{ deep: true }
+	)
 </script>
 <style lang="scss">
 	html {

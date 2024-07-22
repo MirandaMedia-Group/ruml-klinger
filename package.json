@@ -9,7 +9,7 @@
 		"start": "node .output/server/index.mjs"
 	},
 	"devDependencies": {
-		"@dargmuesli/nuxt-cookie-control": "^5.9.3",
+		"@dargmuesli/nuxt-cookie-control": "^8.4.5",
 		"@nuxt/image-edge": "1.0.0-28059208.2abef1b",
 		"@nuxtjs/apollo": "^5.0.0-alpha.5",
 		"@nuxtjs/i18n": "next",
