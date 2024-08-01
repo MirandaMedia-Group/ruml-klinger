@@ -3,7 +3,7 @@
 		<div
 			class="reference"
 			v-for="(reference, index) in props.references.filter(
-				(reference) => reference.referenceCategories.nodes[0].id === props.category.id
+				(reference) => reference.referenceCategories.nodes[0]?.id === props.category.id
 			)"
 			:key="reference.slug">
 			<div class="reference__image">

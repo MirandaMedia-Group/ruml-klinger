@@ -20,7 +20,11 @@
 					)
 				)"
 				:key="index"
-				:style="{ backgroundImage: `url(${item.productCategoriesAfc.menuImage?.sourceUrl})` }">
+				:style="{
+					backgroundImage: `url(${
+						item.productCategoriesAfc.menuImage?.sourceUrl ? item.productCategoriesAfc.menuImage?.sourceUrl : ''
+					})`,
+				}">
 				<NuxtLink :to="localePath(`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`)">{{ item.name }}</NuxtLink>
 			</li>
 		</ul>

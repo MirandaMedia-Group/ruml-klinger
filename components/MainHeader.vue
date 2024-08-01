@@ -30,7 +30,13 @@
 											:key="index1">
 											<NuxtLink
 												:to="localePath(`/katalog-produktu/${level1.slug}`)"
-												:style="{ backgroundImage: `url(${level1.productCategoriesAfc.menuImage?.sourceUrl})` }">
+												:style="{
+													backgroundImage: `url(${
+														level1.productCategoriesAfc.menuImage?.sourceUrl
+															? level1.productCategoriesAfc.menuImage?.sourceUrl
+															: ''
+													})`,
+												}">
 												<span>
 													{{ level1.name }}
 												</span>

@@ -16,32 +16,29 @@ export default defineNuxtConfig({
 		'/katalog-produktu/**': { isr: 3600 },
 		'/cs': { redirect: '/' },
 	},
+
 	vite: {
 		css: {
 			preprocessorOptions: {
 				scss: {
 					additionalData: `
-                        @import "@/assets/_variables.scss";
-                        @import "@/assets/_mixins.scss";    
-                    `,
+																					@import "@/assets/_variables.scss";
+																					@import "@/assets/_mixins.scss";    
+																	`,
 				},
 			},
 		},
 	},
+
 	css: ['@/assets/normalize.css', '@/assets/global.css'],
-	modules: [
-		'@nuxt/image-edge',
-		'@nuxtjs/apollo',
-		'@zadigetvoltaire/nuxt-gtm',
-		'@dargmuesli/nuxt-cookie-control',
-		'nuxt-simple-sitemap',
-		'@nuxtjs/i18n',
-	],
+	modules: ['@nuxt/image-edge', '@nuxtjs/apollo', '@dargmuesli/nuxt-cookie-control', 'nuxt-simple-sitemap', '@nuxtjs/i18n', 'nuxt-gtag'],
+
 	image: {
 		provider: 'netlify',
 		domains: [],
 		ipx: {},
 	},
+
 	apollo: {
 		clients: {
 			default: {
@@ -54,23 +51,42 @@ export default defineNuxtConfig({
 			},
 		},
 	},
+
 	runtimeConfig: {
 		public: {
 			googleMapsAPI: process.env.GOOGLE_MAPS_API,
 			siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.ruml-klinger.cz',
 		},
 	},
-	gtm: {
+
+	// gtm: {
+	// 	id: 'GTM-PVPZKVF',
+	// 	defer: false, // Script can be set to `defer` to speed up page load at the cost of less accurate results (in case visitor leaves before script is loaded, which is unlikely but possible). Defaults to false, so the script is loaded `async` by default
+	// 	compatibility: false, // Will add `async` and `defer` to the script tag to not block requests for old browsers that do not support `async`
+	// 	// nonce: '2726c7f26c', // Will add `nonce` to the script tag
+	// 	enabled: true, // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
+	// 	debug: true, // Whether or not display console logs debugs (optional)
+	// 	loadScript: true, // Whether or not to load the GTM Script (Helpful if you are including GTM manually, but need the dataLayer functionality in your components) (optional)
+	// 	enableRouterSync: true, // Pass the router instance of your app to automatically sync with router (optional)
+	// 	trackOnNextTick: false, // Whether or not call trackView in Vue.nextTick
+	// },
+	gtag: {
 		id: 'GTM-PVPZKVF',
-		defer: false, // Script can be set to `defer` to speed up page load at the cost of less accurate results (in case visitor leaves before script is loaded, which is unlikely but possible). Defaults to false, so the script is loaded `async` by default
-		compatibility: false, // Will add `async` and `defer` to the script tag to not block requests for old browsers that do not support `async`
-		// nonce: '2726c7f26c', // Will add `nonce` to the script tag
-		enabled: false, // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
-		debug: true, // Whether or not display console logs debugs (optional)
-		loadScript: true, // Whether or not to load the GTM Script (Helpful if you are including GTM manually, but need the dataLayer functionality in your components) (optional)
-		enableRouterSync: true, // Pass the router instance of your app to automatically sync with router (optional)
-		trackOnNextTick: false, // Whether or not call trackView in Vue.nextTick
+		initCommands: [
+			[
+				'consent',
+				'default',
+				{
+					ad_storage: 'denied',
+					ad_user_data: 'denied',
+					ad_personalization: 'denied',
+					analytics_storage: 'denied',
+					wait_for_update: 500,
+				},
+			],
+		],
 	},
+
 	cookieControl: {
 		barPosition: 'bottom-full',
 		closeModalOnClickOutside: true,
@@ -136,6 +152,7 @@ export default defineNuxtConfig({
 		cookieNameCookiesEnabledIds: 'ncc_e',
 		locales: ['cs', 'en'],
 	},
+
 	i18n: {
 		locales: [
 			{
@@ -153,4 +170,6 @@ export default defineNuxtConfig({
 		defaultLocale: 'cs',
 		vueI18n: './i18n.config.ts',
 	},
+
+	compatibilityDate: '2024-08-01',
 })

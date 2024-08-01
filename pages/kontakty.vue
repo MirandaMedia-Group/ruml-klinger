@@ -315,10 +315,10 @@
 			}
 		}
 		.column {
+			padding: 0 20px;
 			&:not(:last-child) {
 				border-right: 1px solid $color-inactive;
 			}
-			padding: 0 20px;
 		}
 	}
 	.pobocky {
@@ -331,6 +331,7 @@
 			flex: 1 1 560px;
 			max-width: 710px;
 			background-color: $color-white;
+			border-top: 2px solid;
 			&__image {
 				width: 100%;
 				height: 300px;
@@ -346,7 +347,6 @@
 					display: none;
 				}
 			}
-			border-top: 2px solid;
 			&:nth-of-type(1) {
 				border-color: $color-primary-light;
 			}

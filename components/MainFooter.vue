@@ -153,13 +153,13 @@
 			flex-grow: 1;
 		}
 		h3 {
-			.trigger {
-				display: none;
-			}
 			font-size: rem(16);
 			margin-top: 0;
 			margin-bottom: em(10);
 			text-transform: uppercase;
+			.trigger {
+				display: none;
+			}
 			&::after {
 				content: '';
 				display: block;

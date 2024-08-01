@@ -99,10 +99,10 @@
 		.partners-grid {
 			gap: 20px;
 			.partner {
+				padding: 20px;
 				.partner__excerpt {
 					font-size: 1rem;
 				}
-				padding: 20px;
 				.buttons-wrapper {
 					justify-content: center;
 				}

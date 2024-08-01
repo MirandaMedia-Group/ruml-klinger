@@ -13,7 +13,8 @@
 <script setup>
 	import { useLocaleHead } from '#imports'
 	const { cookiesEnabled, cookiesEnabledIds, isConsentGiven, isModalActive, moduleOptions } = useCookieControl()
-	const gtm = useGtm()
+	// const gtm = useGtm()
+	const { gtag } = useGtag()
 	const { locale } = useI18n()
 	const head = useLocaleHead({
 		addDirAttribute: true,
@@ -42,6 +43,15 @@
 		window.addEventListener('resize', () => {
 			screenWidth.value = window.innerWidth
 		})
+
+		if (cookiesEnabledIds.value && cookiesEnabledIds.value.includes('google-analytics')) {
+			gtag('consent', 'update', {
+				ad_storage: 'granted',
+				ad_user_data: 'granted',
+				ad_personalization: 'granted',
+				analytics_storage: 'granted',
+			})
+		}
 	})
 	onBeforeUnmount(() => {
 		window.removeEventListener('resize', () => {
@@ -60,10 +70,23 @@
 		() => cookiesEnabledIds.value,
 		(current, previous) => {
 			if (!previous?.includes('google-analytics') && current?.includes('google-analytics')) {
-				gtm.enable(true)
+				// gtm.enable(true)
+				console.log(gtag)
+				gtag('consent', 'update', {
+					ad_storage: 'granted',
+					ad_user_data: 'granted',
+					ad_personalization: 'granted',
+					analytics_storage: 'granted',
+				})
 			}
 			if (previous?.includes('google-analytics') && !current?.includes('google-analytics')) {
-				gtm.enable(false)
+				// gtm.enable(false)
+				gtag('consent', 'update', {
+					ad_storage: 'denied',
+					ad_user_data: 'denied',
+					ad_personalization: 'denied',
+					analytics_storage: 'denied',
+				})
 			}
 		},
 		{ deep: true }
@@ -453,10 +476,10 @@
 		column-gap: 20px;
 		figure {
 			margin: 0 0 20px;
+			display: block;
 			img {
 				display: block;
 			}
-			display: block;
 		}
 	}
 	@media (max-width: 1240px) {
