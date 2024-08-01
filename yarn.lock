@@ -470,7 +470,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dargmuesli/nuxt-cookie-control@npm:^8.4.5":
+"@dargmuesli/nuxt-cookie-control@npm:^8.4.6":
   version: 8.4.6
   resolution: "@dargmuesli/nuxt-cookie-control@npm:8.4.6"
   dependencies:
@@ -1632,7 +1632,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxtjs/apollo@npm:^5.0.0-alpha.5":
+"@nuxtjs/apollo@npm:^5.0.0-alpha.14":
   version: 5.0.0-alpha.14
   resolution: "@nuxtjs/apollo@npm:5.0.0-alpha.14"
   dependencies:
@@ -2586,12 +2586,12 @@ __metadata:
   linkType: hard
 
 "@vitejs/plugin-vue@npm:^5.0.5":
-  version: 5.1.1
-  resolution: "@vitejs/plugin-vue@npm:5.1.1"
+  version: 5.1.2
+  resolution: "@vitejs/plugin-vue@npm:5.1.2"
   peerDependencies:
     vite: ^5.0.0
     vue: ^3.2.25
-  checksum: 58cc8e388c4dfe0f6b9d8efcf9eeb7730a5942e9509a8e5e6276af2bdb4bc6ab5422e4ab82121f94d618a58104efc4a1a5911f87f47fac6de3f563e49f379d07
+  checksum: ea4f3f87c62356efc5f11e266dcc575c063333c04b4e5ddeb3d58d245f0a7ba0b1ee16590c4d0d96b2af7bb33141b065d19fb0ce30a716ab329c92a6ceecd206
   languageName: node
   linkType: hard
 
@@ -6012,7 +6012,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"klona@npm:^2.0.4, klona@npm:^2.0.6":
+"klona@npm:^2.0.6":
   version: 2.0.6
   resolution: "klona@npm:2.0.6"
   checksum: ac9ee3732e42b96feb67faae4d27cf49494e8a3bf3fa7115ce242fe04786788e0aff4741a07a45a2462e2079aa983d73d38519c85d65b70ef11447bbc3c58ce7
@@ -8057,16 +8057,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@dargmuesli/nuxt-cookie-control": ^8.4.5
+    "@dargmuesli/nuxt-cookie-control": ^8.4.6
     "@nuxt/image-edge": 1.0.0-28059208.2abef1b
-    "@nuxtjs/apollo": ^5.0.0-alpha.5
+    "@nuxtjs/apollo": ^5.0.0-alpha.14
     "@nuxtjs/i18n": ^8.3.3
     "@zadigetvoltaire/nuxt-gtm": ^0.0.13
     nuxt: ^3.12.4
     nuxt-gtag: latest
     nuxt-simple-sitemap: ^4.4.1
-    sass: ^1.57.1
-    sass-loader: 10
+    sass: ^1.77.8
+    sass-loader: 16.0.0
     swiper: ^9.0.3
     typescript: ^5.5.4
   languageName: unknown
@@ -8109,32 +8109,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:10":
-  version: 10.5.2
-  resolution: "sass-loader@npm:10.5.2"
+"sass-loader@npm:16.0.0":
+  version: 16.0.0
+  resolution: "sass-loader@npm:16.0.0"
   dependencies:
-    klona: ^2.0.4
-    loader-utils: ^2.0.0
     neo-async: ^2.6.2
-    schema-utils: ^3.0.0
-    semver: ^7.3.2
   peerDependencies:
-    fibers: ">= 3.1.0"
+    "@rspack/core": 0.x || 1.x
     node-sass: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
     sass: ^1.3.0
-    webpack: ^4.36.0 || ^5.0.0
+    sass-embedded: "*"
+    webpack: ^5.0.0
   peerDependenciesMeta:
-    fibers:
+    "@rspack/core":
       optional: true
     node-sass:
       optional: true
     sass:
       optional: true
-  checksum: 416909a9d685aafeb4342d91575439b293f4e1d6fdf7f8f970e4b3158af38e3e7379b87c0a82d7b7b32165b1f54bcd7eca3c132ad143405a5105ea4ba79cdac2
+    sass-embedded:
+      optional: true
+    webpack:
+      optional: true
+  checksum: 0ac3dfc2ae6d7be31e840a5a8e243269c78b97f9f3811e0f796e0ca8e14ed463fc5771ba1f46c1ffdf124b98931b9b739cef6efb7105cf71e3d64a1363ebd305
   languageName: node
   linkType: hard
 
-"sass@npm:^1.57.1":
+"sass@npm:^1.77.8":
   version: 1.77.8
   resolution: "sass@npm:1.77.8"
   dependencies:
@@ -8174,7 +8175,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.5.4, semver@npm:^7.6.2, semver@npm:^7.6.3":
+"semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.5.4, semver@npm:^7.6.2, semver@npm:^7.6.3":
   version: 7.6.3
   resolution: "semver@npm:7.6.3"
   bin:
