@@ -22,9 +22,9 @@ export default defineNuxtConfig({
 			preprocessorOptions: {
 				scss: {
 					additionalData: `
-																					@import "@/assets/_variables.scss";
-																					@import "@/assets/_mixins.scss";    
-																	`,
+						@import "@/assets/_variables.scss";
+						@import "@/assets/_mixins.scss";    
+					`,
 				},
 			},
 		},
@@ -58,6 +58,7 @@ export default defineNuxtConfig({
 			siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.ruml-klinger.cz',
 		},
 	},
+
 	gtag: {
 		id: 'GTM-PVPZKVF',
 		initCommands: [
@@ -158,4 +159,6 @@ export default defineNuxtConfig({
 		defaultLocale: 'cs',
 		vueI18n: './i18n.config.ts',
 	},
+
+	compatibilityDate: '2024-09-04',
 })

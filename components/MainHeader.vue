@@ -22,20 +22,16 @@
 								<div class="container">
 									<ul class="menu__level-2">
 										<li
-											v-for="(level1, index1) in sortByOrder(
-												categoriesData.productCategories.nodes.filter((category) =>
-													category.productCategoriesAfc.target?.includes('klinger')
-												)
+											v-for="(level1, index1) in categoriesData.productCategories.nodes.filter((category) =>
+												category.productCategoriesAfc.target?.includes('klinger')
 											)"
 											:key="index1">
 											<NuxtLink
 												:to="localePath(`/katalog-produktu/${level1.slug}`)"
 												:style="{
-													backgroundImage: `url(${
-														level1.productCategoriesAfc.menuImage?.sourceUrl
-															? level1.productCategoriesAfc.menuImage?.sourceUrl
-															: ''
-													})`,
+													backgroundImage: level1.productCategoriesAfc.menuImage?.sourceUrl
+														? `url(${level1.productCategoriesAfc.menuImage?.sourceUrl})`
+														: 'none',
 												}">
 												<span>
 													{{ level1.name }}
@@ -43,10 +39,8 @@
 											</NuxtLink>
 											<ul class="menu__level-3">
 												<li
-													v-for="(level2, index2) in sortByOrder(
-														level1?.children?.nodes.filter((category) =>
-															category.productCategoriesAfc.target?.includes('klinger')
-														)
+													v-for="(level2, index2) in level1?.children?.nodes.filter((category) =>
+														category.productCategoriesAfc.target?.includes('klinger')
 													)"
 													:key="index2">
 													<NuxtLink :to="localePath(`/katalog-produktu/${level1.slug}/${level2.slug}`)">{{
@@ -128,17 +122,6 @@
 		next()
 	})
 
-	const sortByOrder = (object) => {
-		const help = object.slice(0)
-		help.sort((a, b) => {
-			return (
-				(a.productCategoriesAfc.order === null ? 1000 : a.productCategoriesAfc.order) -
-				(b.productCategoriesAfc.order === null ? 1001 : b.productCategoriesAfc.order)
-			)
-		})
-		return help
-	}
-
 	const navigationVisible = useState('navigationVisible', () => false)
 	const productCategoriesQuery = gql`
 		query getCategories($language: LanguageCodeFilterEnum!) {
@@ -177,7 +160,24 @@
 			}
 		}
 	`
+	const sortByOrder = (object) => {
+		const help = object.slice(0)
+		help.sort((a, b) => {
+			return (
+				(a.productCategoriesAfc.order === null ? 1000 : a.productCategoriesAfc.order) -
+				(b.productCategoriesAfc.order === null ? 1001 : b.productCategoriesAfc.order)
+			)
+		})
+		return help
+	}
+
 	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery, { language: locale.value.toUpperCase() })
+	categoriesData.value.productCategories.nodes = sortByOrder(categoriesData.value.productCategories.nodes)
+	watch(locale, async (newLocale) => {
+		const { data: help } = await useAsyncQuery(productCategoriesQuery, { language: locale.value.toUpperCase() })
+		categoriesData.value = help.value
+	})
+
 	const toggleSearch = () => {
 		document.body.classList.toggle('search-visible')
 	}

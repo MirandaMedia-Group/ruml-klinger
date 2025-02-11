@@ -94,7 +94,7 @@
 					<ul>
 						<li
 							class="references__category--item"
-							v-for="(item, index) in sortByOrder(referenceCategories.referenceCategories.nodes)"
+							v-for="(item, index) in referenceCategories.referenceCategories.nodes"
 							:class="{ active: item.id === activeReferenceBlock }"
 							:key="index">
 							<button @click.prevent="activeReferenceBlock = item.id">
@@ -105,7 +105,7 @@
 				</nav>
 			</div>
 			<div
-				v-for="item in sortByOrder(referenceCategories.referenceCategories.nodes)"
+				v-for="item in referenceCategories.referenceCategories.nodes"
 				:key="item.id"
 				:class="{ active: item.id === activeReferenceBlock }"
 				class="references__block">
@@ -115,7 +115,7 @@
 		<div v-else>
 			<div
 				class="mobile-references__wrapper"
-				v-for="(item, index) in sortByOrder(referenceCategories.referenceCategories.nodes)"
+				v-for="(item, index) in referenceCategories.referenceCategories.nodes"
 				:class="{ active: item.id === activeReferenceBlock }"
 				:key="index">
 				<button @click.prevent="activeReferenceBlock = item.id">
@@ -365,6 +365,7 @@
 		}
 	`
 	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery, { language: locale.value.toUpperCase() })
+	referenceCategories.value.referenceCategories.nodes = sortByOrder(referenceCategories.value.referenceCategories.nodes)
 	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
 
 	const referencesQuery = gql`
@@ -395,6 +396,7 @@
 		}
 	`
 	const { data: references } = await useAsyncQuery(referencesQuery, { language: locale.value.toUpperCase() })
+	references.value.references.nodes = ref(references.value.references.nodes.filter((ref) => ref.referenceCategories.nodes.length > 0))
 </script>
 <style lang="scss">
 	.categories__switcher {

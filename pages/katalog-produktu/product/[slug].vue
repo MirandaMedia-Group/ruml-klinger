@@ -75,10 +75,10 @@
 				class="narrow"
 				v-if="
 					singleProduct.products.nodes[0].productAcf.tabulkaParametru ||
-					singleProduct.products.nodes[0].productAcf.productParameters?.values ||
-					singleProduct.products.nodes[0].productAcf.customTable.table
+					singleProduct.products.nodes[0].productAcf.productParameters?.values
+					// ||					singleProduct.products.nodes[0].productAcf.customTable.table
 				">
-				<div v-if="singleProduct.products.nodes[0].productAcf.customTable.table">
+				<!-- <div v-if="singleProduct.products.nodes[0].productAcf.customTable.table">
 					<h3 v-if="singleProduct.products.nodes[0].productAcf.customTable.heading">
 						{{ singleProduct.products.nodes[0].productAcf.customTable.heading }}
 					</h3>
@@ -96,8 +96,8 @@
 							</tr>
 						</tbody>
 					</table>
-				</div>
-				<div v-else-if="singleProduct.products.nodes[0].productAcf.productParameters?.values">
+				</div> -->
+				<div v-if="singleProduct.products.nodes[0].productAcf.productParameters?.values">
 					<h3 v-if="singleProduct.products.nodes[0].productAcf.productParameters.heading">
 						{{ singleProduct.products.nodes[0].productAcf.productParameters.heading }}
 					</h3>
@@ -211,14 +211,6 @@
 							}
 							altText
 						}
-						customTable {
-							heading
-							table {
-								body
-								header
-								headerEnabled
-							}
-						}
 					}
 					productCategories {
 						nodes {
@@ -242,6 +234,14 @@
 			}
 		}
 	`
+	// customTable {
+	// 						heading
+	// 						table {
+	// 							body
+	// 							header
+	// 							headerEnabled
+	// 						}
+	// 					}
 	// const singleProduct = useState('product', () => null)
 	const { data: singleProduct, pending } = await useAsyncQuery(singleProductQuery, variables.value)
 	// singleProduct.value = data.value
