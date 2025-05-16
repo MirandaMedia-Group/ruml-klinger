@@ -22,9 +22,14 @@
 								<div class="container">
 									<ul class="menu__level-2">
 										<li
-											v-for="(level1, index1) in categoriesData.productCategories.nodes.filter((category) =>
-												category.productCategoriesAfc.target?.includes('klinger')
-											)"
+											v-for="(level1, index1) in categoriesData.productCategories.nodes
+												.filter((category) => category.productCategoriesAfc.target?.includes('klinger'))
+												.sort((a, b) => {
+													return (
+														(a.productCategoriesAfc.order === null ? 1000 : a.productCategoriesAfc.order) -
+														(b.productCategoriesAfc.order === null ? 1001 : b.productCategoriesAfc.order)
+													)
+												})"
 											:key="index1">
 											<NuxtLink
 												:to="localePath(`/katalog-produktu/${level1.slug}`)"
@@ -39,9 +44,18 @@
 											</NuxtLink>
 											<ul class="menu__level-3">
 												<li
-													v-for="(level2, index2) in level1?.children?.nodes.filter((category) =>
-														category.productCategoriesAfc.target?.includes('klinger')
-													)"
+													v-for="(level2, index2) in level1?.children?.nodes
+														.filter((category) => category.productCategoriesAfc.target?.includes('klinger'))
+														.sort((a, b) => {
+															return (
+																(a.productCategoriesAfc.order === null
+																	? 1000
+																	: a.productCategoriesAfc.order) -
+																(b.productCategoriesAfc.order === null
+																	? 1001
+																	: b.productCategoriesAfc.order)
+															)
+														})"
 													:key="index2">
 													<NuxtLink :to="localePath(`/katalog-produktu/${level1.slug}/${level2.slug}`)">{{
 														level2.name
