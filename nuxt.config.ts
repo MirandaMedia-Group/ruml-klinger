@@ -158,6 +158,7 @@ export default defineNuxtConfig({
 		baseUrl: 'https://www.ruml-klinger.cz',
 		defaultLocale: 'cs',
 		vueI18n: './i18n.config.ts',
+		detectBrowserLanguage: false,
 	},
 
 	compatibilityDate: '2024-09-04',
