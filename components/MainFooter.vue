@@ -50,6 +50,9 @@
 							<li>
 								<a href="https://www.ruml-tesneni.cz" target="_blank"> RUML Těsnění s.r.o. </a>
 							</li>
+							<li>
+								<a href="https://www.universe-pce.cz/" target="_blank">UNIVERSE I spol. s r.o.</a>
+							</li>
 						</ul>
 					</nav>
 				</div>
