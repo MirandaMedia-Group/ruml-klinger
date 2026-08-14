@@ -1,5 +1,7 @@
 <template>
-	<section class="hero" :class="{ white: props.white, center: props.center, nowrap: props.nowrap }">
+	<section
+		class="hero"
+		:class="{ white: props.white, center: props.center, nowrap: props.nowrap, 'content-hidden': hasVideo && !isContentVisible }">
 		<NuxtPicture
 			v-if="props.heroType === 'img' || !props.heroType"
 			:src="image.sourceUrl"
@@ -150,7 +152,11 @@
 				right: 0;
 				bottom: 0;
 				background: linear-gradient(92.48deg, #dbeffa 27.55%, rgba(219, 239, 250, 0.21) 63.5%);
+				transition: opacity 0.2s ease;
 			}
+		}
+		&.content-hidden .video-wrapper::after {
+			opacity: 0;
 		}
 	}
 	.container {
