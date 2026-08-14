@@ -8,10 +8,10 @@
 			:alt="image.altText"
 			:img-attrs="{ style: 'display: block; height: 100%; object-fit: cover;' }"
 			provider="ipx" />
-		<div class="video-wrapper" v-else-if="props.heroType === 'video'">
+		<div class="video-wrapper" v-else-if="hasVideo">
 			<video :src="props.video.mediaItemUrl" autoplay playsinline="" preload="" muted style="width: 100%" loop></video>
 		</div>
-		<div class="container">
+		<div v-show="isContentVisible" class="container">
 			<div class="content">
 				<h1>{{ props.title }}</h1>
 				<div v-if="props?.perex" class="excerpt" v-html="props?.perex"></div>
@@ -75,10 +75,28 @@
 				</div>
 			</div>
 		</div>
+		<button
+			v-if="hasVideo"
+			class="content-toggle"
+			type="button"
+			:aria-label="isContentVisible ? 'Skrýt obsah hero sekce' : 'Zobrazit obsah hero sekce'"
+			:aria-pressed="!isContentVisible"
+			@click="isContentVisible = !isContentVisible">
+			<svg v-if="isContentVisible" aria-hidden="true" viewBox="0 0 24 24">
+				<path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" />
+				<circle cx="12" cy="12" r="3" />
+			</svg>
+			<svg v-else aria-hidden="true" viewBox="0 0 24 24">
+				<path d="m3 3 18 18" />
+				<path d="M10.6 6.1A10.5 10.5 0 0 1 12 6c6.5 0 10 6 10 6a17.8 17.8 0 0 1-2.3 3.1M6.6 6.6C3.6 8.4 2 12 2 12s3.5 6 10 6c1.7 0 3.2-.4 4.5-1" />
+				<path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+			</svg>
+		</button>
 	</section>
 </template>
 <script setup>
 	const localePath = useLocalePath()
+	const isContentVisible = ref(true)
 	const props = defineProps([
 		'email',
 		'phone',
@@ -94,6 +112,7 @@
 		'heroType',
 		'video',
 	])
+	const hasVideo = computed(() => props.heroType === 'video' && Boolean(props.video?.mediaItemUrl))
 </script>
 <style lang="scss" scoped>
 	.hero {
@@ -142,6 +161,41 @@
 		height: 100%;
 		display: flex;
 		align-items: center;
+	}
+	.content-toggle {
+		position: absolute;
+		right: 24px;
+		bottom: 24px;
+		z-index: 2;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: 48px;
+		padding: 0;
+		color: $color-white;
+		background: rgba(22, 22, 23, 0.55);
+		border: 0;
+		border-radius: 50%;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+		&:hover,
+		&:focus-visible {
+			background: rgba(22, 22, 23, 0.8);
+		}
+		&:focus-visible {
+			outline: 2px solid $color-white;
+			outline-offset: 2px;
+		}
+		svg {
+			width: 26px;
+			height: 26px;
+			fill: none;
+			stroke: currentColor;
+			stroke-width: 1.8;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
 	}
 
 	.subheading {
@@ -212,6 +266,10 @@
 		}
 	}
 	@media (max-width: 767px) {
+		.content-toggle {
+			right: 16px;
+			bottom: 16px;
+		}
 		.excerpt {
 			font-size: 1rem;
 		}

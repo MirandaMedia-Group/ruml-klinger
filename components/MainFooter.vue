@@ -60,7 +60,7 @@
 					<h3 @click.prevent="toggleMenu">{{ $t('contact') }}<span class="trigger"></span></h3>
 					<div>
 						<p>
-							Nad Doly 1625/3 <br />
+							Nad doly 2443/3 <br />
 							Praha 4 - Modřany <br />
 							PSČ 143 00 <br />
 							{{ $t('czechRepublic') }}
