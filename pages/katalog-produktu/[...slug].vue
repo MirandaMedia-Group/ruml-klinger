@@ -7,20 +7,20 @@
 			<template #main>
 				<div class="category__header">
 					<div
-						v-if="categoryInfoData.productCategories.nodes[0].productCategoriesAfc?.featuredimage?.sourceUrl"
+						v-if="categoryInfo.productCategoriesAfc?.featuredimage?.sourceUrl"
 						class="category__image">
 						<NuxtPicture
-							:src="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.sourceUrl"
-							:alt="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.altText"
-							:width="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.mediaDetails.width"
-							:height="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.featuredimage.mediaDetails.height"
+							:src="categoryInfo.productCategoriesAfc.featuredimage.sourceUrl"
+							:alt="categoryInfo.productCategoriesAfc.featuredimage.altText"
+							:width="categoryInfo.productCategoriesAfc.featuredimage.mediaDetails?.width"
+							:height="categoryInfo.productCategoriesAfc.featuredimage.mediaDetails?.height"
 							loading="lazy"
 							provider="ipx"
 							:img-attrs="{ style: 'display: block; height: 100%; object-fit: cover;' }" />
 					</div>
 					<div class="category__info">
-						<h1>{{ categoryInfoData.productCategories.nodes[0].name }}</h1>
-						<p>{{ categoryInfoData.productCategories.nodes[0].description }}</p>
+						<h1>{{ categoryInfo.name }}</h1>
+						<p>{{ categoryInfo.description }}</p>
 					</div>
 				</div>
 				<div v-if="screenWidth <= 900">
@@ -33,15 +33,15 @@
 					<div v-if="pending">
 						<LoadingCircle />
 					</div>
-					<!-- <div
+					<div
 						class="center"
-						v-else-if="!categoryProductsData.productCategories.nodes[0].contentNodes.nodes.length">
-						<p><strong>Tato kategorie neobsahuje žádné produkty ...</strong></p>
-					</div> -->
+						v-else-if="!categoryProducts?.nodes?.length">
+						<p><strong>Tato kategorie neobsahuje žádné produkty.</strong></p>
+					</div>
 					<ProductsBlock
 						v-else
-						:data="categoryProductsData.productCategories.nodes[0].contentNodes.nodes"
-						:banner="categoryInfoData.productCategories.nodes[0].productCategoriesAfc.banner?.[0]" />
+						:data="categoryProducts.nodes"
+						:banner="categoryInfo.productCategoriesAfc?.banner?.[0]" />
 				</div>
 				<div class="pagination">
 					<!-- <button
@@ -52,13 +52,13 @@
 					</button> -->
 					<button
 						class="button-prev"
-						v-if="categoryProductsData.productCategories.nodes[0].contentNodes.pageInfo.hasPreviousPage"
+						v-if="categoryProducts?.pageInfo?.hasPreviousPage"
 						@click.prevent="handlePrevPage">
 						<span class="arrow"></span>
 					</button>
 					<button
 						class="button-next"
-						v-if="categoryProductsData.productCategories.nodes[0].contentNodes.pageInfo.hasNextPage"
+						v-if="categoryProducts?.pageInfo?.hasNextPage"
 						@click.prevent="handleNextPage">
 						<span class="arrow"></span>
 					</button>
@@ -92,19 +92,24 @@
 	})
 	const productsAnchor = ref(null)
 	const handleNextPage = () => {
+		const pageInfo = categoryProductsData.value?.productCategories?.nodes?.[0]?.contentNodes?.pageInfo
+		if (!pageInfo?.hasNextPage) return
+
 		productsCount.value = 15
-		setTimeout(() => productsAnchor.value.scrollIntoView(), 10)
-		console.log(variables.value)
-		variables.value.after = categoryProductsData.value.productCategories.nodes[0].contentNodes.pageInfo.endCursor
+		setTimeout(() => productsAnchor.value?.scrollIntoView(), 10)
+		variables.value.after = pageInfo.endCursor
 		variables.value.first = productsCount.value
 		variables.value.before = null
 		variables.value.last = null
 		refresh()
 	}
 	const handlePrevPage = () => {
+		const pageInfo = categoryProductsData.value?.productCategories?.nodes?.[0]?.contentNodes?.pageInfo
+		if (!pageInfo?.hasPreviousPage) return
+
 		productsCount.value = 15
-		setTimeout(() => productsAnchor.value.scrollIntoView(), 10)
-		variables.value.before = categoryProductsData.value.productCategories.nodes[0].contentNodes.pageInfo.startCursor
+		setTimeout(() => productsAnchor.value?.scrollIntoView(), 10)
+		variables.value.before = pageInfo.startCursor
 		variables.value.last = productsCount.value
 		variables.value.first = null
 		variables.value.after = null
@@ -175,37 +180,46 @@
 		}
 	`
 	const { data: categoryInfoData } = await useAsyncQuery(categoryInfoQuery, slugVariable.value)
+	const categoryInfo = computed(() => categoryInfoData.value?.productCategories?.nodes?.[0] ?? null)
+
+	if (!categoryInfo.value) {
+		throw createError({
+			statusCode: 404,
+			statusMessage: 'Kategorie nebyla nalezena',
+		})
+	}
+
 	const breadcrumbsSublinks = ref(
-		categoryInfoData.value.productCategories.nodes[0].parent?.node.parent
+		categoryInfo.value.parent?.node.parent
 			? [
 					{
-						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}`,
-						name: categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.name,
+						url: `/katalog-produktu/${categoryInfo.value.parent.node.parent.node.slug}`,
+						name: categoryInfo.value.parent.node.parent.node.name,
 					},
 					{
-						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}`,
-						name: categoryInfoData.value.productCategories.nodes[0].parent?.node.name,
+						url: `/katalog-produktu/${categoryInfo.value.parent.node.parent.node.slug}/${categoryInfo.value.parent?.node.slug}`,
+						name: categoryInfo.value.parent?.node.name,
 					},
 					{
-						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent.node.parent.node.slug}/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}/${categoryInfoData.value.productCategories.nodes[0].slug}`,
-						name: categoryInfoData.value.productCategories.nodes[0].name,
+						url: `/katalog-produktu/${categoryInfo.value.parent.node.parent.node.slug}/${categoryInfo.value.parent?.node.slug}/${categoryInfo.value.slug}`,
+						name: categoryInfo.value.name,
 					},
 			  ]
-			: categoryInfoData.value.productCategories.nodes[0].parent
+			: categoryInfo.value.parent
 			? [
 					{
-						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}/`,
-						name: categoryInfoData.value.productCategories.nodes[0].parent?.node.name,
+						url: `/katalog-produktu/${categoryInfo.value.parent?.node.slug}/`,
+						name: categoryInfo.value.parent?.node.name,
 					},
 					{
-						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].parent?.node.slug}/${categoryInfoData.value.productCategories.nodes[0].slug}`,
-						name: categoryInfoData.value.productCategories.nodes[0].name,
+						url: `/katalog-produktu/${categoryInfo.value.parent?.node.slug}/${categoryInfo.value.slug}`,
+						name: categoryInfo.value.name,
 					},
 			  ]
 			: [
 					{
-						url: `/katalog-produktu/${categoryInfoData.value.productCategories.nodes[0].slug}`,
-						name: categoryInfoData.value.productCategories.nodes[0].name,
+						url: `/katalog-produktu/${categoryInfo.value.slug}`,
+						name: categoryInfo.value.name,
 					},
 			  ]
 	)
@@ -252,6 +266,7 @@
 	`
 
 	const { data: categoryProductsData, refresh, pending } = await useAsyncQuery(categoryProductsQuery, variables.value)
+	const categoryProducts = computed(() => categoryProductsData.value?.productCategories?.nodes?.[0]?.contentNodes ?? null)
 </script>
 <style lang="scss">
 	.category__header {
