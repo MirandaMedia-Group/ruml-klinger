@@ -29,13 +29,13 @@
 					<div class="swiper-container">
 						<Swiper :slides-per-view="1.1" :space-between="20" :modules="modules" navigation pagination>
 							<SwiperSlide v-for="(item, index) in singleProduct.products.nodes[0].productAcf.gallery" :key="index">
-								<NuxtPicture
+								<NuxtPicture sizes="xs:100vw sm:100vw md:50vw lg:650px" format="webp" decoding="async"
 									:src="item.sourceUrl"
 									:alt="item.altText"
 									:width="item.mediaDetails?.width"
 									:height="item.mediaDetails?.height"
 									loading="lazy"
-									provider="ipx" />
+									 />
 							</SwiperSlide>
 						</Swiper>
 					</div>
@@ -142,6 +142,7 @@
 	<ContactForm />
 </template>
 <script setup>
+ import { categoryPath } from "~/utils/catalogue-paths"
 	import { Navigation, Pagination } from 'swiper'
 	import { Swiper, SwiperSlide } from 'swiper/vue'
 	import 'swiper/css'
@@ -150,147 +151,93 @@
 	const variables = ref({
 		slug: router.currentRoute.value.params.slug,
 	})
-	const singleProductQuery = gql`
-		query getProduct($slug: String!) {
-			products(where: { name: $slug }) {
-				nodes {
-					title
-					slug
-					content
-					productAcf {
-						additionalProducts {
-							... on Product {
-								slug
-								title
-								productAcf {
-									shortDescription
-									gallery {
-										sourceUrl
-									}
-								}
-							}
-						}
-						baseParameters {
-							heading
-							values {
-								name
-								value
-							}
-						}
-						productFiles {
-							name
-							file {
-								fileSize
-								mediaItemUrl
-								slug
-								title
-								mimeType
-							}
-						}
-						productParameters {
-							heading
-							values {
-								label
-								name
-								unit
-								value
-							}
-						}
-						productVideos {
-							description
-							title
-							video
-						}
-						shortDescription
-						tabulkaParametru
-						gallery {
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-							altText
-						}
-						customTable {
-							heading
-							table {
-								body
-								header
-								headerEnabled
-							}
-						}
-					}
-					productCategories {
-						nodes {
-							name
-							slug
-							parent {
-								node {
-									name
-									slug
-									parent {
-										node {
-											name
-											slug
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	// const singleProduct = useState('product', () => null)
-	const { data: singleProduct, pending } = await useAsyncQuery(singleProductQuery, variables.value)
-	// singleProduct.value = data.value
-	const breadcrumbsSublinks = ref(
-		singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.parent
-			? [
-					{
-						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent.node.parent.node.slug}`,
-						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].parent.node.parent.node.name,
-					},
-					{
-						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent.node.parent.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}`,
-						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.name,
-					},
-					{
-						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent.node.parent.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}`,
-						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].name,
-					},
-					{
-						url: `/katalog-produktu/product/${singleProduct.value.products.nodes[0].slug}`,
-						name: singleProduct.value.products.nodes[0].title,
-					},
-			  ]
-			: singleProduct.value.products.nodes[0].productCategories.nodes[0].parent
-			? [
-					{
-						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}/`,
-						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.name,
-					},
-					{
-						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].parent?.node.slug}/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}`,
-						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].name,
-					},
-					{
-						url: `/katalog-produktu/product/${singleProduct.value.products.nodes[0].slug}`,
-						name: singleProduct.value.products.nodes[0].title,
-					},
-			  ]
-			: [
-					{
-						url: `/katalog-produktu/${singleProduct.value.products.nodes[0].productCategories.nodes[0].slug}`,
-						name: singleProduct.value.products.nodes[0].productCategories.nodes[0].name,
-					},
-					{
-						url: `/katalog-produktu/product/${singleProduct.value.products.nodes[0].slug}`,
-						name: singleProduct.value.products.nodes[0].title,
-					},
-			  ]
-	)
+	const singleProductQuery = `query getProduct($slug: String!) {
+  products(where: {name: $slug}, first: 1) {
+    nodes {
+      id
+      title
+      slug
+      content
+      productAcf {
+        additionalProducts {
+          ... on Product {
+            slug
+            title
+            productAcf {
+              shortDescription
+              gallery {
+                sourceUrl
+              }
+            }
+          }
+        }
+        baseParameters {
+          heading
+          values {
+            name
+            value
+          }
+        }
+        productFiles {
+          name
+          file {
+            fileSize
+            mediaItemUrl
+            slug
+            title
+            mimeType
+          }
+        }
+        productParameters {
+          heading
+          values {
+            label
+            name
+            unit
+            value
+          }
+        }
+        productVideos {
+          description
+          title
+          video
+        }
+        shortDescription
+        tabulkaParametru
+        gallery {
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+          altText
+        }
+        customTable {
+          heading
+          table {
+            body
+            header
+            headerEnabled
+          }
+        }
+      }
+      productCategories(first:100) { nodes { slug } pageInfo { hasNextPage endCursor } }
+    }
+  }
+}`
+
+	const { data: singleProduct, pending } = await useRequiredAsyncQuery(singleProductQuery, variables.value)
+ if (!singleProduct.value.products.nodes.length) throw createError({statusCode:404,statusMessage:'Not found'})
+
+ const { data: categories } = await useProductCategories()
+ const product = singleProduct.value.products.nodes[0]
+ const category = categories.value.productCategories.nodes.find(item => item.productCategoriesAfc?.target?.includes('klinger') && product.productCategories.nodes.some(c => c.slug === item.slug))
+ if (!category) throw createError({statusCode:404,statusMessage:'Not found'})
+ const categoryNodes = categories.value.productCategories.nodes
+ const path = categoryPath(categoryNodes, category.slug)
+ const parts = path.replace('/katalog-produktu/', '').split('/')
+ const breadcrumbsSublinks = parts.map((slug, index) => ({name: categoryNodes.find(item => item.slug === slug).name, url: '/katalog-produktu/' + parts.slice(0,index+1).join('/')}))
+ breadcrumbsSublinks.push({name:product.title,url:'/katalog-produktu/product/'+product.slug})
 </script>
 <style lang="scss">
 	.full-width {
@@ -435,20 +382,20 @@
 					flex: 4;
 					font-weight: 700;
 				}
-				// td:nth-of-type(2),
-				// th:nth-of-type(2) {
-				// 	flex: 2;
-				// }
-				// td:nth-of-type(3),
-				// th:nth-of-type(3) {
-				// 	text-align: right;
-				// }
-				// td:nth-of-type(3),
-				// td:nth-of-type(4),
-				// th:nth-of-type(3),
-				// th:nth-of-type(4) {
-				// 	flex: 1;
-				// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 				td:nth-last-of-type(2),
 				th:nth-last-of-type(2) {
 					flex: 1;

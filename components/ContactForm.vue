@@ -60,7 +60,8 @@
 
 	const router = useRouter()
 
-	const endpointURL = 'https://ruml-api.mirandamedia.cz/wp-json/contact-form-7/v1/contact-forms/866/feedback'
+	const config = useRuntimeConfig()
+	const endpointURL = `${config.public.apiBaseUrl.replace(/\/+$/, '')}/wp-json/contact-form-7/v1/contact-forms/${config.public.contactFormId}/feedback`
 	const submitForm = async () => {
 		dataSending.value = true
 		const formData = new FormData()
@@ -75,7 +76,7 @@
 				method: 'POST',
 				body: formData,
 			})
-			console.log(response)
+
 			if (response.status === 'mail_sent') {
 				dataSending.value = false
 				dataSent.value = true
@@ -84,7 +85,7 @@
 				dataError.value = true
 			}
 		} catch (e) {
-			console.log(e)
+
 			dataSending.value = false
 			dataError.value = true
 		}

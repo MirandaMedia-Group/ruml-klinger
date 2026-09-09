@@ -2,19 +2,19 @@
 	<nav class="breadcrumbs">
 		<ul>
 			<li>
-				<NuxtLink :to="localePath('/')">Home</NuxtLink>
+				<NuxtLink external no-prefetch :to="localePath('/')">Home</NuxtLink>
 			</li>
 			<li>
-				<NuxtLink :to="localePath('/katalog-produktu')">{{ $t('products') }}</NuxtLink>
+				<NuxtLink external no-prefetch :to="localePath('/katalog-produktu')">{{ $t('products') }}</NuxtLink>
 			</li>
 			<li v-for="(item, index) in props.sublinks" :key="index">
-				<NuxtLink :to="localePath(item.url)">{{ item.name }}</NuxtLink>
+				<NuxtLink external no-prefetch :to="localePath(item.url)">{{ item.name }}</NuxtLink>
 			</li>
 		</ul>
 	</nav>
 </template>
 <script setup>
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	const props = defineProps(['sublinks'])
 </script>
 <style lang="scss" scoped>

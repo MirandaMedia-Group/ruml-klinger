@@ -7,7 +7,7 @@
 				)"
 				:class="{ 'has-children': level1?.children.nodes.length, expanded: $route.fullPath.indexOf(level1.slug) >= 0 }"
 				:key="index1">
-				<NuxtLink
+				<NuxtLink external no-prefetch
 					:to="localePath(`/katalog-produktu/${level1.slug}`)"
 					:class="{ 'router-link-active': $route.fullPath.indexOf(level1.slug) >= 0 }">
 					{{ level1.name }}
@@ -19,14 +19,14 @@
 							level1?.children?.nodes.filter((category) => category.productCategoriesAfc.target?.includes('klinger'))
 						)"
 						:key="index2">
-						<NuxtLink :to="localePath(`/katalog-produktu/${level1.slug}/${level2.slug}`)">{{ level2.name }}</NuxtLink>
+						<NuxtLink external no-prefetch :to="localePath(`/katalog-produktu/${level1.slug}/${level2.slug}`)">{{ level2.name }}</NuxtLink>
 						<ul v-if="level2?.children?.nodes?.length" class="menu__level-3">
 							<li
 								v-for="(level3, index3) in sortByOrder(
 									level2.children.nodes.filter((category) => category.productCategoriesAfc.target?.includes('klinger'))
 								)"
 								:key="index3">
-								<NuxtLink :to="localePath(`/katalog-produktu/${level1.slug}/${level2.slug}/${level3.slug}`)">{{
+								<NuxtLink external no-prefetch :to="localePath(`/katalog-produktu/${level1.slug}/${level2.slug}/${level3.slug}`)">{{
 									level3.name
 								}}</NuxtLink>
 							</li>
@@ -39,71 +39,15 @@
 </template>
 
 <script setup>
-	const localePath = useLocalePath()
+ import { sortProductCategories as sortByOrder } from "~/utils/product-category-order"
+	const localePath = useCmsLocalePath()
 	const { locale, t } = useI18n()
-	const screenWidth = useState('screenWidth')
 	const router = useRouter()
 	const language = useState('language')
-	const sortByOrder = (object) => {
-		const help = object.slice(0)
-		help.sort((a, b) => {
-			return (
-				(a.productCategoriesAfc.order === null ? 1000 : a.productCategoriesAfc.order) -
-				(b.productCategoriesAfc.order === null ? 1001 : b.productCategoriesAfc.order)
-			)
-		})
-		return help
-	}
-	const productCategoriesQuery = gql`
-		query getCategories($language: LanguageCodeFilterEnum!) {
-			productCategories(first: 100, where: { parent: 0, language: $language }) {
-				nodes {
-					name
-					slug
-					productCategoriesAfc {
-						target
-						order
-						menuImage {
-							sourceUrl
-						}
-					}
-					children {
-						nodes {
-							name
-							slug
-							productCategoriesAfc {
-								target
-								order
-							}
-							children {
-								nodes {
-									name
-									slug
-									productCategoriesAfc {
-										target
-										order
-									}
-									children {
-										nodes {
-											name
-											slug
-											productCategoriesAfc {
-												target
-												order
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery, { language: locale.value.toUpperCase() })
-	const toggleExpanded = (e) => e.target.closest('.has-children').classList.toggle('expanded')
-	const toggleCategories = (e) => e.target.parentElement.classList.toggle('expanded')
+	const { data: categoryList } = await useProductCategories()
+	const categoriesData = useCategoryTree(categoryList)
+	const toggleExpanded = (e) => e.currentTarget.closest('.has-children').classList.toggle('expanded')
+	const toggleCategories = (e) => e.currentTarget.parentElement.classList.toggle('expanded')
 </script>
 <style lang="scss" scoped>
 	ul {

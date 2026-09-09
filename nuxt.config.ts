@@ -1,111 +1,143 @@
+const apiBaseUrl = (process.env.NUXT_PUBLIC_API_BASE_URL || 'https://ruml-api.mirandamedia.cz').replace(/\/+$/, '')
+const siteUrl = (process.env.NUXT_PUBLIC_SITE_URL || 'https://www.ruml-klinger.cz').replace(/\/+$/, '')
+const graphqlEndpoint = process.env.NUXT_PUBLIC_GRAPHQL_ENDPOINT || `${apiBaseUrl}/graphql`
+const cmsImageOriginPattern = new URL(apiBaseUrl).origin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	// ssr: true,
+	ssr: true,
+	experimental: { payloadExtraction: true },
+	nitro: { compatibilityDate: '2024-05-07', netlify: { images: { remote_images: [`^${cmsImageOriginPattern}/wp-content/uploads/.*$`] } } },
 	routeRules: {
-		'/': { isr: 3600 },
-		'/o-nas': { isr: 3600 },
-		'/kontakty': { isr: 3600 },
-		'/reference': { isr: 3600 },
-		'/sluzby': { isr: 3600 },
-		'/sluzby/**': { isr: 3600 },
-		'/partneri': { isr: 3600 },
-		'/partneri/**': { isr: 3600 },
-		'/kariera': { isr: 3600 },
-		'/kariera/**': { isr: 3600 },
-		'/katalog-produktu': { isr: 3600 },
-		'/katalog-produktu/**': { isr: 3600 },
-		'/cs': { redirect: '/' },
-	},
+  "/": {
+    "isr": 3000
+  },
+  "/o-nas": {
+    "isr": 3000
+  },
+  "/kontakty": {
+    "isr": 3000
+  },
+  "/reference": {
+    "isr": 3000
+  },
+  "/sluzby": {
+    "isr": 3000
+  },
+  "/sluzby/**": {
+    "isr": 3000
+  },
+  "/partneri": {
+    "isr": 3000
+  },
+  "/partneri/**": {
+    "isr": 3000
+  },
+  "/kariera": {
+    "isr": 3000
+  },
+  "/kariera/**": {
+    "isr": 3000
+  },
+  "/katalog-produktu": {
+    "isr": 3000
+  },
+  "/katalog-produktu/**": {
+    "isr": 3000
+  },
+  "/pf": {
+    "isr": 3000
+  },
+  "/kalendare": {
+    "isr": 3000
+  },
+  "/en": {
+    "isr": 3000
+  },
+  "/en/o-nas": {
+    "isr": 3000
+  },
+  "/en/kontakty": {
+    "isr": 3000
+  },
+  "/en/reference": {
+    "isr": 3000
+  },
+  "/en/sluzby": {
+    "isr": 3000
+  },
+  "/en/sluzby/**": {
+    "isr": 3000
+  },
+  "/en/partneri": {
+    "isr": 3000
+  },
+  "/en/partneri/**": {
+    "isr": 3000
+  },
+  "/en/kariera": {
+    "isr": 3000
+  },
+  "/en/kariera/**": {
+    "isr": 3000
+  },
+  "/en/katalog-produktu": {
+    "isr": 3000
+  },
+  "/en/katalog-produktu/**": {
+    "isr": 3000
+  },
+  "/en/pf": {
+    "isr": 3000
+  },
+  "/en/kalendare": {
+    "isr": 3000
+  },
+  "/vyhledavani": {
+    "isr": false,
+    "cache": false
+  },
+  "/en/vyhledavani": {
+    "isr": false,
+    "cache": false
+  },
+  "/cs": {
+    "redirect": "/"
+  }
+},
 
 	vite: {
 		css: {
 			preprocessorOptions: {
 				scss: {
 					additionalData: `
-						@import "@/assets/_variables.scss";
-						@import "@/assets/_mixins.scss";    
+						@use "@/assets/variables" as *;
+						@use "@/assets/mixins" as *;
 					`,
 				},
 			},
 		},
 	},
 
-	css: ['@/assets/normalize.css', '@/assets/global.css'],
-	modules: ['@nuxt/image-edge', '@nuxtjs/apollo', '@dargmuesli/nuxt-cookie-control', 'nuxt-simple-sitemap', '@nuxtjs/i18n', 'nuxt-gtag'],
+	css: ['@/assets/normalize.css', '@/assets/global.css', '@/assets/cookie-control.css', '@/assets/shared-sections.scss'],
+	modules: ['@nuxt/image', '@dargmuesli/nuxt-cookie-control', '@nuxtjs/sitemap', '@nuxtjs/i18n'],
 
-	image: {
-		provider: 'netlify',
-		domains: [],
-		ipx: {},
-	},
-
-	apollo: {
-		clients: {
-			default: {
-				httpEndpoint: 'https://ruml-api.mirandamedia.cz/graphql',
-			},
-		},
-		defaultOptions: {
-			query: {
-				fetchPolicy: 'no-cache',
-			},
-		},
-	},
-
+	image: { provider: process.env.NETLIFY === 'true' ? 'netlifyImageCdn' : 'ipx', domains: [new URL(apiBaseUrl).hostname], quality: 80 },
+	site: { url: siteUrl },
+	sitemap: { sources: ['/api/sitemap'], exclude: ['/vyhledavani', '/en/vyhledavani'] },
 	runtimeConfig: {
-		public: {
-			googleMapsAPI: process.env.GOOGLE_MAPS_API,
-			siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.ruml-klinger.cz',
-		},
-	},
-
-	gtag: {
-		id: 'GTM-PVPZKVF',
-		initCommands: [
-			[
-				'consent',
-				'default',
-				{
-					ad_storage: 'denied',
-					ad_user_data: 'denied',
-					ad_personalization: 'denied',
-					analytics_storage: 'denied',
-					wait_for_update: 500,
-				},
-			],
-		],
-	},
+  indexable: process.env.NETLIFY !== 'true' || process.env.CONTEXT === 'production',
+  public: { apiBaseUrl, graphqlEndpoint, siteUrl,
+   contactFormId: process.env.NUXT_PUBLIC_CONTACT_FORM_ID || '866',
+   careerFormId: process.env.NUXT_PUBLIC_CAREER_FORM_ID || '865',
+   googleMapsAPI: process.env.NUXT_PUBLIC_GOOGLE_MAPS_API_KEY || process.env.GOOGLE_MAPS_API || '',
+   gtmId: process.env.NUXT_PUBLIC_GTM_ID || 'GTM-PVPZKVF',
+  },
+ },
 
 	cookieControl: {
 		barPosition: 'bottom-full',
 		closeModalOnClickOutside: true,
-		colors: {
-			barBackground: '#fff',
-			barButtonBackground: '#232f5d',
-			barButtonColor: '#fff',
-			barButtonHoverBackground: '#213eab',
-			barTextColor: '#232f5d',
-			checkboxActiveBackground: '#232f5d',
-			checkboxActiveCircleBackground: '#fff',
-			checkboxDisabledBackground: '#ddd',
-			checkboxDisabledCircleBackground: '#fff',
-			checkboxInactiveBackground: '#000',
-			checkboxInactiveCircleBackground: '#fff',
-			controlButtonBackground: '#232f5d',
-			controlButtonHoverBackground: '#213eab',
-			controlButtonIconColor: '#fff',
-			controlButtonIconHoverColor: '#fff',
-			focusRingColor: '#808080',
-			modalBackground: '#fff',
-			modalButtonBackground: '#232f5d',
-			modalButtonColor: '#fff',
-			modalButtonHoverBackground: '#213eab',
-			modalButtonHoverColor: '#fff',
-			modalOverlay: '#000',
-			modalOverlayOpacity: 0.8,
-			modalTextColor: '#000',
-			modalUnsavedColor: '#fff',
-		},
+		colors: false,
 		cookies: {
 			necessary: [
 				{
@@ -131,7 +163,6 @@ export default defineNuxtConfig({
 						cs: 'Google Analytics',
 						en: 'Google Analytics',
 					},
-					src: 'https://www.googletagmanager.com/gtag/js?id=GTM-PVPZKVF',
 					targetCookieIds: ['cookie_control_consent', 'cookie_control_enabled_cookies'],
 				},
 			],
@@ -143,19 +174,21 @@ export default defineNuxtConfig({
 	},
 
 	i18n: {
+		restructureDir: '.',
+		experimental: { nitroContextDetection: false },
 		locales: [
 			{
 				code: 'cs',
-				iso: 'cs-CZ',
+				language: 'cs-CZ',
 				name: 'CZ',
 			},
 			{
 				code: 'en',
-				iso: 'en-US',
+				language: 'en-US',
 				name: 'EN',
 			},
 		],
-		baseUrl: 'https://www.ruml-klinger.cz',
+		baseUrl: siteUrl,
 		defaultLocale: 'cs',
 		vueI18n: './i18n.config.ts',
 		detectBrowserLanguage: false,

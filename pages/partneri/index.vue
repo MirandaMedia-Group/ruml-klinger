@@ -6,52 +6,58 @@
 		<div class="partners-grid">
 			<div class="partner" v-for="(partner, index) in allPartners.partners.nodes" :key="index">
 				<div class="partner__image">
-					<NuxtPicture
+					<NuxtPicture sizes="xs:200px sm:240px md:300px" format="webp" decoding="async"
 						:src="partner.featuredImage.node.sourceUrl"
 						:alt="partner.featuredImage.node.altText"
 						:width="partner.featuredImage.node.mediaDetails.width"
 						:height="partner.featuredImage.node.mediaDetails.height"
 						loading="lazy"
-						provider="ipx" />
+						 />
 				</div>
 				<h2 class="partner__title">{{ partner.title }}</h2>
 				<div class="partner__excerpt" v-html="partner.excerpt"></div>
 				<div class="buttons-wrapper align-center justify-start">
-					<NuxtLink :to="localePath(`/katalog-produktu/vyrobce/${partner.slug}`)" class="btn btn-primary">
+					<NuxtLink external no-prefetch :to="localePath(`/katalog-produktu/vyrobce/${partner.slug}`)" class="btn btn-primary">
 						{{ $t('showProducts') }}
 					</NuxtLink>
-					<NuxtLink :to="localePath(`/partneri/${partner.slug}`)">{{ $t('moreAboutPartner') }}</NuxtLink>
+					<NuxtLink external no-prefetch :to="localePath(`/partneri/${partner.slug}`)">{{ $t('moreAboutPartner') }}</NuxtLink>
 				</div>
 			</div>
 		</div>
 	</section>
 </template>
 <script setup>
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	const { locale, t } = useI18n()
 	const language = useState('language')
-	const allPartnersQuery = gql`
-		query getPartnersKlinger($language: LanguageCodeFilterEnum) {
-			partners(where: { orderby: { field: TITLE, order: ASC }, language: $language }) {
-				nodes {
-					featuredImage {
-						node {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					slug
-					title
-					excerpt
-				}
-			}
-		}
-	`
-	const { data: allPartners } = await useAsyncQuery(allPartnersQuery, { language: locale.value.toUpperCase() })
+	const allPartnersQuery = `query getPartnersKlinger($language: LanguageCodeFilterEnum, $_cursor_partners: String) {
+  partners(
+    where: {orderby: {field: TITLE, order: ASC}, language: $language}
+    first: 100
+    after: $_cursor_partners
+  ) {
+    nodes {
+      featuredImage {
+        node {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      slug
+      title
+      excerpt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}`
+	const { data: allPartners } = await useRequiredAsyncQuery(allPartnersQuery, { language: locale.value.toUpperCase() })
 </script>
 <style lang="scss">
 	.partners-grid {

@@ -62,13 +62,13 @@
 		<div class="pobocky">
 			<div v-for="(item, index) in kontakty.page.rumlKlingerKontakty.pobocky" :key="index" class="pobocka">
 				<div v-if="item.image" class="pobocka__image">
-					<NuxtPicture
+					<NuxtPicture sizes="150px" format="webp" decoding="async"
 						:src="item.image.sourceUrl"
 						:alt="item.image.altText"
 						:width="item.image.mediaDetails.width"
 						:height="item.image.mediaDetails.height"
 						loading="lazy"
-						provider="ipx"
+
 						:img-attrs="{ style: 'display: block; height: 100%; object-fit: cover;' }" />
 				</div>
 				<div class="pobocka__content">
@@ -113,8 +113,8 @@
 		</div>
 	</section>
 	<section id="nasi-specialiste" class="container">
-		<h2 v-if="screenWidth > 767" class="center">{{ $t('contactsPage.specialistsTitle') }}</h2>
-		<AnchorsBlock v-if="screenWidth > 767" :style="{ marginTop: `${screenWidth > 767 ? 100 : 50}px` }">
+		<h2 class="center desktop-767">{{ $t('contactsPage.specialistsTitle') }}</h2>
+		<AnchorsBlock class="desktop-767" style="margin-top:100px">
 			<ul>
 				<li v-for="(item, index) in kontakty.page.rumlKlingerKontakty.contactGroup" :key="index">
 					<a :href="`#${slugify(item.groupTitle)}`">{{ item.groupTitle }}</a>
@@ -133,15 +133,15 @@
 			<div class="contacts__group">
 				<div v-for="(person, index) in item.person" :key="index" class="person">
 					<div class="person__image">
-						<NuxtPicture
+						<NuxtPicture sizes="150px" format="webp" decoding="async"
 							v-if="person.image"
 							:src="person.image.sourceUrl"
 							:alt="person.image.altText"
 							:width="person.image.mediaDetails.width"
 							:height="person.image.mediaDetails.height"
 							loading="lazy"
-							provider="ipx" />
-						<NuxtPicture v-else src="/kontaktni_osoby/placeholder.jpg" width="150" height="150" loading="lazy" alt="" />
+							 />
+						<NuxtPicture sizes="150px" format="webp" decoding="async" v-else src="/kontaktni_osoby/placeholder.jpg" width="150" height="150" loading="lazy" alt="" />
 					</div>
 					<div class="person__name">{{ person.name }}</div>
 					<div class="person__position">{{ person.position }}</div>
@@ -164,10 +164,9 @@
 			.replace(/[^\w\s-]/g, '')
 			.replace(/[\s_-]+/g, '-')
 			.replace(/^-+|-+$/g, '')
-	const screenWidth = useState('screenWidth')
-	const toggleContacts = (e) => e.target.parentElement.classList.toggle('active')
+	const toggleContacts = (e) => e.currentTarget.parentElement.classList.toggle('active')
 	const { locale, t } = useI18n()
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	useHead({
 		title: t('seo.contacts.title'),
 		meta: [
@@ -188,98 +187,97 @@
 			en: 'cG9zdDozODQy',
 		},
 	}
-	const kontaktyQuery = gql`
-		query getKontaktyKlinger($localeID: ID!) {
-			page(id: $localeID) {
-				slug
-				rumlKlingerKontakty {
-					hero {
-						email
-						phone
-						title
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					billingAddress {
-						ico
-						dic
-						address
-						datovaSchranka
-						obchodniRejstrik
-					}
-					spojeni {
-						title
-						accountNumber
-						iban
-						swift
-					}
-					pobocky {
-						title
-						address
-						phone
-						email
-						gpsLat
-						gpsLng
-						openingHours
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					contactGroup {
-						groupTitle
-						person {
-							name
-							position
-							phone
-							email
-							image {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: kontakty } = await useAsyncQuery(kontaktyQuery, { localeID: localeIDs.contacts[locale.value] })
 
-	const certificatesQuery = gql`
-		query getCertificatesKlinger($localeID: ID!) {
-			page(id: $localeID) {
-				rumlKlingerOnas {
-					firstBlock {
-						certificates {
-							name
-							file {
-								fileSize
-								mediaItemUrl
-								slug
-								title
-								mimeType
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: certificates } = await useAsyncQuery(certificatesQuery, { localeID: localeIDs.aboutus[locale.value] })
+const contentQuery = `query KlingerPagesKontaktyVue($kontakty_localeID: ID!, $certificates_localeID: ID!) {
+  kontakty_page: page(id: $kontakty_localeID) {
+    slug
+    rumlKlingerKontakty {
+      hero {
+        email
+        phone
+        title
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      billingAddress {
+        ico
+        dic
+        address
+        datovaSchranka
+        obchodniRejstrik
+      }
+      spojeni {
+        title
+        accountNumber
+        iban
+        swift
+      }
+      pobocky {
+        title
+        address
+        phone
+        email
+        gpsLat
+        gpsLng
+        openingHours
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      contactGroup {
+        groupTitle
+        person {
+          name
+          position
+          phone
+          email
+          image {
+            altText
+            sourceUrl
+            mediaDetails {
+              height
+              width
+            }
+          }
+        }
+      }
+    }
+  }
+  certificates_page: page(id: $certificates_localeID) {
+    rumlKlingerOnas {
+      firstBlock {
+        certificates {
+          name
+          file {
+            fileSize
+            mediaItemUrl
+            slug
+            title
+            mimeType
+          }
+        }
+      }
+    }
+  }
+}`
+const { data: combinedData } = await useRequiredAsyncQuery(contentQuery, { ...Object.fromEntries(Object.entries({ localeID: localeIDs.contacts[locale.value] }).map(([key,value])=>["kontakty_"+key,value])), ...Object.fromEntries(Object.entries({ localeID: localeIDs.aboutus[locale.value] }).map(([key,value])=>["certificates_"+key,value])) })
+const kontakty = computed(() => ({ page: combinedData.value.kontakty_page }))
+const certificates = computed(() => ({ page: combinedData.value.certificates_page }))
+
+
+
+
 </script>
 <style lang="scss">
 	.billing-info {
@@ -440,7 +438,7 @@
 			}
 		}
 		.contacts__group {
-			// overflow: auto;
+
 			gap: 40px;
 			margin-bottom: 20px;
 			max-height: 1000px;

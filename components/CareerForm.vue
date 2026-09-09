@@ -63,7 +63,8 @@
 
 	const router = useRouter()
 
-	const endpointURL = 'https://ruml-api.mirandamedia.cz/wp-json/contact-form-7/v1/contact-forms/865/feedback'
+	const config = useRuntimeConfig()
+	const endpointURL = `${config.public.apiBaseUrl.replace(/\/+$/, '')}/wp-json/contact-form-7/v1/contact-forms/${config.public.careerFormId}/feedback`
 	const submitForm = async () => {
 		dataSending.value = true
 		const formData = new FormData()
@@ -89,7 +90,7 @@
 				dataErrorFields.value = response.invalid_fields
 			}
 		} catch (e) {
-			console.error(e)
+
 			dataSending.value = false
 			dataError.value = 'Něco se pokazilo, zkuste to prosím znovu.'
 		}

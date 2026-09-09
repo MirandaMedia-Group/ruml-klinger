@@ -12,13 +12,13 @@
 				</div>
 				<div class="column">
 					<div class="about-us__image">
-						<NuxtPicture
+						<NuxtPicture sizes="xs:100vw sm:100vw md:100vw lg:50vw xl:700px" format="webp" decoding="async"
 							:src="props.data.image.sourceUrl"
 							:width="props.data.image.mediaDetails.width"
 							:height="props.data.image.mediaDetails.height"
 							:alt="props.data.image.altText"
 							loading="lazy"
-							provider="ipx" />
+							 />
 					</div>
 					<div v-if="props.data.certificates" class="certificates">
 						<h3>{{ $t('aboutusPage.downloadCertificates') }}</h3>
@@ -66,6 +66,7 @@
 			flex-direction: column;
 			gap: 30px;
 			&.col-2 .column {
+ width: 100%;
 				flex-basis: unset;
 			}
 			&.reverse {

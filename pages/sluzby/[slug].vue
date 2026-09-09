@@ -10,31 +10,30 @@
 <script setup>
 	const router = useRouter()
 	const variables = ref({ name: router.currentRoute.value.params.slug })
-	const serviceQuery = gql`
-		query getService($name: String!) {
-			pages(where: { name: $name }) {
-				nodes {
-					title
-					slug
-					content
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								width
-								height
-							}
-						}
-					}
-					rumlKlingerSluzby {
-						shortDescription
-					}
-				}
-			}
-		}
-	`
-	const { data: service } = await useAsyncQuery(serviceQuery, variables.value)
+	const serviceQuery = `query getService($name: String!) {
+  pages(where: {name: $name}, first: 1) {
+    nodes {
+      title
+      slug
+      content
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            width
+            height
+          }
+        }
+      }
+      rumlKlingerSluzby {
+        shortDescription
+      }
+    }
+  }
+}`
+	const { data: service } = await useRequiredAsyncQuery(serviceQuery, variables.value)
+ if (!service.value.pages.nodes.length) throw createError({statusCode:404,statusMessage:'Not found'})
 	useHead({
 		bodyAttrs: {
 			class: 'wp-content',
@@ -48,5 +47,6 @@
 			},
 		],
 	})
+
 </script>
 <style lang="scss"></style>

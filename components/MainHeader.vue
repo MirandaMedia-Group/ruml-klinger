@@ -2,40 +2,33 @@
 	<header :class="{ 'show-submenu': showSubmenu }">
 		<div class="container">
 			<div class="site-logo">
-				<nuxt-link :to="localePath('/')">
-					<NuxtImg src="/site-logo.png" width="184" height="55" alt="RUML Klinger s.r.o." />
+				<nuxt-link external no-prefetch :to="localePath('/')">
+					<NuxtImg sizes="184px" densities="1" src="/site-logo.png" width="184" height="55" alt="RUML Klinger s.r.o." />
 				</nuxt-link>
 			</div>
 
 			<a class="contact-mail" href="mailto:ruml@ruml-group.cz"> ruml@ruml-group.cz </a>
-			<div class="navigation-wrapper">
-				<div class="hamburger" @click.prevent="navigationVisible = !navigationVisible">
+			<div class="navigation-wrapper" @keydown.esc="closeNavigation">
+				<button ref="menuButton" type="button" class="hamburger" aria-controls="navigation" :aria-expanded="navigationVisible" :aria-label="locale === 'en' ? 'Menu' : 'Nabídka'" @click="navigationVisible = !navigationVisible">
 					<span></span>
 					<span></span>
 					<span></span>
-				</div>
-				<nav id="navigation" :class="{ visible: navigationVisible }">
+				</button>
+				<nav @click="onNavigationClick" id="navigation" :class="{ visible: navigationVisible }">
 					<ul>
-						<li class="has-submenu" @mouseenter="showSubmenu = true" @mouseleave="showSubmenu = false">
-							<nuxt-link :to="localePath('/katalog-produktu')">{{ $t('products') }}<span class="arrow"></span></nuxt-link>
+						<li class="has-submenu" @mouseenter="showSubmenu = true" @focusin="showSubmenu = true" @focusout="onSubmenuFocusout" @mouseleave="showSubmenu = false">
+							<nuxt-link external no-prefetch :to="localePath('/katalog-produktu')">{{ $t('products') }}<span class="arrow"></span></nuxt-link>
 							<div class="megamenu">
 								<div class="container">
 									<ul class="menu__level-2">
 										<li
-											v-for="(level1, index1) in categoriesData.productCategories.nodes
-												.filter((category) => category.productCategoriesAfc.target?.includes('klinger'))
-												.sort((a, b) => {
-													return (
-														(a.productCategoriesAfc.order === null ? 1000 : a.productCategoriesAfc.order) -
-														(b.productCategoriesAfc.order === null ? 1001 : b.productCategoriesAfc.order)
-													)
-												})"
+											v-for="(level1, index1) in sortByOrder(categoriesData.productCategories.nodes.filter((category) => category.productCategoriesAfc.target?.includes('klinger')))"
 											:key="index1">
-											<NuxtLink
+											<NuxtLink external no-prefetch
 												:to="localePath(`/katalog-produktu/${level1.slug}`)"
 												:style="{
-													backgroundImage: level1.productCategoriesAfc.menuImage?.sourceUrl
-														? `url(${level1.productCategoriesAfc.menuImage?.sourceUrl})`
+													backgroundImage: showSubmenu && level1.productCategoriesAfc.menuImage?.sourceUrl
+														? `url(${image(level1.productCategoriesAfc.menuImage.sourceUrl, { width: 480, quality: 80, format: 'webp' })})`
 														: 'none',
 												}">
 												<span>
@@ -44,20 +37,9 @@
 											</NuxtLink>
 											<ul class="menu__level-3">
 												<li
-													v-for="(level2, index2) in level1?.children?.nodes
-														.filter((category) => category.productCategoriesAfc.target?.includes('klinger'))
-														.sort((a, b) => {
-															return (
-																(a.productCategoriesAfc.order === null
-																	? 1000
-																	: a.productCategoriesAfc.order) -
-																(b.productCategoriesAfc.order === null
-																	? 1001
-																	: b.productCategoriesAfc.order)
-															)
-														})"
+													v-for="(level2, index2) in sortByOrder(level1?.children?.nodes.filter((category) => category.productCategoriesAfc.target?.includes('klinger')))"
 													:key="index2">
-													<NuxtLink :to="localePath(`/katalog-produktu/${level1.slug}/${level2.slug}`)">{{
+													<NuxtLink external no-prefetch :to="localePath(`/katalog-produktu/${level1.slug}/${level2.slug}`)">{{
 														level2.name
 													}}</NuxtLink>
 												</li>
@@ -68,22 +50,22 @@
 							</div>
 						</li>
 						<li>
-							<nuxt-link :to="localePath('/sluzby')">{{ $t('services') }}</nuxt-link>
+							<nuxt-link external no-prefetch :to="localePath('/sluzby')">{{ $t('services') }}</nuxt-link>
 						</li>
 						<li>
-							<nuxt-link :to="localePath('/o-nas')">{{ $t('about') }}</nuxt-link>
+							<nuxt-link external no-prefetch :to="localePath('/o-nas')">{{ $t('about') }}</nuxt-link>
 						</li>
 						<li>
-							<nuxt-link :to="localePath('/reference')">{{ $t('references') }}</nuxt-link>
+							<nuxt-link external no-prefetch :to="localePath('/reference')">{{ $t('references') }}</nuxt-link>
 						</li>
 						<li>
-							<nuxt-link :to="localePath('/partneri')">{{ $t('partners') }}</nuxt-link>
+							<nuxt-link external no-prefetch :to="localePath('/partneri')">{{ $t('partners') }}</nuxt-link>
 						</li>
 						<li>
-							<nuxt-link :to="localePath('/kariera')">{{ $t('career') }}</nuxt-link>
+							<nuxt-link external no-prefetch :to="localePath('/kariera')">{{ $t('career') }}</nuxt-link>
 						</li>
 						<li>
-							<nuxt-link :to="localePath('/kontakty')">{{ $t('contact') }}</nuxt-link>
+							<nuxt-link external no-prefetch :to="localePath('/kontakty')">{{ $t('contact') }}</nuxt-link>
 						</li>
 					</ul>
 				</nav>
@@ -112,7 +94,7 @@
 				<nav class="language">
 					<ul>
 						<li v-for="(locale, index) in availableLocales" :key="index">
-							<nuxt-link :to="switchLocalePath(locale.code)">{{ locale.name }}</nuxt-link>
+							<nuxt-link external no-prefetch :to="alternateLocalePath($route.path, locale.code, categoryList, switchLocalePath(locale.code))">{{ locale.name }}</nuxt-link>
 						</li>
 					</ul>
 				</nav>
@@ -121,9 +103,17 @@
 	</header>
 </template>
 <script setup>
+ import { alternateLocalePath } from "~/utils/alternate-locale-path"
+ import { sortProductCategories as sortByOrder } from "~/utils/product-category-order"
 	import { useLocalePath, useSwitchLocalePath } from '#imports'
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	const showSubmenu = ref(false)
+ const menuButton = ref(null)
+ const closeNavigation = () => { navigationVisible.value = false; showSubmenu.value = false; menuButton.value?.focus() }
+ const onNavigationClick = event => { if (event.target.closest('a')) navigationVisible.value = false }
+ const switchLocalePath = useSwitchLocalePath()
+ const image = useImage()
+ const onSubmenuFocusout = event => { if (!event.currentTarget.contains(event.relatedTarget)) showSubmenu.value = false }
 	const router = useRouter()
 	const language = useState('language')
 	const { locale, locales, t } = useI18n()
@@ -131,66 +121,11 @@
 		return locales.value.filter((i) => i.code !== locale.value)
 	})
 
-	router.beforeEach((to, from, next) => {
-		showSubmenu.value = false
-		next()
-	})
 
 	const navigationVisible = useState('navigationVisible', () => false)
-	const productCategoriesQuery = gql`
-		query getCategories($language: LanguageCodeFilterEnum!) {
-			productCategories(first: 100, where: { parent: 0, language: $language }) {
-				nodes {
-					name
-					slug
-					productCategoriesAfc {
-						target
-						order
-						menuImage {
-							sourceUrl
-						}
-					}
-					children {
-						nodes {
-							name
-							slug
-							productCategoriesAfc {
-								target
-								order
-							}
-							children {
-								nodes {
-									name
-									slug
-									productCategoriesAfc {
-										order
-										target
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const sortByOrder = (object) => {
-		const help = object.slice(0)
-		help.sort((a, b) => {
-			return (
-				(a.productCategoriesAfc.order === null ? 1000 : a.productCategoriesAfc.order) -
-				(b.productCategoriesAfc.order === null ? 1001 : b.productCategoriesAfc.order)
-			)
-		})
-		return help
-	}
 
-	const { data: categoriesData } = await useAsyncQuery(productCategoriesQuery, { language: locale.value.toUpperCase() })
-	categoriesData.value.productCategories.nodes = sortByOrder(categoriesData.value.productCategories.nodes)
-	watch(locale, async (newLocale) => {
-		const { data: help } = await useAsyncQuery(productCategoriesQuery, { language: locale.value.toUpperCase() })
-		categoriesData.value = help.value
-	})
+	const { data: categoryList } = await useProductCategories()
+	const categoriesData = useCategoryTree(categoryList)
 
 	const toggleSearch = () => {
 		document.body.classList.toggle('search-visible')
@@ -200,7 +135,7 @@
 		e.preventDefault()
 		if (searchField.value) {
 			document.body.classList.remove('search-visible')
-			navigateTo(localePath('/vyhledavani') + `?search=${searchField.value}`)
+			navigateTo(localePath('/vyhledavani') + `?search=${encodeURIComponent(searchField.value)}`, { external: true })
 		}
 	}
 </script>
@@ -305,8 +240,8 @@
 			transition: all 0.3s ease-in-out;
 		}
 		.menu__level-2 {
-			// display: block;
-			// columns: 6;
+
+
 			display: grid;
 			grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 			width: 100%;
@@ -524,4 +459,7 @@
 			display: none;
 		}
 	}
+
+.hamburger:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+@media (max-width: 1249px) { #navigation:not(.visible) { visibility: hidden; } #navigation.visible { visibility: visible; } }
 </style>

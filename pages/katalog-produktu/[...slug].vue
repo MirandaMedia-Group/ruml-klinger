@@ -9,13 +9,13 @@
 					<div
 						v-if="categoryInfo.productCategoriesAfc?.featuredimage?.sourceUrl"
 						class="category__image">
-						<NuxtPicture
+						<NuxtPicture sizes="xs:100vw sm:100vw md:300px" format="webp" decoding="async"
 							:src="categoryInfo.productCategoriesAfc.featuredimage.sourceUrl"
 							:alt="categoryInfo.productCategoriesAfc.featuredimage.altText"
 							:width="categoryInfo.productCategoriesAfc.featuredimage.mediaDetails?.width"
 							:height="categoryInfo.productCategoriesAfc.featuredimage.mediaDetails?.height"
 							loading="lazy"
-							provider="ipx"
+
 							:img-attrs="{ style: 'display: block; height: 100%; object-fit: cover;' }" />
 					</div>
 					<div class="category__info">
@@ -23,10 +23,10 @@
 						<p>{{ categoryInfo.description }}</p>
 					</div>
 				</div>
-				<div v-if="screenWidth <= 900">
+				<div class="mobile-900">
 					<CategoriesBox />
 				</div>
-				<div v-else>
+				<div class="desktop-900">
 					<SubcategoriesList />
 				</div>
 				<div id="products" ref="productsAnchor">
@@ -51,13 +51,13 @@
 						Načíst další
 					</button> -->
 					<button
-						class="button-prev"
+						class="button-prev" :disabled="pending" :aria-label="locale === 'en' ? 'Previous page' : 'Předchozí stránka'"
 						v-if="categoryProducts?.pageInfo?.hasPreviousPage"
 						@click.prevent="handlePrevPage">
 						<span class="arrow"></span>
 					</button>
 					<button
-						class="button-next"
+						class="button-next" :disabled="pending" :aria-label="locale === 'en' ? 'Next page' : 'Další stránka'"
 						v-if="categoryProducts?.pageInfo?.hasNextPage"
 						@click.prevent="handleNextPage">
 						<span class="arrow"></span>
@@ -71,11 +71,11 @@
 	</div>
 </template>
 <script setup>
+ import { categoryPath } from "~/utils/catalogue-paths"
 	const { locale } = useI18n()
 	definePageMeta({
 		layout: false,
 	})
-	const screenWidth = useState('screenWidth')
 	const router = useRouter()
 	const productsCount = useState('productsCount', () => 15)
 	const routerSlug = ref(router.currentRoute.value.params.slug)
@@ -97,11 +97,7 @@
 
 		productsCount.value = 15
 		setTimeout(() => productsAnchor.value?.scrollIntoView(), 10)
-		variables.value.after = pageInfo.endCursor
-		variables.value.first = productsCount.value
-		variables.value.before = null
-		variables.value.last = null
-		refresh()
+		variables.value = { ...variables.value, after: pageInfo.endCursor, first: 15, before: null, last: null }
 	}
 	const handlePrevPage = () => {
 		const pageInfo = categoryProductsData.value?.productCategories?.nodes?.[0]?.contentNodes?.pageInfo
@@ -109,77 +105,71 @@
 
 		productsCount.value = 15
 		setTimeout(() => productsAnchor.value?.scrollIntoView(), 10)
-		variables.value.before = pageInfo.startCursor
-		variables.value.last = productsCount.value
-		variables.value.first = null
-		variables.value.after = null
-		refresh()
+		variables.value = { ...variables.value, before: pageInfo.startCursor, last: 15, first: null, after: null }
 	}
-	// const loadMoreProducts = () => {
-	// 	productsCount.value += 15
-	// 	variables.value.first = productsCount.value
-	// 	variables.value.after = categoryProductsData.value.productCategories.nodes[0].contentNodes.pageInfo.startCursor
-	// 	variables.value.before = null
-	// 	variables.value.last = null
-	// 	refresh()
-	// }
 
-	const categoryInfoQuery = gql`
-		query getCategoryInfo($slug: [String]) {
-			productCategories(where: { slug: $slug }) {
-				nodes {
-					name
-					slug
-					description
-					productCategoriesAfc {
-						featuredimage {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-						banner {
-							... on CategoryBanner {
-								id
-								title
-								slug
-								excerpt
-								featuredImage {
-									node {
-										altText
-										sourceUrl
-										mediaDetails {
-											height
-											width
-										}
-									}
-								}
-								categoryBanners {
-									btnUrl
-									btnText
-								}
-							}
-						}
-					}
-					parent {
-						node {
-							name
-							slug
-							parent {
-								node {
-									name
-									slug
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: categoryInfoData } = await useAsyncQuery(categoryInfoQuery, slugVariable.value)
+
+
+
+
+
+
+
+
+	const categoryInfoQuery = `query getCategoryInfo($slug: [String]) {
+  productCategories(where: {slug: $slug}, first: 1) {
+    nodes {
+      name
+      slug
+      description
+      productCategoriesAfc {
+        featuredimage {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+        banner {
+          ... on CategoryBanner {
+            id
+            title
+            slug
+            excerpt
+            featuredImage {
+              node {
+                altText
+                sourceUrl
+                mediaDetails {
+                  height
+                  width
+                }
+              }
+            }
+            categoryBanners {
+              btnUrl
+              btnText
+            }
+          }
+        }
+      }
+      parent {
+        node {
+          name
+          slug
+          parent {
+            node {
+              name
+              slug
+            }
+          }
+        }
+      }
+    }
+  }
+}`
+	const { data: categoryInfoData } = await useRequiredAsyncQuery(categoryInfoQuery, slugVariable.value)
 	const categoryInfo = computed(() => categoryInfoData.value?.productCategories?.nodes?.[0] ?? null)
 
 	if (!categoryInfo.value) {
@@ -189,83 +179,54 @@
 		})
 	}
 
-	const breadcrumbsSublinks = ref(
-		categoryInfo.value.parent?.node.parent
-			? [
-					{
-						url: `/katalog-produktu/${categoryInfo.value.parent.node.parent.node.slug}`,
-						name: categoryInfo.value.parent.node.parent.node.name,
-					},
-					{
-						url: `/katalog-produktu/${categoryInfo.value.parent.node.parent.node.slug}/${categoryInfo.value.parent?.node.slug}`,
-						name: categoryInfo.value.parent?.node.name,
-					},
-					{
-						url: `/katalog-produktu/${categoryInfo.value.parent.node.parent.node.slug}/${categoryInfo.value.parent?.node.slug}/${categoryInfo.value.slug}`,
-						name: categoryInfo.value.name,
-					},
-			  ]
-			: categoryInfo.value.parent
-			? [
-					{
-						url: `/katalog-produktu/${categoryInfo.value.parent?.node.slug}/`,
-						name: categoryInfo.value.parent?.node.name,
-					},
-					{
-						url: `/katalog-produktu/${categoryInfo.value.parent?.node.slug}/${categoryInfo.value.slug}`,
-						name: categoryInfo.value.name,
-					},
-			  ]
-			: [
-					{
-						url: `/katalog-produktu/${categoryInfo.value.slug}`,
-						name: categoryInfo.value.name,
-					},
-			  ]
-	)
-	const categoryProductsQuery = gql`
-		query getProducts($first: Int, $last: Int, $after: String, $before: String, $slug: [String]) {
-			productCategories(where: { slug: $slug }) {
-				nodes {
-					contentNodes(
-						first: $first
-						last: $last
-						after: $after
-						before: $before
-						where: { orderby: { field: MENU_ORDER, order: DESC } }
-					) {
-						nodes {
-							... on Product {
-								id
-								excerpt
-								title
-								slug
-								productAcf {
-									shortDescription
-									gallery {
-										sourceUrl
-										altText
-										mediaDetails {
-											height
-											width
-										}
-									}
-								}
-							}
-						}
-						pageInfo {
-							endCursor
-							hasNextPage
-							hasPreviousPage
-							startCursor
-						}
-					}
-				}
-			}
-		}
-	`
+ const { data: categories } = await useProductCategories()
+ const categoryNodes = categories.value.productCategories.nodes
+ const category = categoryNodes.find(item => item.slug === categoryInfo.value.slug && item.productCategoriesAfc?.target?.includes('klinger'))
+ if (!category || categoryPath(categoryNodes,category.slug) !== '/katalog-produktu/'+routerSlug.value.join('/')) throw createError({statusCode:404,statusMessage:'Not found'})
+ const parts = categoryPath(categoryNodes,category.slug).replace('/katalog-produktu/','').split('/')
+ const breadcrumbsSublinks = parts.map((slug,index) => ({name:categoryNodes.find(item=>item.slug===slug).name,url:'/katalog-produktu/'+parts.slice(0,index+1).join('/')}))
 
-	const { data: categoryProductsData, refresh, pending } = await useAsyncQuery(categoryProductsQuery, variables.value)
+	const categoryProductsQuery = `query getProducts($first: Int, $last: Int, $after: String, $before: String, $slug: [String]) {
+  productCategories(where: {slug: $slug}, first: 1) {
+    nodes {
+      contentNodes(
+        first: $first
+        last: $last
+        after: $after
+        before: $before
+        where: {orderby: {field: MENU_ORDER, order: DESC}}
+      ) {
+        nodes {
+          ... on Product {
+            id
+            excerpt
+            title
+            slug
+            productAcf {
+              shortDescription
+              gallery {
+                sourceUrl
+                altText
+                mediaDetails {
+                  height
+                  width
+                }
+              }
+            }
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+          hasPreviousPage
+          startCursor
+        }
+      }
+    }
+  }
+}`
+
+	const { data: categoryProductsData, refresh, pending } = await useRequiredAsyncQuery(categoryProductsQuery, () => variables.value)
 	const categoryProducts = computed(() => categoryProductsData.value?.productCategories?.nodes?.[0]?.contentNodes ?? null)
 </script>
 <style lang="scss">

@@ -2,7 +2,7 @@
 	<HeroBig v-bind="onas.page.rumlKlingerOnas.hero" :white="true" />
 	<TextImageBlock :data="onas.page.rumlKlingerOnas.firstBlock" :has-background="true" :divider="true" />
 	<section id="usp" class="container">
-		<USPBlock />
+		<USPBlock :usp="usp" />
 	</section>
 	<section id="historie">
 		<div class="container">
@@ -54,7 +54,7 @@
 							class="timeline__slider--item"
 							:class="{ first: index === 0 }">
 							<div class="timeline-item__content__image">
-								<img
+								<NuxtImg loading="lazy" decoding="async" sizes="xs:260px sm:320px md:450px"
 									:src="history.image.sourceUrl"
 									:alt="history.image.altText"
 									:width="history.image.mediaDetails.width"
@@ -76,16 +76,16 @@
 		<div class="narrow center">
 			<h2>{{ $t('aboutusPage.ownersTitle') }}</h2>
 		</div>
-		<div class="owners" v-if="screenWidth > 767">
+		<div class="owners desktop-767">
 			<div v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person" :key="index" class="owner">
 				<div class="owner__image">
-					<NuxtPicture
+					<NuxtPicture sizes="xs:80px sm:80px md:300px" format="webp" decoding="async"
 						:src="owner.image.sourceUrl"
 						:alt="owner.image.altText"
 						:width="owner.image.mediaDetails.width"
 						:height="owner.image.mediaDetails.height"
 						loading="lazy"
-						provider="ipx" />
+						 />
 				</div>
 				<div class="owner__name">
 					<strong>{{ owner.name }}</strong>
@@ -96,17 +96,17 @@
 				</div>
 			</div>
 		</div>
-		<div v-else class="owners-mobile">
+		<div class="owners-mobile mobile-767">
 			<div v-for="(owner, index) in onas.page.rumlKlingerOnas.owners.person" :key="index" class="owner-mobile">
 				<div class="owner-mobile__heading" @click.prevent="toggleOwner">
 					<div class="owner-mobile__image">
-						<NuxtPicture
+						<NuxtPicture sizes="xs:80px sm:80px md:300px" format="webp" decoding="async"
 							:src="owner.image.sourceUrl"
 							:alt="owner.image.altText"
 							:width="owner.image.mediaDetails.width"
 							:height="owner.image.mediaDetails.height"
 							loading="lazy"
-							provider="ipx" />
+							 />
 					</div>
 					<div class="owner-mobile__name">
 						<strong>{{ owner.name }}</strong>
@@ -126,21 +126,21 @@
 		<div class="companies">
 			<div class="company" v-for="(company, index) in onas.page.rumlKlingerOnas.ourCompanies.company" :key="index">
 				<div class="company__image">
-					<NuxtPicture
+					<NuxtPicture sizes="xs:100vw sm:50vw md:33vw lg:460px" format="webp" decoding="async"
 						:src="company.image.sourceUrl"
 						:alt="company.image.altText"
 						:width="company.image.mediaDetails.width"
 						:height="company.image.mediaDetails.height"
 						loading="lazy"
-						provider="ipx" />
+						 />
 					<div class="company__logo">
-						<NuxtPicture
+						<NuxtPicture sizes="200px" format="webp" decoding="async" densities="1" quality="90"
 							:src="company.logo.sourceUrl"
 							:alt="company.logo.altText"
 							:width="company.logo.mediaDetails.width"
 							:height="company.logo.mediaDetails.height"
 							loading="lazy"
-							provider="ipx" />
+							 />
 					</div>
 				</div>
 				<div class="company__info">
@@ -163,31 +163,31 @@
 			<div class="companies">
 				<div class="company">
 					<div class="company__image">
-						<NuxtPicture
+						<NuxtPicture sizes="xs:100vw sm:50vw md:33vw lg:460px" format="webp" decoding="async"
 							v-if="pfData.page?.featuredImage"
 							:src="pfData.page?.featuredImage?.node?.sourceUrl"
 							:alt="pfData.page.featuredImage.node.altText"
 							:width="pfData.page.featuredImage.node.mediaDetails.width"
 							:height="pfData.page.featuredImage.node.mediaDetails.height"
 							loading="lazy"
-							provider="ipx" />
+							 />
 					</div>
 					<div class="company__info">
 						<h3 class="company__title">{{ pfData.page.title }}</h3>
 						<div v-if="pfData.page.pfCustom.description" class="company__perex" v-html="pfData.page.pfCustom.description"></div>
-						<nuxt-link :to="localePath('/pf')" class="btn btn-primary">{{ $t('discoverAll') }}</nuxt-link>
+						<nuxt-link external no-prefetch :to="localePath('/pf')" class="btn btn-primary">{{ $t('discoverAll') }}</nuxt-link>
 					</div>
 				</div>
 				<div class="company">
 					<div class="company__image">
-						<NuxtPicture
+						<NuxtPicture sizes="xs:100vw sm:50vw md:33vw lg:460px" format="webp" decoding="async"
 							v-if="calendarData.page?.featuredImage"
 							:src="calendarData.page?.featuredImage?.node?.sourceUrl"
 							:alt="calendarData.page.featuredImage.node.altText"
 							:width="calendarData.page.featuredImage.node.mediaDetails.width"
 							:height="calendarData.page.featuredImage.node.mediaDetails.height"
 							loading="lazy"
-							provider="ipx" />
+							 />
 					</div>
 					<div class="company__info">
 						<h3 class="company__title">{{ calendarData.page.title }}</h3>
@@ -195,7 +195,7 @@
 							v-if="calendarData.page.pfCustom.description"
 							class="company__perex"
 							v-html="calendarData.page.pfCustom.description"></div>
-						<nuxt-link :to="localePath('/kalendare')" class="btn btn-primary">{{ $t('discoverAll') }}</nuxt-link>
+						<nuxt-link external no-prefetch :to="localePath('/kalendare')" class="btn btn-primary">{{ $t('discoverAll') }}</nuxt-link>
 					</div>
 				</div>
 			</div>
@@ -209,10 +209,9 @@
 	const modules = [Navigation]
 	const swiperPrev = ref(null)
 	const swiperNext = ref(null)
-	const screenWidth = useState('screenWidth')
 	const toggleOwner = (event) => event.target.classList.toggle('active')
 	const { locale, t } = useI18n()
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	const localeIDs = {
 		aboutus: {
 			cs: 'cG9zdDo2MDI=',
@@ -241,216 +240,202 @@
 			},
 		],
 	})
-	const onasQuery = gql`
-		query getOnasKlinger($localeID: ID!) {
-			page(id: $localeID) {
-				id
-				slug
-				title
-				rumlKlingerOnas {
-					hero {
-						title
-						perex
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								width
-								height
-							}
-						}
-					}
-					firstBlock {
-						title
-						perex
-						text
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-						certificates {
-							name
-							file {
-								fileSize
-								mediaItemUrl
-								slug
-								title
-								mimeType
-							}
-						}
-					}
-					timeline {
-						titulek
-						perex
-						history {
-							year
-							perex
-							image {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
-							}
-						}
-					}
-					owners {
-						person {
-							name
-							position
-							perex
-							image {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
-							}
-						}
-					}
-					ourCompanies {
-						company {
-							title
-							perex
-							url
-							image {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
-							}
-							logo {
-								altText
-								sourceUrl
-								mediaDetails {
-									height
-									width
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: onas } = await useAsyncQuery(onasQuery, { localeID: localeIDs.aboutus[locale.value] })
+	const USPBlockIDs = {
+		aboutus: {
+			cs: 'cG9zdDo2MDI=',
+			en: 'cG9zdDozODQy',
+		},
+	}
+const contentQuery = `query KlingerPagesONasVue($onas_localeID: ID!, $careerBanner_localeID: ID!, $pfData_localeID: ID!, $calendarData_localeID: ID!, $usp_localeID: ID!) {
+  onas_page: page(id: $onas_localeID) {
+    id
+    slug
+    title
+    rumlKlingerOnas {
+      hero {
+        title
+        perex
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            width
+            height
+          }
+        }
+      }
+      firstBlock {
+        title
+        perex
+        text
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+        certificates {
+          name
+          file {
+            fileSize
+            mediaItemUrl
+            slug
+            title
+            mimeType
+          }
+        }
+      }
+      timeline {
+        titulek
+        perex
+        history {
+          year
+          perex
+          image {
+            altText
+            sourceUrl
+            mediaDetails {
+              height
+              width
+            }
+          }
+        }
+      }
+      owners {
+        person {
+          name
+          position
+          perex
+          image {
+            altText
+            sourceUrl
+            mediaDetails {
+              height
+              width
+            }
+          }
+        }
+      }
+      ourCompanies {
+        company {
+          title
+          perex
+          url
+          image {
+            altText
+            sourceUrl
+            mediaDetails {
+              height
+              width
+            }
+          }
+          logo {
+            altText
+            sourceUrl
+            mediaDetails {
+              height
+              width
+            }
+          }
+        }
+      }
+    }
+  }
+  careerBanner_page: page(id: $careerBanner_localeID) {
+    title
+    slug
+    rumlKlingerHomepage {
+      career {
+        title
+        perex
+        text
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+    }
+  }
+  pfData_page: page(id: $pfData_localeID) {
+    title
+    slug
+    content
+    featuredImage {
+      node {
+        altText
+        sourceUrl
+        mediaDetails {
+          height
+          width
+        }
+      }
+    }
+    pfCustom {
+      description
+    }
+  }
+  calendarData_page: page(id: $calendarData_localeID) {
+    title
+    slug
+    content
+    featuredImage {
+      node {
+        altText
+        sourceUrl
+        mediaDetails {
+          height
+          width
+        }
+      }
+    }
+    pfCustom {
+      description
+    }
+  }
+  usp_page: page(id: $usp_localeID) {
+    id
+    slug
+    title
+    rumlKlingerOnas {
+      secondBlock {
+        title
+        perex
+        usp {
+          text
+          value
+        }
+      }
+    }
+  }
+}`
+const { data: combinedData } = await useRequiredAsyncQuery(contentQuery, { ...Object.fromEntries(Object.entries({ localeID: localeIDs.aboutus[locale.value] }).map(([key,value])=>["onas_"+key,value])), ...Object.fromEntries(Object.entries({ localeID: localeIDs.homepage[locale.value] }).map(([key,value])=>["careerBanner_"+key,value])), ...Object.fromEntries(Object.entries({ localeID: localeIDs.pf[locale.value] }).map(([key,value])=>["pfData_"+key,value])), ...Object.fromEntries(Object.entries({ localeID: localeIDs.kalendar[locale.value] }).map(([key,value])=>["calendarData_"+key,value])), ...Object.fromEntries(Object.entries({ localeID: USPBlockIDs.aboutus[locale.value] }).map(([key,value])=>["usp_"+key,value])) })
+const onas = computed(() => ({ page: combinedData.value.onas_page }))
+const careerBanner = computed(() => ({ page: combinedData.value.careerBanner_page }))
+const pfData = computed(() => ({ page: combinedData.value.pfData_page }))
+const calendarData = computed(() => ({ page: combinedData.value.calendarData_page }))
+const usp = computed(() => ({ page: combinedData.value.usp_page }))
 
-	const careerBannerQuery = gql`
-		query getCareerBannerKlinger($localeID: ID!) {
-			page(id: $localeID) {
-				title
-				slug
-				rumlKlingerHomepage {
-					career {
-						title
-						perex
-						text
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: careerBanner } = await useAsyncQuery(careerBannerQuery, { localeID: localeIDs.homepage[locale.value] })
 
-	const pfQuery = gql`
-		query getKlingerPF($localeID: ID!) {
-			page(id: $localeID) {
-				title
-				slug
-				content
-				featuredImage {
-					node {
-						altText
-						sourceUrl
-						mediaDetails {
-							height
-							width
-						}
-					}
-				}
-				pfCustom {
-					description
-				}
-			}
-		}
-	`
-	const { data: pfData } = await useAsyncQuery(pfQuery, { localeID: localeIDs.pf[locale.value] })
-	const calendarQuery = gql`
-		query getKlingerCalendar($localeID: ID!) {
-			page(id: $localeID) {
-				title
-				slug
-				content
-				featuredImage {
-					node {
-						altText
-						sourceUrl
-						mediaDetails {
-							height
-							width
-						}
-					}
-				}
-				pfCustom {
-					description
-				}
-			}
-		}
-	`
-	const { data: calendarData } = await useAsyncQuery(calendarQuery, { localeID: localeIDs.kalendar[locale.value] })
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 <style lang="scss">
-	.usp-wrapper {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-		gap: 20px;
-	}
-	.usp {
-		margin-top: 100px;
-		padding: 60px 30px;
-		background-color: $color-white;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-		gap: 20px;
-		strong {
-			color: $color-secondary;
-			font-size: rem(62);
-			&::after {
-				content: '';
-				display: block;
-				height: 2px;
-				width: 60px;
-				margin-left: auto;
-				margin-right: auto;
-				background-color: $color-secondary;
-				margin-top: 20px;
-			}
-		}
-		span {
-			font-weight: 700;
-			text-transform: uppercase;
-			font-size: rem(24);
-		}
-	}
 	#historie {
 		background: url(/timeline-bg.jpg) repeat-y center center;
 		padding: 170px 0;
@@ -579,11 +564,6 @@
 			}
 		}
 	}
-	.companies {
-		display: flex;
-		gap: 30px;
-		flex-wrap: wrap;
-	}
 	.company {
 		flex: 1 1 300px;
 		&:nth-of-type(1),
@@ -620,7 +600,7 @@
 	.owner-mobile {
 		&:not(:last-of-type) {
 			border-bottom: 1px solid $color-inactive;
-			// padding-bottom: 20px;
+
 			margin-bottom: 20px;
 		}
 		&__heading {
@@ -657,7 +637,7 @@
 			gap: 10px;
 		}
 		&__text {
-			// max-height: 500px;
+
 			transition: all 0.15s ease-in-out;
 			overflow: hidden;
 			background-color: rgba($color-primary, 0.1);
@@ -700,24 +680,6 @@
 		}
 	}
 	@media (max-width: 767px) {
-		.usp-wrapper {
-			gap: 10px;
-		}
-		.usp {
-			margin-top: 0px;
-			align-items: flex-start;
-			padding: 20px;
-			gap: 0;
-			strong {
-				font-size: rem(30);
-				&::after {
-					display: none;
-				}
-			}
-			span {
-				font-size: rem(20);
-			}
-		}
 		.company__info {
 			padding: 30px 20px;
 		}

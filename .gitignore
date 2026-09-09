@@ -14,3 +14,8 @@ dist
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.netlify/
+output/
+test-results/
+playwright-report/
+.DS_Store

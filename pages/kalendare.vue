@@ -13,29 +13,27 @@
 			en: 'cG9zdDo0MzE2',
 		},
 	}
-	const pfQuery = gql`
-		query getKlingerCalendar($localeID: ID!) {
-			page(id: $localeID) {
-				title
-				slug
-				content
-				featuredImage {
-					node {
-						altText
-						sourceUrl
-						mediaDetails {
-							height
-							width
-						}
-					}
-				}
-				pfCustom {
-					description
-				}
-			}
-		}
-	`
-	const { data: pfData } = await useAsyncQuery(pfQuery, { localeID: localeIDs.kalendar[locale.value] })
+	const pfQuery = `query getKlingerCalendar($localeID: ID!) {
+  page(id: $localeID) {
+    title
+    slug
+    content
+    featuredImage {
+      node {
+        altText
+        sourceUrl
+        mediaDetails {
+          height
+          width
+        }
+      }
+    }
+    pfCustom {
+      description
+    }
+  }
+}`
+	const { data: pfData } = await useRequiredAsyncQuery(pfQuery, { localeID: localeIDs.kalendar[locale.value] })
 	useHead({
 		bodyAttrs: {
 			class: 'wp-content',
