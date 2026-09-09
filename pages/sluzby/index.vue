@@ -11,13 +11,13 @@
 		<div class="container">
 			<div v-for="(service, index) in servicesData.pages.nodes" :key="index" class="service columns col-2">
 				<div class="service__image column">
-					<NuxtPicture
+					<NuxtPicture sizes="xs:100vw sm:100vw md:50vw lg:700px" format="webp" decoding="async"
 						:src="service.featuredImage.node.sourceUrl"
 						:alt="service.featuredImage.node.altText"
 						:width="service.featuredImage.node.mediaDetails.width"
 						:height="service.featuredImage.node.mediaDetails.height"
 						loading="lazy"
-						provider="ipx"
+
 						:imgAttrs="{ style: 'height: 100%; object-fit: cover;' }" />
 				</div>
 				<div class="service__content column">
@@ -32,12 +32,12 @@
 		</div>
 	</section>
 	<section>
-		<BannerTop />
+		<BannerTop :data="bannerData" />
 	</section>
 </template>
 <script setup>
 	const { locale, t } = useI18n()
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	useHead({
 		title: t('seo.services.title'),
 		meta: [
@@ -57,30 +57,71 @@
 
 	const route = useRoute()
 
-	const servicesQuery = gql`
-		query getAllServicesKlinger($localeID: ID!) {
-			pages(where: { parent: $localeID, orderby: { field: DATE, order: ASC } }) {
-				nodes {
-					title
-					slug
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					rumlKlingerSluzby {
-						shortDescription
-					}
-				}
-			}
-		}
-	`
-	const { data: servicesData } = await useAsyncQuery(servicesQuery, { localeID: localeIDs.services[locale.value] })
+	const servicesQuery = `query KlingerServices($localeID: ID!, $_cursor_pages: String, $hpBannerTop_localeID: ID!) {
+  pages(
+    where: {parent: $localeID, orderby: {field: DATE, order: ASC}}
+    first: 100
+    after: $_cursor_pages
+  ) {
+    nodes {
+      title
+      slug
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      rumlKlingerSluzby {
+        shortDescription
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+  page: page(id: $hpBannerTop_localeID) {
+    title
+    slug
+    rumlKlingerHomepage {
+      bannerTop {
+        title
+        perex
+        btn {
+          text
+          file {
+            fileSize
+            mediaItemUrl
+          }
+        }
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+        imageMobile {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+    }
+  }
+}`
+	const { data: servicesData } = await useRequiredAsyncQuery(servicesQuery, { localeID: localeIDs.services[locale.value], hpBannerTop_localeID: locale.value === "en" ? "cG9zdDozODM3" : "cG9zdDo1OTI=" })
+
+const bannerData = computed(() => ({ page: servicesData.value.page }))
 </script>
 <style lang="scss" scoped>
 	.page-image-header {

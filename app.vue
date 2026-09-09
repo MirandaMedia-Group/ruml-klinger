@@ -1,9 +1,6 @@
 <template>
-	<ClientOnly>
-		<SiteMessage />
-	</ClientOnly>
-	<LazyNuxtLoadingIndicator color="#d70c38" />
-	<CookieControl class="no-margin" :locale="locale" />
+	<SiteMessage />
+	<ClientOnly><CookieControl class="no-margin" :locale="locale" /></ClientOnly>
 	<MainHeader />
 	<NuxtLayout>
 		<NuxtPage />
@@ -11,86 +8,14 @@
 	<MainFooter />
 </template>
 <script setup>
-	import { useLocaleHead } from '#imports'
-	const { cookiesEnabled, cookiesEnabledIds, isConsentGiven, isModalActive, moduleOptions } = useCookieControl()
-	// const gtm = useGtm()
-	const { gtag } = useGtag()
-	const { locale } = useI18n()
-	const head = useLocaleHead({
-		addDirAttribute: true,
-		identifierAttribute: 'id',
-		addSeoAttributes: true,
-	})
-	useHead({
-		htmlAttrs: {
-			lang: head.value.htmlAttrs.lang,
-			dir: head.value.htmlAttrs.dir,
-		},
-		title: 'RUML s.r.o.',
-		meta: [
-			{
-				name: 'google-site-verification',
-				content: '751U2lbOwvrVU2Mi-WwfobyR-PXTfeaqxqGhVeXLdMs',
-			},
-		],
-	})
-	const screenWidth = useState('screenWidth', () => {
-		return 1024
-	})
-	const language = useState('language', () => 'CS')
-	onMounted(() => {
-		screenWidth.value = window.innerWidth
-		window.addEventListener('resize', () => {
-			screenWidth.value = window.innerWidth
-		})
-
-		if (cookiesEnabledIds.value && cookiesEnabledIds.value.includes('google-analytics')) {
-			gtag('consent', 'update', {
-				ad_storage: 'granted',
-				ad_user_data: 'granted',
-				ad_personalization: 'granted',
-				analytics_storage: 'granted',
-			})
-		}
-	})
-	onBeforeUnmount(() => {
-		window.removeEventListener('resize', () => {
-			screenWidth.value = window.innerWidth
-		})
-	})
-
-	const navigationVisible = useState('navigationVisible')
-	const router = useRouter()
-	router.beforeEach((to, from, next) => {
-		document.body.classList.remove('search-visible')
-		navigationVisible.value = false
-		next()
-	})
-	watch(
-		() => cookiesEnabledIds.value,
-		(current, previous) => {
-			if (!previous?.includes('google-analytics') && current?.includes('google-analytics')) {
-				// gtm.enable(true)
-				console.log(gtag)
-				gtag('consent', 'update', {
-					ad_storage: 'granted',
-					ad_user_data: 'granted',
-					ad_personalization: 'granted',
-					analytics_storage: 'granted',
-				})
-			}
-			if (previous?.includes('google-analytics') && !current?.includes('google-analytics')) {
-				// gtm.enable(false)
-				gtag('consent', 'update', {
-					ad_storage: 'denied',
-					ad_user_data: 'denied',
-					ad_personalization: 'denied',
-					analytics_storage: 'denied',
-				})
-			}
-		},
-		{ deep: true }
-	)
+ const { locale } = useI18n()
+ const head = useLocaleHead({ seo: true })
+ useHead(() => ({
+  htmlAttrs: { lang: head.value.htmlAttrs.lang, dir: head.value.htmlAttrs.dir },
+  link: head.value.link,
+  meta: [...(head.value.meta || []), { name: 'google-site-verification', content: '751U2lbOwvrVU2Mi-WwfobyR-PXTfeaqxqGhVeXLdMs' }],
+  title: 'RUML s.r.o.',
+ }))
 </script>
 <style lang="scss">
 	html {

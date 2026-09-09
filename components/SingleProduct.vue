@@ -1,8 +1,8 @@
 <template>
 	<div class="product">
-		<NuxtLink :to="localePath(`/katalog-produktu/product/${props.slug}`)">
+		<NuxtLink external no-prefetch :to="localePath(`/katalog-produktu/product/${props.slug}`)">
 			<div class="product__image">
-				<NuxtPicture
+				<NuxtPicture sizes="xs:100vw sm:50vw md:33vw lg:300px" format="webp" decoding="async"
 					v-if="props.productAcf?.gallery?.[0]?.sourceUrl"
 					:src="props.productAcf.gallery?.[0].sourceUrl"
 					:alt="props.productAcf.gallery?.[0].altText"
@@ -10,7 +10,7 @@
 					:height="props.productAcf.gallery?.[0].mediaDetails?.height"
 					:img-attrs="{ style: 'max-width: 100%; max-height: 340px; object-fit: contain;' }"
 					loading="lazy"
-					provider="ipx" />
+					 />
 			</div>
 			<div class="product__info">
 				<h2>{{ props.title }}</h2>
@@ -31,7 +31,7 @@
 	</div>
 </template>
 <script setup>
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	const props = defineProps(['slug', 'title', 'excerpt', 'productAcf'])
 </script>
 <style lang="scss" scoped>

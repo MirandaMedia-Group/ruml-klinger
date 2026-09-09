@@ -29,7 +29,7 @@
 				</div>
 				<ul class="search-results">
 					<li v-for="(item, index) in searchServices.pages.nodes" :key="index">
-						<NuxtLink :to="localePath(`/${item.parent.node.slug}`) + `/` + item.slug"> {{ item.title }}</NuxtLink>
+						<NuxtLink external no-prefetch :to="localePath(`/sluzby/${item.slug}`)"> {{ item.title }}</NuxtLink>
 					</li>
 				</ul>
 			</section>
@@ -39,7 +39,7 @@
 				</div>
 				<ul class="search-results">
 					<li v-for="(item, index) in searchCategories.productCategories.nodes" :key="index">
-						<NuxtLink :to="localePath(`/katalog-produktu/${item.parent ? item.parent.node.slug + '/' : ''}${item.slug}`)">{{
+						<NuxtLink external no-prefetch :to="localePath(categoryUrl(item.slug))">{{
 							item.name
 						}}</NuxtLink>
 					</li>
@@ -58,15 +58,15 @@
 								:width="partner.featuredImage.node.mediaDetails.width"
 								:height="partner.featuredImage.node.mediaDetails.height"
 								loading="lazy"
-								provider="ipx" />
+								 />
 						</div>
 						<h2 class="partner__title">{{ partner.title }}</h2>
 						<div class="partner__excerpt" v-html="partner.excerpt"></div>
 						<div class="buttons-wrapper align-center justify-start">
-							<NuxtLink :to="localePath(`/katalog-produktu/vyrobce/${partner.slug}`)" class="btn btn-primary">{{
+							<NuxtLink external no-prefetch :to="localePath(`/katalog-produktu/vyrobce/${partner.slug}`)" class="btn btn-primary">{{
 								$t('showProducts')
 							}}</NuxtLink>
-							<NuxtLink :to="localePath(`/partneri/${partner.slug}`)">{{ $t('moreAboutPartner') }}</NuxtLink>
+							<NuxtLink external no-prefetch :to="localePath(`/partneri/${partner.slug}`)">{{ $t('moreAboutPartner') }}</NuxtLink>
 						</div>
 					</div>
 				</div>
@@ -81,12 +81,17 @@
 	</div>
 </template>
 <script setup>
-	const localePath = useLocalePath()
+ import { categoryPath } from "~/utils/catalogue-paths"
+	const localePath = useCmsLocalePath()
 	const router = useRouter()
+ const { data: categoryList } = await useProductCategories()
+ const selected = new Set(categoryList.value.productCategories.nodes.filter(item => item.productCategoriesAfc?.target?.includes('klinger')).map(item => item.slug))
+ const categoryUrl = slug => categoryPath(categoryList.value.productCategories.nodes, slug)
+
 	const language = useState('language')
 	const { locale, t } = useI18n()
 	const variables = ref({
-		search: router.currentRoute.value.query.search,
+		search: String(router.currentRoute.value.query.search || ''),
 		language: locale.value.toUpperCase(),
 	})
 	const localeIDs = {
@@ -95,110 +100,130 @@
 			en: 'cG9zdDozODQ3',
 		},
 	}
-	watch(router.currentRoute, (route) => {
-		variables.value.search = route.query.search
-		refreshPartners()
-		refreshProducts()
-		refreshServices()
-		refreshCategories()
-	})
 
-	const searchProductsQuery = gql`
-		query searchProducts($search: String!, $language: LanguageCodeFilterEnum!) {
-			products(where: { search: $search, language: $language }) {
-				nodes {
-					slug
-					title
-					excerpt
-					productAcf {
-						shortDescription
-						gallery {
-							sourceUrl
-							mediaDetails {
-								width
-								height
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const {
-		data: searchProducts,
-		refresh: refreshProducts,
-		pending: pendingProducts,
-	} = await useAsyncQuery(searchProductsQuery, variables.value)
+	const searchQuery = `query KlingerSearch($search: String!, $language: LanguageCodeFilterEnum!, $_cursor_products: String, $localeID: ID!, $_cursor_pages: String, $_cursor_partners: String, $_cursor_productCategories: String) {
+  rawProducts_products: products(
+    where: {search: $search, language: $language}
+    first: 100
+    after: $_cursor_products
+  ) {
+    nodes {
+      id
+      productCategories(first: 100) {
+        nodes {
+          slug
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+      slug
+      title
+      excerpt
+      productAcf {
+        shortDescription
+        gallery {
+          sourceUrl
+          mediaDetails {
+            width
+            height
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+  searchServices_pages: pages(
+    where: {search: $search, parent: $localeID, language: $language}
+    first: 100
+    after: $_cursor_pages
+  ) {
+    nodes {
+      slug
+      title
+      parent {
+        node {
+          slug
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+  searchPartners_partners: partners(
+    where: {search: $search, language: $language}
+    first: 100
+    after: $_cursor_partners
+  ) {
+    nodes {
+      featuredImage {
+        node {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      slug
+      title
+      excerpt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+  rawCategories_productCategories: productCategories(
+    where: {search: $search, language: $language}
+    first: 100
+    after: $_cursor_productCategories
+  ) {
+    nodes {
+      name
+      slug
+      parent {
+        node {
+          slug
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}`
+const { data: searchData, pending } = await useRequiredAsyncQuery(searchQuery, { ...variables.value, localeID: localeIDs.services[locale.value] })
+const pendingProducts = pending
+const rawProducts = computed(() => ({ products: searchData.value.rawProducts_products }))
+const pendingServices = pending
+const searchServices = computed(() => ({ pages: searchData.value.searchServices_pages }))
+const pendingPartners = pending
+const searchPartners = computed(() => ({ partners: searchData.value.searchPartners_partners }))
+const pendingCategories = pending
+const rawCategories = computed(() => ({ productCategories: searchData.value.rawCategories_productCategories }))
 
-	const searchServicesQuery = gql`
-		query searchServices($search: String!, $language: LanguageCodeFilterEnum!, $localeID: ID!) {
-			pages(where: { search: $search, parent: $localeID, language: $language }) {
-				nodes {
-					slug
-					title
-					parent {
-						node {
-							slug
-						}
-					}
-				}
-			}
-		}
-	`
-	const {
-		data: searchServices,
-		refresh: refreshServices,
-		pending: pendingServices,
-	} = await useAsyncQuery(searchServicesQuery, { ...variables.value, localeID: localeIDs.services[locale.value] })
-	console.log(searchServices.value)
 
-	const searchPartnersQuery = gql`
-		query searchPartners($search: String!, $language: LanguageCodeFilterEnum!) {
-			partners(where: { search: $search, language: $language }) {
-				nodes {
-					featuredImage {
-						node {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					slug
-					title
-					excerpt
-				}
-			}
-		}
-	`
-	const {
-		data: searchPartners,
-		refresh: refreshPartners,
-		pending: pendingPartners,
-	} = await useAsyncQuery(searchPartnersQuery, variables.value)
 
-	const productCategoriesQuery = gql`
-		query searchCategories($search: String!, $language: LanguageCodeFilterEnum!) {
-			productCategories(where: { search: $search, language: $language }) {
-				nodes {
-					name
-					slug
-					parent {
-						node {
-							slug
-						}
-					}
-				}
-			}
-		}
-	`
-	const {
-		data: searchCategories,
-		pending: pendingCategories,
-		refresh: refreshCategories,
-	} = await useAsyncQuery(productCategoriesQuery, variables.value)
+
+
+
+
+
+
+
+
+
+ const searchProducts = computed(() => ({ products: { nodes: rawProducts.value.products.nodes.filter(p => p.productCategories.nodes.some(c => selected.has(c.slug))) } }))
+ const searchCategories = computed(() => ({ productCategories: { nodes: rawCategories.value.productCategories.nodes.filter(c => selected.has(c.slug)) } }))
 </script>
 <style lang="scss">
 	ul.search-results {

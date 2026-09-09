@@ -4,7 +4,7 @@
 			<div class="container">
 				<h2>{{ $t('contactUs') }}</h2>
 				<a class="project-mail" href="mailto:ruml@ruml-group.cz"> ruml@ruml-group.cz </a>
-				<NuxtLink class="btn btn-primary" :to="localePath('/kontakty') + '#nasi-specialiste'">{{ $t('ourSpecialists') }}</NuxtLink>
+				<NuxtLink external no-prefetch class="btn btn-primary" :to="localePath('/kontakty') + '#nasi-specialiste'">{{ $t('ourSpecialists') }}</NuxtLink>
 			</div>
 		</div>
 		<div class="footer-middle">
@@ -14,19 +14,19 @@
 					<nav>
 						<ul>
 							<li>
-								<nuxt-link :to="localePath('/o-nas') + '#nase-spolecnosti'">{{ $t('ourCompanies') }}</nuxt-link>
+								<nuxt-link external no-prefetch :to="localePath('/o-nas') + '#nase-spolecnosti'">{{ $t('ourCompanies') }}</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link :to="localePath('/o-nas')">{{ $t('about') }}</nuxt-link>
+								<nuxt-link external no-prefetch :to="localePath('/o-nas')">{{ $t('about') }}</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link :to="localePath('/o-nas#historie')">{{ $t('history') }}</nuxt-link>
+								<nuxt-link external no-prefetch :to="localePath('/o-nas#historie')">{{ $t('history') }}</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link :to="localePath('/kontakty')">{{ $t('contact') }}</nuxt-link>
+								<nuxt-link external no-prefetch :to="localePath('/kontakty')">{{ $t('contact') }}</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link :to="localePath('/kariera')">{{ $t('career') }}</nuxt-link>
+								<nuxt-link external no-prefetch :to="localePath('/kariera')">{{ $t('career') }}</nuxt-link>
 							</li>
 						</ul>
 					</nav>
@@ -75,7 +75,7 @@
 					</div>
 				</div>
 				<div class="footer-block site-logo">
-					<NuxtPicture class="logo" src="/logo-white.png" width="316" height="94" alt="RUML Klinger s.r.o." />
+					<NuxtPicture sizes="316px" densities="1" loading="lazy" decoding="async" class="logo" src="/logo-white.png" width="316" height="94" alt="RUML Klinger s.r.o." />
 					<a href="https://www.linkedin.com/company/ruml-s-r-o/" target="_blank" class="social-link">
 						<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path
@@ -111,10 +111,10 @@
 	</footer>
 </template>
 <script setup>
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	const actualYear = computed(() => new Date().getFullYear())
 	const toggleMenu = (e) => {
-		e.target.classList.toggle('active')
+		e.currentTarget.classList.toggle('active')
 	}
 </script>
 <style lang="scss" scoped>

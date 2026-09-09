@@ -25,7 +25,7 @@
 					:width="category.referenceCategoryAcf.image.mediaDetails.width"
 					:height="category.referenceCategoryAcf.image.mediaDetails.height"
 					loading="lazy"
-					provider="ipx" />
+					 />
 				<h2>{{ category.name }}</h2>
 			</div>
 			<ReferencesList :references="references.references.nodes" :category="category" />
@@ -33,7 +33,7 @@
 				<h3>{{ $t('referencesPage.usedTechnologies') }}</h3>
 				<div v-html="category.referenceCategoryAcf.technologies"></div>
 				<div class="buttons-wrapper">
-					<NuxtLink :to="localePath(`/kontakty`) + `#formular`" class="btn btn-tertiary">{{
+					<NuxtLink external no-prefetch :to="localePath(`/kontakty`) + `#formular`" class="btn btn-tertiary">{{
 						$t('referencesPage.servicesInquiry')
 					}}</NuxtLink>
 				</div>
@@ -42,74 +42,81 @@
 	</section>
 </template>
 <script setup>
+ import { compareProductCategoryOrder } from "~/utils/product-category-order"
 	const { locale, t } = useI18n()
-	const localePath = useLocalePath()
-	const sortByOrder = (object) => {
-		const help = object.slice(0)
-		help.sort((a, b) => {
-			return (
-				(a.referenceCategoryAcf.order === null ? 1000 : a.referenceCategoryAcf.order) -
-				(b.referenceCategoryAcf.order === null ? 1001 : b.referenceCategoryAcf.order)
-			)
-		})
-		return help
-	}
+	const localePath = useCmsLocalePath()
+	const sortByOrder = items => [...items].sort((a, b) => compareProductCategoryOrder({productCategoriesAfc:a.referenceCategoryAcf}, {productCategoriesAfc:b.referenceCategoryAcf}))
 	const language = useState('language')
-	const referenceCategoriesQuery = gql`
-		query getReferenceCategoriesKlinger($language: LanguageCodeFilterEnum!) {
-			referenceCategories(where: { language: $language }) {
-				nodes {
-					id
-					name
-					link
-					uri
-					slug
-					referenceCategoryAcf {
-						order
-						image {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-						technologies
-					}
-				}
-			}
-		}
-	`
-	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery, { language: locale.value.toUpperCase() })
 
-	const referencesQuery = gql`
-		query getReferencesKlinger($language: LanguageCodeFilterEnum!) {
-			references(first: 200, where: { language: $language }) {
-				nodes {
-					id
-					title
-					slug
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					referenceCategories {
-						nodes {
-							name
-							id
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: references } = await useAsyncQuery(referencesQuery, { language: locale.value.toUpperCase() })
+const contentQuery = `query KlingerPagesReferenceIndexVue($referenceCategories_language: LanguageCodeFilterEnum!, $references_language: LanguageCodeFilterEnum!, $_cursor_referenceCategories_referenceCategories: String, $_cursor_references_references: String) {
+  referenceCategories_referenceCategories: referenceCategories(
+    where: {language: $referenceCategories_language}
+    first: 100
+    after: $_cursor_referenceCategories_referenceCategories
+  ) {
+    nodes {
+      id
+      name
+      link
+      uri
+      slug
+      referenceCategoryAcf {
+        order
+        image {
+          sourceUrl
+          altText
+          mediaDetails {
+            height
+            width
+          }
+        }
+        technologies
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+  references_references: references(
+    where: {language: $references_language}
+    first: 100
+    after: $_cursor_references_references
+  ) {
+    nodes {
+      id
+      title
+      slug
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      referenceCategories {
+        nodes {
+          name
+          id
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}`
+const { data: combinedData } = await useRequiredAsyncQuery(contentQuery, { ...Object.fromEntries(Object.entries({ language: locale.value.toUpperCase() }).map(([key,value])=>["referenceCategories_"+key,value])), ...Object.fromEntries(Object.entries({ language: locale.value.toUpperCase() }).map(([key,value])=>["references_"+key,value])) })
+const referenceCategories = computed(() => ({ referenceCategories: combinedData.value.referenceCategories_referenceCategories }))
+const references = computed(() => ({ references: combinedData.value.references_references }))
+
+
+
+
 </script>
 <style lang="scss">
 	.reference-category {

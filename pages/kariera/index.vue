@@ -41,7 +41,7 @@
 						:width="post.featuredImage.node.mediaDetails.width"
 						:height="post.featuredImage.node.mediaDetails.height"
 						loading="lazy"
-						provider="ipx"
+
 						:img-attrs="{ style: 'display:block; width: 100%; height: 100%; object-fit: cover;' }" />
 				</div>
 				<div class="career__content">
@@ -58,7 +58,7 @@
 						{{ companyURLs[post.careerAcf.company] }}
 					</div>
 					<div class="career__excerpt" v-html="post.excerpt"></div>
-					<NuxtLink :to="localePath(`/kariera/${post.slug}`)" class="btn btn-primary">{{
+					<NuxtLink external no-prefetch :to="localePath(`/kariera/${post.slug}`)" class="btn btn-primary">{{
 						$t('careerPage.showPosition')
 					}}</NuxtLink>
 				</div>
@@ -71,11 +71,12 @@
 		:btn="{ text: $t('moreAboutCompany'), url: localePath('/o-nas') }"
 		:alignCenter="true" />
 	<section class="container">
-		<USPBlock />
+		<USPBlock :usp="usp" />
 	</section>
 </template>
 
 <script setup>
+ const localePath = useCmsLocalePath()
 	const companyLogos = ref({
 		klinger: '/loga/ruml-group.png',
 		service: '/loga/ruml-service.png',
@@ -110,56 +111,89 @@
 		],
 	})
 
-	const careerListQuery = gql`
-		query getCareerList($language: LanguageCodeFilterEnum!) {
-			careers(where: { language: $language }) {
-				nodes {
-					excerpt
-					featuredImage {
-						node {
-							altText
-							mediaDetails {
-								height
-								width
-							}
-							sourceUrl
-						}
-					}
-					slug
-					title
-					careerAcf {
-						company
-					}
-				}
-			}
-		}
-	`
-	const { data: careerList } = await useAsyncQuery(careerListQuery, { language: locale.value.toUpperCase() })
+	const USPBlockIDs = {
+		aboutus: {
+			cs: 'cG9zdDo2MDI=',
+			en: 'cG9zdDozODQy',
+		},
+	}
+const contentQuery = `query KlingerPagesKarieraIndexVue($careerList_language: LanguageCodeFilterEnum!, $aboutUsBanner_localeID: ID!, $usp_localeID: ID!, $_cursor_careerList_careers: String) {
+  careerList_careers: careers(
+    where: {language: $careerList_language}
+    first: 100
+    after: $_cursor_careerList_careers
+  ) {
+    nodes {
+      excerpt
+      featuredImage {
+        node {
+          altText
+          mediaDetails {
+            height
+            width
+          }
+          sourceUrl
+        }
+      }
+      slug
+      title
+      careerAcf {
+        company
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+  aboutUsBanner_page: page(id: $aboutUsBanner_localeID) {
+    title
+    slug
+    rumlKlingerHomepage {
+      aboutUs {
+        title
+        perex
+        text
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+    }
+  }
+  usp_page: page(id: $usp_localeID) {
+    id
+    slug
+    title
+    rumlKlingerOnas {
+      secondBlock {
+        title
+        perex
+        usp {
+          text
+          value
+        }
+      }
+    }
+  }
+}`
+const { data: combinedData } = await useRequiredAsyncQuery(contentQuery, { ...Object.fromEntries(Object.entries({ language: locale.value.toUpperCase() }).map(([key,value])=>["careerList_"+key,value])), ...Object.fromEntries(Object.entries({ localeID: localeIDs.homepage[locale.value] }).map(([key,value])=>["aboutUsBanner_"+key,value])), ...Object.fromEntries(Object.entries({ localeID: USPBlockIDs.aboutus[locale.value] }).map(([key,value])=>["usp_"+key,value])) })
+const careerList = computed(() => ({ careers: combinedData.value.careerList_careers }))
+const aboutUsBanner = computed(() => ({ page: combinedData.value.aboutUsBanner_page }))
+const usp = computed(() => ({ page: combinedData.value.usp_page }))
 
-	const aboutUsBannerQuery = gql`
-		query getOnasBannerKlinger($localeID: ID!) {
-			page(id: $localeID) {
-				title
-				slug
-				rumlKlingerHomepage {
-					aboutUs {
-						title
-						perex
-						text
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: aboutUsBanner } = await useAsyncQuery(aboutUsBannerQuery, { localeID: localeIDs.homepage[locale.value] })
+
+
+
+
+
+
+
+
 </script>
 
 <style lang="scss" scoped>

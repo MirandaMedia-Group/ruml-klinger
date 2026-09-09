@@ -110,7 +110,6 @@
 	const activeVideo = useState('activeVideo', () => 0)
 	const showVideo = useState('showVideo', () => false)
 
-	// COMPUTED
 	const youtubeID = (videoURL) => new URL(videoURL).searchParams.get('v')
 </script>
 <style lang="scss" scoped>

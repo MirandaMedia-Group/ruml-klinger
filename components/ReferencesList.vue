@@ -7,14 +7,14 @@
 			)"
 			:key="reference.slug">
 			<div class="reference__image">
-				<NuxtPicture
+				<NuxtPicture densities="1" quality="90" sizes="xs:50vw sm:200px md:240px" format="webp" decoding="async"
 					v-if="reference.featuredImage?.node"
 					:src="reference.featuredImage.node.sourceUrl"
 					:alt="reference.featuredImage.node.altText"
 					:width="reference.featuredImage.node.mediaDetails.width"
 					:height="reference.featuredImage.node.mediaDetails.height"
 					loading="lazy"
-					provider="ipx" />
+					 />
 			</div>
 			<div class="reference__title">
 				{{ reference.title }}

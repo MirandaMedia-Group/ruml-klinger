@@ -1,5 +1,5 @@
 <template>
-	<div v-if="siteMessageData?.siteMessage">
+	<div v-if="siteMessageData?.siteMessage?.siteMessageAcf?.text">
 		<div
 			class="site-message"
 			:style="{
@@ -20,8 +20,8 @@
 			en: 'cG9zdDo0NDk2',
 		},
 	}
-	const siteMessageQuery = gql`
-		query getGroupMessage($localeID: ID!) {
+	const siteMessageQuery = `
+		query getKlingerMessage($localeID: ID!) {
 			siteMessage(id: $localeID) {
 				siteMessageAcf {
 					bgColor
@@ -32,7 +32,7 @@
 		}
 	`
 
-	const { data: siteMessageData } = await useAsyncQuery(siteMessageQuery, { localeID: localeIDs.message[locale.value] })
+	const { data: siteMessageData } = await useOptionalAsyncQuery({ key: `klinger:message:${locale.value}`, label: 'getKlingerMessage', query: siteMessageQuery, variables: { localeID: localeIDs.message[locale.value] }, validate: data => !!data && Object.hasOwn(data, 'siteMessage'), fallback: () => ({ siteMessage: null }) })
 </script>
 <style lang="scss" scoped>
 	.site-message {

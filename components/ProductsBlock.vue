@@ -9,15 +9,15 @@
 				</a>
 			</div>
 			<div class="category-banner__image">
-				<NuxtPicture
+				<NuxtPicture sizes="xs:100vw sm:50vw md:33vw lg:300px" format="webp" decoding="async"
 					:src="props.banner.featuredImage.node.sourceUrl"
 					:alt="props.banner.featuredImage.node.altText"
 					:width="props.banner.featuredImage.node.mediaDetails.width"
 					:height="props.banner.featuredImage.node.mediaDetails.height"
 					loading="lazy"
-					provider="ipx"
+
 					:img-attrs="{ style: 'display:block; width: 100%; height: 100%; object-fit: cover;' }" />
-				<NuxtLink
+				<NuxtLink external no-prefetch
 					v-if="!props.banner.categoryBanners.btnUrl.includes('https')"
 					:to="localePath(props.banner.categoryBanners.btnUrl)"
 					class="category-banner__button btn btn-primary">
@@ -32,7 +32,7 @@
 	</div>
 </template>
 <script setup>
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	const props = defineProps(['data', 'banner'])
 </script>
 <style lang="scss" scoped>

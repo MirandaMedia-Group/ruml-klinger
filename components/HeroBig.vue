@@ -2,14 +2,16 @@
 	<section
 		class="hero"
 		:class="{ white: props.white, center: props.center, nowrap: props.nowrap, 'content-hidden': hasVideo && !isContentVisible }">
-		<NuxtPicture
+		<NuxtPicture fetchpriority="high" loading="eager" format="webp" decoding="async"
+ :sizes="props.nowrap ? `${image.mediaDetails.width}px` : 'xs:100vw sm:100vw md:100vw lg:100vw xl:100vw xxl:100vw 1920:100vw'"
+ :densities="props.nowrap ? '1' : '1 2'"
 			v-if="props.heroType === 'img' || !props.heroType"
 			:src="image.sourceUrl"
 			:width="image.mediaDetails.width"
 			:height="image.mediaDetails.height"
 			:alt="image.altText"
 			:img-attrs="{ style: 'display: block; height: 100%; object-fit: cover;' }"
-			provider="ipx" />
+			 />
 		<div class="video-wrapper" v-else-if="hasVideo">
 			<video :src="props.video.mediaItemUrl" autoplay playsinline="" preload="" muted style="width: 100%" loop></video>
 		</div>
@@ -55,7 +57,7 @@
 					</div>
 				</div>
 				<div v-if="btnPrimary && btnSecondary" class="buttons-vertical">
-					<NuxtLink
+					<NuxtLink external no-prefetch
 						v-if="btnPrimary.type === 'internal' && btnPrimary.urlInternal"
 						:to="localePath(btnPrimary.urlInternal)"
 						class="btn btn-primary">
@@ -97,7 +99,7 @@
 	</section>
 </template>
 <script setup>
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	const isContentVisible = ref(true)
 	const props = defineProps([
 		'email',

@@ -1,29 +1,31 @@
 {
-	"private": true,
-	"scripts": {
-		"build": "nuxt build",
-		"dev": "nuxt dev",
-		"generate": "nuxt generate",
-		"preview": "nuxt preview",
-		"postinstall": "nuxt prepare",
-		"start": "node .output/server/index.mjs"
-	},
-	"devDependencies": {
-		"@dargmuesli/nuxt-cookie-control": "^8.4.6",
-		"@nuxt/image-edge": "1.0.0-28059208.2abef1b",
-		"@nuxtjs/apollo": "5.0.0-alpha.12",
-		"@nuxtjs/i18n": "^8.3.3",
-		"@zadigetvoltaire/nuxt-gtm": "^0.0.13",
-		"nuxt": "^3.13.1",
-		"nuxt-gtag": "latest",
-		"nuxt-simple-sitemap": "^4.4.1",
-		"sass": "^1.77.8",
-		"sass-loader": "16.0.0",
-		"typescript": "^5.5.4"
-	},
-	"dependencies": {
-		"swiper": "^9.0.3"
-	},
-	"packageManager": "yarn@3.5.1",
-	"type": "module"
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "start": "node .output/server/index.mjs",
+    "typecheck": "nuxt typecheck",
+    "test:unit": "node --test tests/unit/*.test.mjs",
+    "test:content": "node --test --test-concurrency=1 tests/integration/*.test.mjs"
+  },
+  "devDependencies": {
+    "@dargmuesli/nuxt-cookie-control": "8.6.1",
+    "@netlify/functions": "6.0.0",
+    "@nuxt/image": "1.11.0",
+    "@nuxtjs/i18n": "10.6.0",
+    "@nuxtjs/sitemap": "8.5.0",
+    "@playwright/test": "1.62.1",
+    "@types/node": "24.10.1",
+    "nuxt": "3.21.11",
+    "sass": "1.103.1",
+    "typescript": "5.9.3",
+    "vue-tsc": "3.3.11"
+  },
+  "dependencies": {
+    "swiper": "9.3.1"
+  },
+  "packageManager": "yarn@3.5.1",
+  "type": "module"
 }

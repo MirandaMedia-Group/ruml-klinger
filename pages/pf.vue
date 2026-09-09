@@ -13,29 +13,27 @@
 			en: 'cG9zdDo0MzEy',
 		},
 	}
-	const pfQuery = gql`
-		query getKlingerPF($localeID: ID!) {
-			page(id: $localeID) {
-				title
-				slug
-				content
-				featuredImage {
-					node {
-						altText
-						sourceUrl
-						mediaDetails {
-							height
-							width
-						}
-					}
-				}
-				pfCustom {
-					description
-				}
-			}
-		}
-	`
-	const { data: pfData } = await useAsyncQuery(pfQuery, { localeID: localeIDs.pf[locale.value] })
+	const pfQuery = `query getKlingerPF($localeID: ID!) {
+  page(id: $localeID) {
+    title
+    slug
+    content
+    featuredImage {
+      node {
+        altText
+        sourceUrl
+        mediaDetails {
+          height
+          width
+        }
+      }
+    }
+    pfCustom {
+      description
+    }
+  }
+}`
+	const { data: pfData } = await useRequiredAsyncQuery(pfQuery, { localeID: localeIDs.pf[locale.value] })
 	useHead({
 		bodyAttrs: {
 			class: 'wp-content',

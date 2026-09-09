@@ -1,20 +1,20 @@
 <template>
 	<div class="subcategories" v-if="subcategoriesData">
-		<ul v-if="subcategoriesData.productCategories.nodes.length == 1">
+		<ul v-if="routerSlug && subcategoriesData.productCategories.nodes.length == 1">
 			<li
-				v-for="(item, index) in sortByOrder(
+				v-for="(item, index) in sortProductCategories(
 					subcategoriesData.productCategories.nodes[0].children.nodes.filter((category) =>
 						category.productCategoriesAfc.target?.includes('klinger')
 					)
 				)"
 				:key="index"
 				:style="{ backgroundImage: item.menuImage?.sourceUrl }">
-				<NuxtLink :to="localePath(`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`)">{{ item.name }}</NuxtLink>
+				<NuxtLink external no-prefetch :to="localePath(`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`)">{{ item.name }}</NuxtLink>
 			</li>
 		</ul>
 		<ul v-else class="subcategories">
 			<li
-				v-for="(item, index) in sortByOrder(
+				v-for="(item, index) in sortProductCategories(
 					subcategoriesData.productCategories.nodes.filter((category) =>
 						category.productCategoriesAfc.target?.includes('klinger')
 					)
@@ -25,119 +25,27 @@
 						item.productCategoriesAfc.menuImage?.sourceUrl ? item.productCategoriesAfc.menuImage?.sourceUrl : ''
 					})`,
 				}">
-				<NuxtLink :to="localePath(`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`)">{{ item.name }}</NuxtLink>
+				<NuxtLink external no-prefetch :to="localePath(`/katalog-produktu/${routerSlug ? routerSlug + '/' : ''}${item.slug}`)">{{ item.name }}</NuxtLink>
 			</li>
 		</ul>
 	</div>
 </template>
 <script setup>
-	const localePath = useLocalePath()
-	const { locale } = useI18n()
+ import { sortProductCategories } from '~/utils/product-category-order'
+	const localePath = useCmsLocalePath()
 	const router = useRouter()
-	const language = useState('language')
-	const sortByOrder = (object) => {
-		const help = object.slice(0)
-		help.sort((a, b) => {
-			return (
-				(a.productCategoriesAfc.order === null ? 1000 : a.productCategoriesAfc.order) -
-				(b.productCategoriesAfc.order === null ? 1001 : b.productCategoriesAfc.order)
-			)
-		})
-		return help
-	}
-	const routerSlug = ref(router.currentRoute.value.params.slug)
-	routerSlug.value = router.currentRoute.value.params.slug?.length
-		? router.currentRoute.value.params.slug.filter((slug) => slug !== '')
-		: 0
-	const slugVariable = ref({
-		slug: routerSlug.value[routerSlug.value.length - 1] ? [routerSlug.value[routerSlug.value.length - 1]] : 0,
-	})
-	const productSubcategoriesQuery =
-		routerSlug.value !== 0
-			? gql`
-					query getSubcategoriesKlinger($slug: [String], $language: LanguageCodeFilterEnum!) {
-						productCategories(first: 100, where: { slug: $slug, language: $language }) {
-							nodes {
-								name
-								slug
-								productCategoriesAfc {
-									order
-									target
-									menuImage {
-										altText
-										sourceUrl
-										mediaDetails {
-											height
-											width
-										}
-									}
-								}
-								children {
-									nodes {
-										name
-										slug
-										productCategoriesAfc {
-											order
-											target
-											menuImage {
-												altText
-												sourceUrl
-												mediaDetails {
-													height
-													width
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-			  `
-			: gql`
-					query getSubcategoriesKlinger($language: LanguageCodeFilterEnum!) {
-						productCategories(first: 100, where: { parent: 0, language: $language }) {
-							nodes {
-								name
-								slug
-								productCategoriesAfc {
-									order
-									target
-									menuImage {
-										altText
-										sourceUrl
-										mediaDetails {
-											height
-											width
-										}
-									}
-								}
-								children {
-									nodes {
-										name
-										slug
-										productCategoriesAfc {
-											order
-											target
-											menuImage {
-												altText
-												sourceUrl
-												mediaDetails {
-													height
-													width
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-			  `
-	const { data: subcategoriesData } = await useAsyncQuery(
-		productSubcategoriesQuery,
-		routerSlug.value !== 0 ? { ...slugVariable.value, language: locale.value.toUpperCase() } : { language: locale.value.toUpperCase() }
-	)
+	const { locale } = useI18n()
+
+ const routerSlug = (useRoute().params.slug || []).filter(Boolean).join('/')
+ const { data: categoryList } = await useProductCategories()
+ const tree = useCategoryTree(categoryList)
+ const subcategoriesData = computed(() => {
+  const slug = routerSlug.split('/').at(-1)
+  if (!slug) return tree.value
+  const find = nodes => { for (const node of nodes) { if (node.slug === slug) return node; const child = find(node.children.nodes); if (child) return child } }
+  const category = find(tree.value.productCategories.nodes)
+  return { productCategories: { nodes: category ? [category] : [] } }
+ })
 </script>
 <style lang="scss" scoped>
 	.subcategories {

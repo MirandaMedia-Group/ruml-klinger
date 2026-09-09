@@ -3,17 +3,17 @@
 		<div class="container">
 			<div class="detail-header__columns">
 				<div v-if="props.image" class="column detail-header__image">
-					<NuxtPicture
+					<NuxtPicture sizes="xs:100vw sm:100vw md:100vw lg:100vw xl:1440px" format="webp" decoding="async"
 						:src="props.image.sourceUrl"
 						:alt="props.image.altText"
 						:width="props.image.mediaDetails.width"
 						:height="props.image.mediaDetails.height"
 						loading="lazy"
-						provider="ipx" />
+						 />
 				</div>
 				<div class="column detail-header__info">
 					<div v-if="props.company" class="detail-header__company">
-						<NuxtPicture :src="companyLogos[props.logo]" :alt="props.logo" />
+						<NuxtPicture sizes="xs:100vw sm:100vw md:100vw lg:100vw xl:1440px" format="webp" decoding="async" :src="companyLogos[props.logo]" :alt="props.logo" />
 					</div>
 					<h1>{{ props.title }}</h1>
 					<div class="detail-header__excerpt" v-html="props.excerpt"></div>

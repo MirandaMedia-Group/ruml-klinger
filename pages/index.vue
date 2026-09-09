@@ -10,19 +10,19 @@
 			</div> -->
 		</div>
 		<div class="categories-grid">
-			<NuxtLink
+			<NuxtLink external no-prefetch
 				v-for="category in homepageData.page.rumlKlingerHomepage.categoriesBlock.categories"
 				:key="category.title"
 				:to="localePath(category.url)"
 				class="category">
 				<div class="category__image">
-					<NuxtPicture
+					<NuxtPicture sizes="xs:100vw sm:50vw md:33vw lg:400px" format="webp" decoding="async"
 						:src="category.image.sourceUrl"
 						:alt="category.image.altText"
 						:width="category.image.mediaDetails.width"
 						:height="category.image.mediaDetails.height"
 						loading="lazy"
-						provider="ipx" />
+						 />
 				</div>
 				<div class="category__content">
 					<h3>{{ category.title }}</h3>
@@ -31,7 +31,7 @@
 		</div>
 	</section>
 	<section>
-		<BannerTop />
+		<BannerTop :data="hpBannerTop" />
 	</section>
 	<section class="services container">
 		<div class="narrow center">
@@ -41,18 +41,18 @@
 		<div class="services-wrap">
 			<div class="service" v-for="(item, index) in homepageData.pages.nodes" :key="index">
 				<div class="service__image">
-					<NuxtPicture
+					<NuxtPicture sizes="xs:100vw sm:50vw md:33vw lg:400px" format="webp" decoding="async"
 						:src="item.featuredImage?.node.sourceUrl"
 						:width="item.featuredImage?.node.mediaDetails.width"
 						:height="item.featuredImage?.node.mediaDetails.height"
 						:alt="item.featuredImage?.node.altText"
 						loading="lazy"
-						provider="ipx" />
+						 />
 				</div>
 				<div class="service__content">
 					<h3>{{ item.title }}</h3>
 					<p class="service__description">{{ item.rumlKlingerSluzby.shortDescription }}</p>
-					<NuxtLink :to="localePath(`/sluzby/${item.slug}`)" class="btn btn-primary">{{ $t('showService') }}</NuxtLink>
+					<NuxtLink external no-prefetch :to="localePath(`/sluzby/${item.slug}`)" class="btn btn-primary">{{ $t('showService') }}</NuxtLink>
 				</div>
 			</div>
 		</div>
@@ -67,13 +67,13 @@
 			<h2>{{ $t('partners') }}</h2>
 			<div class="partners-list">
 				<div class="partner" v-for="(item, index) in homepageData.partners.nodes" :key="index">
-					<NuxtPicture
+					<NuxtPicture sizes="xs:100vw sm:50vw md:33vw lg:400px" format="webp" decoding="async"
 						:src="item.featuredImage.node.sourceUrl"
 						:alt="item.featuredImage.node.altText"
 						:width="item.featuredImage.node.mediaDetails.width"
 						:height="item.featuredImage.node.mediaDetails.height"
 						loading="lazy"
-						provider="ipx" />
+						 />
 				</div>
 			</div>
 			<BtnSecondary :href="localePath('/partneri')">{{ $t('allPartners') }}</BtnSecondary>
@@ -88,7 +88,7 @@
 		<div class="narrow center">
 			<h2>{{ $t('references') }}</h2>
 		</div>
-		<div v-if="screenWidth > 900">
+		<div class="desktop-900">
 			<div class="references__categories">
 				<nav>
 					<ul>
@@ -112,7 +112,7 @@
 				<ReferencesList :references="references.references.nodes" :limit="6" :category="item" />
 			</div>
 		</div>
-		<div v-else>
+		<div class="mobile-900">
 			<div
 				class="mobile-references__wrapper"
 				v-for="(item, index) in referenceCategories.referenceCategories.nodes"
@@ -138,8 +138,9 @@
 </template>
 
 <script setup>
+ import { compareProductCategoryOrder } from "~/utils/product-category-order"
 	const { locale, t } = useI18n()
-	const localePath = useLocalePath()
+	const localePath = useCmsLocalePath()
 	useHead({
 		title: t('seo.homepage.title'),
 		meta: [
@@ -150,19 +151,8 @@
 			},
 		],
 	})
-	const screenWidth = useState('screenWidth')
-	const sortByOrder = (object) => {
-		const help = object.slice(0)
-		help.sort((a, b) => {
-			return (
-				(a.referenceCategoryAcf.order === null ? 1000 : a.referenceCategoryAcf.order) -
-				(b.referenceCategoryAcf.order === null ? 1001 : b.referenceCategoryAcf.order)
-			)
-		})
-		return help
-	}
+	const sortByOrder = items => [...items].sort((a, b) => compareProductCategoryOrder({productCategoriesAfc:a.referenceCategoryAcf}, {productCategoriesAfc:b.referenceCategoryAcf}))
 
-	// STATES
 	const activeReferenceBlock = useState('activeReferenceBlock', () => null)
 	const language = useState('language')
 	const localeIDs = {
@@ -176,227 +166,290 @@
 		},
 	}
 
-	const homepageQuery = gql`
-		query getHomepageKlinger($localeID: ID!, $parentID: ID!, $language: LanguageCodeFilterEnum!) {
-			page(id: $localeID) {
-				title
-				slug
-				rumlKlingerHomepage {
-					hero {
-						btnPrimary {
-							text
-							type
-							urlExternal
-							urlInternal
-						}
-						btnSecondary {
-							text
-							type
-							urlExternal
-							urlInternal
-						}
-						image {
-							altText
-							sourceUrl
-							title
-							mediaDetails {
-								height
-								width
-							}
-						}
-						heroType
-						video {
-							altText
-							mediaDetails {
-								height
-								width
-							}
-							mediaItemUrl
-						}
-						perex
-						title
-					}
-					categoriesBlock {
-						title
-						perex
-						categories {
-							url
-							title
-							image {
-								sourceUrl
-								altText
-								mediaDetails {
-									height
-									width
-								}
-							}
-						}
-					}
-					bannerTop {
-						title
-						perex
-						btn {
-							text
-							file {
-								fileSize
-								mediaItemUrl
-							}
-						}
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					servicesBlock {
-						title
-						perex
-					}
-					videoCarousel {
-						video {
-							title
-							description
-							type
-							video
-							file {
-								mediaItemUrl
-								sourceUrl
-								title
-							}
-						}
-					}
-					aboutUs {
-						title
-						perex
-						text
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					career {
-						title
-						perex
-						text
-						image {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-				}
-			}
-			pages(where: { parent: $parentID, orderby: { field: DATE, order: ASC } }, first: 2) {
-				nodes {
-					title
-					slug
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					rumlKlingerSluzby {
-						shortDescription
-					}
-				}
-			}
-			partners(first: 5, where: { language: $language }) {
-				nodes {
-					id
-					title
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: homepageData } = await useAsyncQuery(homepageQuery, {
+	const BannerTopIDs = {
+		homepage: {
+			cs: 'cG9zdDo1OTI=',
+			en: 'cG9zdDozODM3',
+		},
+	}
+const contentQuery = `query KlingerPagesIndexVue($homepageData_localeID: ID!, $homepageData_parentID: ID!, $homepageData_language: LanguageCodeFilterEnum!, $referenceCategories_language: LanguageCodeFilterEnum!, $references_language: LanguageCodeFilterEnum!, $hpBannerTop_localeID: ID!, $_cursor_referenceCategories_referenceCategories: String, $_cursor_references_references: String) {
+  homepageData_page: page(id: $homepageData_localeID) {
+    title
+    slug
+    rumlKlingerHomepage {
+      hero {
+        btnPrimary {
+          text
+          type
+          urlExternal
+          urlInternal
+        }
+        btnSecondary {
+          text
+          type
+          urlExternal
+          urlInternal
+        }
+        image {
+          altText
+          sourceUrl
+          title
+          mediaDetails {
+            height
+            width
+          }
+        }
+        heroType
+        video {
+          altText
+          mediaDetails {
+            height
+            width
+          }
+          mediaItemUrl
+        }
+        perex
+        title
+      }
+      categoriesBlock {
+        title
+        perex
+        categories {
+          url
+          title
+          image {
+            sourceUrl
+            altText
+            mediaDetails {
+              height
+              width
+            }
+          }
+        }
+      }
+      bannerTop {
+        title
+        perex
+        btn {
+          text
+          file {
+            fileSize
+            mediaItemUrl
+          }
+        }
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      servicesBlock {
+        title
+        perex
+      }
+      videoCarousel {
+        video {
+          title
+          description
+          type
+          video
+          file {
+            mediaItemUrl
+            sourceUrl
+            title
+          }
+        }
+      }
+      aboutUs {
+        title
+        perex
+        text
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      career {
+        title
+        perex
+        text
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+    }
+  }
+  homepageData_pages: pages(
+    where: {parent: $homepageData_parentID, orderby: {field: DATE, order: ASC}}
+    first: 2
+  ) {
+    nodes {
+      title
+      slug
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      rumlKlingerSluzby {
+        shortDescription
+      }
+    }
+  }
+  homepageData_partners: partners(
+    first: 5
+    where: {language: $homepageData_language}
+  ) {
+    nodes {
+      id
+      title
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+    }
+  }
+  referenceCategories_referenceCategories: referenceCategories(
+    where: {language: $referenceCategories_language}
+    first: 100
+    after: $_cursor_referenceCategories_referenceCategories
+  ) {
+    nodes {
+      id
+      name
+      link
+      uri
+      slug
+      referenceCategoryAcf {
+        order
+        image {
+          sourceUrl
+          altText
+          mediaDetails {
+            height
+            width
+          }
+        }
+        technologies
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+  references_references: references(
+    where: {language: $references_language}
+    first: 100
+    after: $_cursor_references_references
+  ) {
+    nodes {
+      id
+      title
+      slug
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      referenceCategories {
+        nodes {
+          name
+          id
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+  hpBannerTop_page: page(id: $hpBannerTop_localeID) {
+    title
+    slug
+    rumlKlingerHomepage {
+      bannerTop {
+        title
+        perex
+        btn {
+          text
+          file {
+            fileSize
+            mediaItemUrl
+          }
+        }
+        image {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+        imageMobile {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+    }
+  }
+}`
+const { data: combinedData } = await useRequiredAsyncQuery(contentQuery, { ...Object.fromEntries(Object.entries({
 		localeID: localeIDs.homepage[locale.value],
 		parentID: localeIDs.services[locale.value],
 		language: locale.value.toUpperCase(),
-	})
+	}).map(([key,value])=>["homepageData_"+key,value])), ...Object.fromEntries(Object.entries({ language: locale.value.toUpperCase() }).map(([key,value])=>["referenceCategories_"+key,value])), ...Object.fromEntries(Object.entries({ language: locale.value.toUpperCase() }).map(([key,value])=>["references_"+key,value])), ...Object.fromEntries(Object.entries({ localeID: BannerTopIDs.homepage[locale.value] }).map(([key,value])=>["hpBannerTop_"+key,value])) })
+const homepageData = computed(() => ({ page: combinedData.value.homepageData_page, pages: combinedData.value.homepageData_pages, partners: combinedData.value.homepageData_partners }))
+const referenceCategories = computed(() => ({ referenceCategories: combinedData.value.referenceCategories_referenceCategories }))
+const references = computed(() => ({ references: combinedData.value.references_references }))
+const hpBannerTop = computed(() => ({ page: combinedData.value.hpBannerTop_page }))
 
-	const referenceCategoriesQuery = gql`
-		query getReferenceCategoriesKlinger($language: LanguageCodeFilterEnum!) {
-			referenceCategories(where: { language: $language }) {
-				nodes {
-					id
-					name
-					link
-					uri
-					slug
-					referenceCategoryAcf {
-						order
-						image {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-						technologies
-					}
-				}
-			}
-		}
-	`
-	const { data: referenceCategories } = await useAsyncQuery(referenceCategoriesQuery, { language: locale.value.toUpperCase() })
+
+
+
 	referenceCategories.value.referenceCategories.nodes = sortByOrder(referenceCategories.value.referenceCategories.nodes)
-	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0].id
+	activeReferenceBlock.value = referenceCategories.value.referenceCategories.nodes[0]?.id
 
-	const referencesQuery = gql`
-		query getReferences($language: LanguageCodeFilterEnum!) {
-			references(first: 200, where: { language: $language }) {
-				nodes {
-					id
-					title
-					slug
-					featuredImage {
-						node {
-							sourceUrl
-							altText
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					referenceCategories {
-						nodes {
-							name
-							id
-						}
-					}
-				}
-			}
-		}
-	`
-	const { data: references } = await useAsyncQuery(referencesQuery, { language: locale.value.toUpperCase() })
-	references.value.references.nodes = ref(references.value.references.nodes.filter((ref) => ref.referenceCategories.nodes.length > 0))
+
+
+	references.value.references.nodes = references.value.references.nodes.filter((ref) => ref.referenceCategories.nodes.length > 0)
+
+
+
+
+
 </script>
 <style lang="scss">
 	.categories__switcher {

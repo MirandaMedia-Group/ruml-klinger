@@ -1,20 +1,20 @@
 <template>
 	<section class="partner-header">
-		<NuxtPicture
+		<NuxtPicture sizes="xs:100vw sm:100vw md:100vw lg:100vw xl:1440px" format="webp" decoding="async"
 			:src="singlePartner.partners.nodes[0].partnerAcf.hero.sourceUrl"
 			:alt="singlePartner.partners.nodes[0].partnerAcf.hero.altText"
 			:width="singlePartner.partners.nodes[0].partnerAcf.hero.mediaDetails.width"
 			:height="singlePartner.partners.nodes[0].partnerAcf.hero.mediaDetails.height"
 			loading="lazy"
-			provider="ipx" />
+			 />
 		<div class="container partner-header__content center">
-			<NuxtPicture
+			<NuxtPicture sizes="xs:100vw sm:100vw md:100vw lg:100vw xl:1440px" format="webp" decoding="async"
 				:src="singlePartner.partners.nodes[0].featuredImage.node.sourceUrl"
 				:alt="singlePartner.partners.nodes[0].featuredImage.node.altText"
 				:width="singlePartner.partners.nodes[0].featuredImage.node.mediaDetails.width"
 				:height="singlePartner.partners.nodes[0].featuredImage.node.mediaDetails.height"
 				loading="lazy"
-				provider="ipx" />
+				 />
 		</div>
 	</section>
 	<section class="container">
@@ -41,42 +41,41 @@
 <script setup>
 	const router = useRouter()
 	const variables = ref({ name: router.currentRoute.value.params.slug })
-	const singlePartnerQuery = gql`
-		query getSinglePartner($name: String!) {
-			partners(where: { name: $name }) {
-				nodes {
-					title
-					slug
-					excerpt
-					featuredImage {
-						node {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					partnerAcf {
-						description
-						sidebarBox
-						hero {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-				}
-			}
-		}
-	`
-	// const singlePartner = useState('singlePartner', () => null)
-	const { data: singlePartner } = await useAsyncQuery(singlePartnerQuery, variables.value)
-	// singlePartner.value = data.value
+	const singlePartnerQuery = `query getSinglePartner($name: String!) {
+  partners(where: {name: $name}, first: 1) {
+    nodes {
+      title
+      slug
+      excerpt
+      featuredImage {
+        node {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      partnerAcf {
+        description
+        sidebarBox
+        hero {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+    }
+  }
+}`
+
+	const { data: singlePartner } = await useRequiredAsyncQuery(singlePartnerQuery, variables.value)
+ if (!singlePartner.value.partners.nodes.length) throw createError({statusCode:404,statusMessage:'Not found'})
+
 </script>
 <style lang="scss">
 	.partner-header {

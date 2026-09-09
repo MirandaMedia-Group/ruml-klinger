@@ -28,32 +28,31 @@
 		slug: router.currentRoute.value.params.slug,
 	})
 
-	const careerDetailQuery = gql`
-		query getCareerDetail($slug: String) {
-			careers(where: { name: $slug }) {
-				nodes {
-					title
-					slug
-					excerpt
-					content
-					featuredImage {
-						node {
-							altText
-							sourceUrl
-							mediaDetails {
-								height
-								width
-							}
-						}
-					}
-					careerAcf {
-						company
-					}
-				}
-			}
-		}
-	`
-	const { data: careerDetail, pending } = await useAsyncQuery(careerDetailQuery, variables.value)
+	const careerDetailQuery = `query getCareerDetail($slug: String) {
+  careers(where: {name: $slug}, first: 1) {
+    nodes {
+      title
+      slug
+      excerpt
+      content
+      featuredImage {
+        node {
+          altText
+          sourceUrl
+          mediaDetails {
+            height
+            width
+          }
+        }
+      }
+      careerAcf {
+        company
+      }
+    }
+  }
+}`
+	const { data: careerDetail, pending } = await useRequiredAsyncQuery(careerDetailQuery, variables.value)
+ if (!careerDetail.value.careers.nodes.length) throw createError({statusCode:404,statusMessage:'Not found'})
 	useHead({
 		bodyAttrs: {
 			class: 'wp-content',
@@ -67,4 +66,5 @@
 			},
 		],
 	})
+
 </script>

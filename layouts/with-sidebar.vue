@@ -4,14 +4,13 @@
 			<slot name="main"></slot>
 		</main>
 		<aside
-			v-if="screenWidth > 900"
+			class="desktop-900"
 			id="sidebar">
 			<slot name="sidebar"></slot>
 		</aside>
 	</div>
 </template>
 <script setup>
-	const screenWidth = useState('screenWidth')
 </script>
 <style lang="scss">
 	.content-wrapper {
